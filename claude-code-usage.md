@@ -218,3 +218,14 @@
 6. **Content was not changed** — all original wording preserved exactly as written by Simon
 
 **Rule established:** Any future content changes requested by Simon → copy original to `original/` first, then edit.
+
+---
+
+### Prompt 19 — Remove .docx from main folder
+**Prompt:**
+> *"Remove the .docx in the main folder, just keep the ones in original/"*
+
+**What Claude did:**
+- Removed `Chapter 1.docx`, `Chapter 2.docx`, `Chapter 3.docx` from the main folder using `git rm`
+- Originals in `original/` folder are untouched
+- Committed and pushed
