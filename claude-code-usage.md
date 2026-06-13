@@ -374,3 +374,22 @@
 
 **What Claude did:**
 - Swapped Prompt 28 and 29 back to correct chronological order
+
+---
+
+### Prompt 31 — Markdown link question
+**Prompt:**
+> *"How do I make a link to original/Ch3? I need it for the stuff I'm writing in AI-Usage.md."*
+
+**What Claude did:**
+- No files modified
+- Explained markdown link syntax with URL encoding for spaces: `[Original Chapter 3](original/Chapter%203.md)`
+
+---
+
+### Prompt 32 — AI-Usage.md updated
+**Prompt:**
+> *"I updated AI Usage file."*
+
+**What Claude did:**
+- Committed and pushed `AI-Usage.md`
