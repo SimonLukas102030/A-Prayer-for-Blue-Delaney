@@ -229,3 +229,14 @@
 - Removed `Chapter 1.docx`, `Chapter 2.docx`, `Chapter 3.docx` from the main folder using `git rm`
 - Originals in `original/` folder are untouched
 - Committed and pushed
+
+---
+
+### Prompt 20 — Remove "extra task" note
+**Prompt:**
+> *"Remove the 'This file will be uploaded as an extra task.' because it is in GitHub. Not necessary anymore."*
+
+**What Claude did:**
+- Copied `Chapter 1.md`, `Chapter 2.md`, `Chapter 3.md` to `original/` before editing (content change rule)
+- Removed "This file will be uploaded as an 'extra task'." from the AI note in all three chapter files
+- Committed and pushed
