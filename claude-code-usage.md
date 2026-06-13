@@ -340,6 +340,20 @@
 
 ## Session — 2026-06-13 | 19:52 – ongoing
 
+### Prompt 29 — Chapter 4 submitted & fixed
+**Prompt:**
+> *"Done" / "Make a copy to original and then fix."*
+
+**What Claude did:**
+- Read `Chapter 4.md` (diary entry written by Simon)
+- Copied to `original/Chapter 4.md` before editing (Simon's content)
+- Fixed structural issues: `Chapter [X]` → `Chapter 4`, removed "extra task" note
+- Fixed 16 spelling/grammar errors: clothes, Mary, marbles/Marble, thinking, went (2×), chance, right away, addressed, tiring, tried, rescue, Brothers, swim, a few, Everyone, I (capital)
+- Added Chapter 4 row to `README.md`
+- Committed and pushed
+
+---
+
 ### Prompt 28 — Fix Chapter 3 errors
 **Prompt:**
 > *"Fix the Ch3 errors."*
