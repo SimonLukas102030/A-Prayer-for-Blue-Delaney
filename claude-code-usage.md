@@ -340,6 +340,20 @@
 
 ## Session — 2026-06-13 | 19:52 – ongoing
 
+### Prompt 28 — Fix Chapter 3 errors
+**Prompt:**
+> *"Fix the Ch3 errors."*
+
+**What Claude did:**
+- Fixed all 5 errors in `Chapter 3.md` (content change approved by Simon):
+  - `scarred` → `scared` (2×)
+  - `h urricanes` → `hurricanes` (split word)
+  - `merry` → `Mary`
+  - `Marry` → `Mary`
+- Committed and pushed
+
+---
+
 ### Prompt 29 — Chapter 4 submitted & fixed
 **Prompt:**
 > *"Done" / "Make a copy to original and then fix."*
@@ -354,14 +368,9 @@
 
 ---
 
-### Prompt 28 — Fix Chapter 3 errors
+### Prompt 30 — Fix prompt order again
 **Prompt:**
-> *"Fix the Ch3 errors."*
+> *"Prompts are in wrong order again."*
 
 **What Claude did:**
-- Fixed all 5 errors in `Chapter 3.md` (content change approved by Simon):
-  - `scarred` → `scared` (2×)
-  - `h urricanes` → `hurricanes` (split word)
-  - `merry` → `Mary`
-  - `Marry` → `Mary`
-- Committed and pushed
+- Swapped Prompt 28 and 29 back to correct chronological order
