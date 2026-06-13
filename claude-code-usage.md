@@ -202,3 +202,19 @@
 **What Claude did:**
 - Detected via `git status`: `Assets/Task.png` deleted, `Assets/LearningView.org.html` and `Assets/LearningView.org_files/` added
 - Committed and pushed all changes (45 files total — the saved HTML page includes many JS/CSS files in the `_files` folder)
+
+---
+
+### Prompt 18 — Convert .docx to .md
+**Prompt:**
+> *"Turn the .docx all to .md with good styling. Also remake the template to .md and note it all in claude usage. DO NOT CHANGE CONTENT. The content must only be changed by me, or when I tell you to. In the instance that I tell you to, you must make a copy to a folder named 'original'. For the step from docx to .md too."*
+
+**What Claude did:**
+1. Created `original/` folder and copied `Chapter 1.docx`, `Chapter 2.docx`, `Chapter 3.docx`, and `Assets/Template.docx` there as backups
+2. Read exact text content from all four `.docx` files via PowerShell XML extraction
+3. Created `Chapter 1.md`, `Chapter 2.md`, `Chapter 3.md` — same content, markdown styling added (headers, blockquote for AI note, horizontal rules, image embeds)
+4. Created `Assets/Template.md` to replace `Assets/Template.docx`
+5. Updated `README.md` chapter links from `.docx` to `.md`
+6. **Content was not changed** — all original wording preserved exactly as written by Simon
+
+**Rule established:** Any future content changes requested by Simon → copy original to `original/` first, then edit.

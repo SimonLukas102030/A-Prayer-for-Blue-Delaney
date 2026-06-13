@@ -7,9 +7,9 @@
 
 | Chapter | Task type | File |
 |---|---|---|
-| Chapter 1 | Chat room conversation | [Chapter 1.docx](Chapter%201.docx) |
-| Chapter 2 | Picture with thought bubbles | [Chapter 2.docx](Chapter%202.docx) |
-| Chapter 3 | Summary | [Chapter 3.docx](Chapter%203.docx) |
+| Chapter 1 | Chat room conversation | [Chapter 1.md](Chapter%201.md) |
+| Chapter 2 | Picture with thought bubbles | [Chapter 2.md](Chapter%202.md) |
+| Chapter 3 | Summary | [Chapter 3.md](Chapter%203.md) |
 
 ---
 
