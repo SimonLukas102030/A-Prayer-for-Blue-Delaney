@@ -10,6 +10,7 @@
 | Chapter 1 | Chat room conversation | [Chapter 1.md](Chapter%201.md) |
 | Chapter 2 | Picture with thought bubbles | [Chapter 2.md](Chapter%202.md) |
 | Chapter 3 | Summary | [Chapter 3.md](Chapter%203.md) |
+| Chapter 4 | Diary entry | [Chapter 4.md](Chapter%204.md) |
 
 ---
 
