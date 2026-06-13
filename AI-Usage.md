@@ -48,7 +48,9 @@ Punctuation & Grammar Tweak<br>
 - Make sure your apostrophes are consistent. You used a backtick/accent ´ in some messages (I´m, we´ll, I´m still sceptical) and omitted them in others (dont, Im, cant). Using standard straight apostrophes ' (I'm, don't, we'll) looks much cleaner."
 
 <br><br><br>
+
 ## Chapter 2
+
 The Image was made by gemini. The startup promt was as following: "refine this promt a bit. Not too much dough: "Create a picture of an scene from "A Prayer for Blue Delaney". It should be a boy named tommy. he is Irish and 13 yo. He is climing o the rail of an cruse ship. Its is a ship used to tranzport the kids from orpangeges to austrailia. The Boy tommy then exendantly loases controll and almost falls of the ship, but Calm, who is in the picture provided, saves him, by grabbing his t-Shirt an resquing him. Add thought bubbles. Tommy things "omg i´m going to fall and die" and colm things "I have tr resque him. Why is nobody else doing it?". In the background there is a woman screeming, and is scared for her life. Tommys friends, are also irish and aboute 13. They are also scarred, but they dont try to resque them. To resque Tommmy, colm had to push aside the people a bit, to get to tommy." Give me a better promt. Do not create an image. Also note that the Image is also purly Ai. Not a real person"
 
 ---
@@ -75,3 +77,23 @@ Text Elements (Comic Style Thought Bubbles):
 
 The resulting Image is: <br>
 <img src="Assets/PictureChapter2.png" alt="Picture for Chapter 2" width="25%" /><br>
+
+<br><br><br>
+
+## Chapter 3
+
+<p>I wrote the summary myselve, and the orginal I wrote is in [Original Chapter 3](original/Chapter%203.md). <br>
+I then had Claude Code read it and fix grammar. More detail in [Claude Code Usage](claude-code-usage.md). <br><p>
+
+---
+**Prompts:** 10 $\rightarrow$ 11 + 28
+
+<br><br><br>
+
+## Chapter 4
+
+<p>I wrote the diary entry myselve, and the orginal I wrote is in [Original Chapter 4](original/Chapter%204.md). <br>
+I then had Claude Code read it and fix grammar. More detail in [Claude Code Usage](claude-code-usage.md). <br><p>
+
+---
+**Prompt:** 29
