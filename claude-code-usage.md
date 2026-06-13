@@ -338,7 +338,7 @@
 
 ---
 
-## Session — 2026-06-13 | 19:52 – ongoing
+## Session — 2026-06-13 | 19:52 – 21:02
 
 ### Prompt 28 — Fix Chapter 3 errors
 **Prompt:**
@@ -393,3 +393,19 @@
 
 **What Claude did:**
 - Committed and pushed `AI-Usage.md`
+
+---
+
+### Prompt 33 — Session close
+**Prompt:**
+> *"Close up the session."*
+
+**What Claude did:**
+- Session ended: **21:02**
+- Total session duration: ~1h 10min
+- Updated session header with end time
+
+**Open for next session:**
+- 6 more chapters needed before deadline 19.06.
+- Still need 1 more ~100-word text (Ch3 Summary ✅, Ch4 Diary entry ✅)
+- Ch5 not yet decided
