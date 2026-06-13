@@ -217,7 +217,7 @@
 5. Updated `README.md` chapter links from `.docx` to `.md`
 6. **Content was not changed** — all original wording preserved exactly as written by Simon
 
-**Rule established:** Any future content changes requested by Simon → copy original to `original/` first, then edit.
+**Rule established:** `original/` is only for files Simon made. Claude-made files don't need to go there — git history is enough. Any future content changes to Simon's files → copy to `original/` first, then edit.
 
 ---
 
@@ -228,6 +228,18 @@
 **What Claude did:**
 - Removed `Chapter 1.docx`, `Chapter 2.docx`, `Chapter 3.docx` from the main folder using `git rm`
 - Originals in `original/` folder are untouched
+- Committed and pushed
+
+---
+
+### Prompt 21 — Remove .md files from original/
+**Prompt:**
+> *"The original rule is just for files I made, not the ones you made. They are in the GitHub log. That's enough. Remove the .mds from original/, just keep the ones actually from me."*
+
+**What Claude did:**
+- Removed `original/Chapter 1.md`, `original/Chapter 2.md`, `original/Chapter 3.md` via `git rm`
+- `original/` now only contains Simon's files: `Chapter 1.docx`, `Chapter 2.docx`, `Chapter 3.docx`, `Template.docx`
+- Updated the rule in this file accordingly
 - Committed and pushed
 
 ---
