@@ -1,0 +1,385 @@
+////////////////////////////////////////////////////////
+// Advent calendar plugin 
+////////////////////////////////////////////////////////
+
+/* jRumble v1.3 - http://jackrugile.com/jrumble - MIT License */
+(function(f){f.fn.jrumble=function(g){var a=f.extend({x:2,y:2,rotation:1,speed:15,opacity:false,opacityMin:0.5},g);return this.each(function(){var b=f(this),h=a.x*2,i=a.y*2,k=a.rotation*2,g=a.speed===0?1:a.speed,m=a.opacity,n=a.opacityMin,l,j,o=function(){var e=Math.floor(Math.random()*(h+1))-h/2,a=Math.floor(Math.random()*(i+1))-i/2,c=Math.floor(Math.random()*(k+1))-k/2,d=m?Math.random()+n:1,e=e===0&&h!==0?Math.random()<0.5?1:-1:e,a=a===0&&i!==0?Math.random()<0.5?1:-1:a;b.css("display")==="inline"&&(l=true,b.css("display","inline-block"));b.css({position:"relative",left:e+"px",top:a+"px","-ms-filter":"progid:DXImageTransform.Microsoft.Alpha(Opacity="+d*100+")",filter:"alpha(opacity="+d*100+")","-moz-opacity":d,"-khtml-opacity":d,opacity:d,"-webkit-transform":"rotate("+c+"deg)","-moz-transform":"rotate("+c+"deg)","-ms-transform":"rotate("+c+"deg)","-o-transform":"rotate("+c+"deg)",transform:"rotate("+c+"deg)"})},p={left:0,top:0,"-ms-filter":"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)",filter:"alpha(opacity=100)","-moz-opacity":1,"-khtml-opacity":1,opacity:1,"-webkit-transform":"rotate(0deg)","-moz-transform":"rotate(0deg)","-ms-transform":"rotate(0deg)","-o-transform":"rotate(0deg)",transform:"rotate(0deg)"};b.bind({startRumble:function(a){a.stopPropagation();clearInterval(j);j=setInterval(o,g)},stopRumble:function(a){a.stopPropagation();clearInterval(j);l&&b.css("display","inline");b.css(p)}})})}})(jQuery);
+
+var plugin_advent = {name:"advent", templates:"advent.html?v4", translations:{"DE":"advent_DE.json"}};
+
+plugin_advent.showButton = false;
+
+plugin_advent.openDay = function (day){
+  var self = plugin_advent.self;
+  var items = plugin_advent.loadData('class') || [];
+
+  if(items[day]){
+    if(items[day].type == "url"){
+      self.openWeblink({DataJSON:items[day]});
+      return true;
+    }
+    if(items[day].type == "image"){
+      self.showTaskMedia('image',items[day],null);
+      return true;
+    }
+    if(items[day].type == "audio"){
+      self.showTaskMedia('audio',items[day],null);
+      return true;
+    }
+    if(items[day].type == "video"){
+      self.showTaskMedia('video',items[day],null);
+      return true;
+    }
+  }
+  return false;
+};
+
+plugin_advent.day = function (day){
+  var self = plugin_advent.self;
+  if(plugin_advent.openDay(day)) return;
+
+  if(day == -1){
+    if(self.user.Teacher == 0)
+      self.alert("Hier geht es am 1. Dezember los."); else
+      self.alert("Fülle jetzt den Adventskalender für deine Schülerinnen und Schüler.").then(function(){
+        plugin_advent.edit();
+      });
+    return;
+  }
+  if(self.user.Teacher == 0)
+    self.alert("Für diesen Tag gibt es noch keinen Inhalt."); else
+    self.alert("Fülle jetzt den Adventskalender für deine Schülerinnen und Schüler.");
+};
+
+plugin_advent.remove = function(){
+  plugin_advent.isOpen = false;
+  $("#winterSpecialBoxOuter").trigger("stopRumble");
+  clearInterval(plugin_advent.rumbleInterval);
+  plugin_advent.wrapper.remove();
+};
+
+plugin_advent.open = function(){
+  var self = plugin_advent.self;
+  var items = plugin_advent.loadData('class') || [];
+  var hidden = false;
+  if(items)
+    for(var i=0; i < items.length; i++){
+      hidden = hidden || (items[i] && items[i].hidden == 1);
+    }
+
+  var currentdate = plugin_advent.now;
+  var day = currentdate.getDate();
+  var month = currentdate.getMonth()+1;
+    
+  plugin_advent.isOpen = true;
+  plugin_advent.wrapper =
+  $('<div style="position:absolute;background-color:#eee;background-position: 50% 50%;background-image: url(\'https://learningview.org/plugins/WinterSpecial.jpg\');background-size:cover;background-repeat:no-repeat;width:100%;left:0;height:100%;top:0px;z-index:50"><style>@import url(https://fonts.googleapis.com/css?family=Gorditas); @import url(https://fonts.googleapis.com/css?family=Merienda); .bi_eff {font-family:\'Gorditas\', cursive;font-size:7vw;color:#EDF2EE;text-transform:uppercase;text-shadow:2px 2px 0px #B5C1B8,-1px -1px #FFFFFF;} #winterSpecialBox { transition: all .3s ease-out;} #winterSpecialBox:hover { transform: scale(1.2); }</style>'+(self.user.Teacher == "1" ? '<div style="z-index:100000;position:absolute;left:8px;top:8px;display:flex"> <div onclick="plugin_advent.edit()" style="cursor:pointer;color:white"><i class="fa fa-fw fa-pencil" style="font-size:200%; vertical-align: middle;"></i> Kalender befüllen </div> '+'</div> <div style="z-index:100000;position:absolute;left:8px;bottom:8px;display:flex"><div onclick="plugin_advent.shareLink()" style="cursor:pointer;color:white"><i class="fa fa-fw fa-external-link" style="font-size:200%; vertical-align: middle;"></i> Kalender-Link anzeigen </div>'+(items && items.length > 0 && !((month < 11) || (month == 11 && day < 23)) ? '<div id="adventPlugin_hideBtn"  onclick="plugin_advent.toggleVisibility(this)" style="margin-left:1rem;cursor:pointer;color:white"><i class="fa fa-fw '+(hidden ? 'fa-square-o':'fa-check-square-o')+'" style="font-size:200%; vertical-align: middle;"></i> Kalender im Kurs anzeigen</div>' : '')+'</div>':'')+'<div onclick="plugin_advent.remove()" style="z-index:100000;position:absolute;right:8px;top:8px;cursor:pointer;color:white"><i class="fa fa-fw fa-times" style="font-size:200%"></i></div></div>');
+
+  if(day > 24) day = 24;
+  if(month != 12) day = -1;
+
+  var lastDays = "";
+  if(day != -1)
+  for(var i = day-1; i > 0; i--)
+    lastDays = '<span style="cursor:pointer" onclick="plugin_advent.day('+(i-1)+')">'+i+'.</span> '+lastDays;
+  if(day > 1)
+    lastDays = '<span style="font-size:13px">Bisherige Tage:</span><br>'+lastDays;
+
+  if(lastDays != "")
+  plugin_advent.wrapper.append($('<div style="border-radius:20px;padding:10px;background:rgba(0,0,0,0.3);font-family:Merienda;font-size:20px;position:absolute;bottom:10px;right:10px;width:200px;z-index:10;color: white;">'+lastDays+'</div>'));
+
+  plugin_advent.packet = $('<div id="paket" style="left:50%;margin-left:-150px;top:45%;position:absolute;z-index:3"><div id="winterSpecialBoxOuter" style="position:absolute;"> <div id="winterSpecialBox" onclick="plugin_advent.day('+(day != -1 ? day-1 : -1)+')" style="cursor:pointer;background:url(\'https://learningview.org/plugins/WinterSpecialBox.png\') no-repeat -200px -200px;width:400px;height:300px;position:absolute;left:-100px;top:-100px">  <div id="winterSpecialDoor" style="background:white;position:absolute;text-align:center;left:268px;top:215px;width:80px;color:#999;font-size:50px;font-family:Gorditas;">'+(day == -1 ? "?" : (day))+'</div></div></div></div>');
+  plugin_advent.wrapper.append(plugin_advent.packet);
+  plugin_advent.winterSpecial = $('<div id="winterSpecialInner" style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden"><div style="position:absolute;left:10%;right:10%;top:10%;color:white;text-align:center;font-family:Gorditas;font-size:7vw">Adventskalender</div></div>');
+   
+   plugin_advent.wrapper.append(plugin_advent.winterSpecial);
+
+   var snowmax=50
+   var snowcolor=new Array("#aaaacc","#ddddff","#ccccdd","#f3f3f3","#f0ffff")
+   var snowtype=new Array("Times","Arial","Times","Verdana")
+   var snowletter="*"
+   var sinkspeed=0.6
+   var snowmaxsize=30
+   var snowminsize=8
+   
+   var snow=new Array()
+   var marginbottom
+   var marginright
+   var timer
+   var i_snow=0
+   var x_mv=new Array();
+   var crds=new Array();
+   var lftrght=new Array();
+
+   function randommaker(range) {
+    rand=Math.floor(range*Math.random());
+    return rand;
+   }
+   var showInited = false;
+
+   function initsnow() {
+    if(showInited) return;
+    showInited = true;
+    var snowsizerange=snowmaxsize-snowminsize
+    for (i=0;i<=snowmax;i++) {
+     crds[i] = 0;
+     lftrght[i] = Math.random()*15;
+     x_mv[i] = 0.03 + Math.random()/10;
+     snow[i]=document.getElementById("snow"+i);
+     if(!snow[i]) continue;
+     snow[i].style.fontFamily=snowtype[randommaker(snowtype.length)]
+     snow[i].size=randommaker(snowsizerange)+snowminsize
+     snow[i].style.fontSize=snow[i].size+"px";
+     snow[i].style.color=snowcolor[randommaker(snowcolor.length)]
+     snow[i].style.zIndex=1000
+     snow[i].sink=sinkspeed*snow[i].size/5
+     snow[i].posx=randommaker(window.innerWidth);
+     snow[i].posy=randommaker(-2*snow[i].size+window.innerHeight);
+     snow[i].style.left=snow[i].posx+"px";
+     snow[i].style.top=snow[i].posy+"px";
+    }
+    movesnow();
+   }
+
+   function movesnow() {
+    if(!plugin_advent.isOpen) return;
+    for (i=0;i<=snowmax;i++) {
+     crds[i] += x_mv[i];
+     snow[i].posy+=snow[i].sink;
+     snow[i].style.left=Math.round(snow[i].posx+lftrght[i]*Math.sin(crds[i]))+"px";
+     snow[i].style.top=Math.round(snow[i].posy)+"px";
+
+     if (snow[i].posy>= $(window).height()){
+      snow[i].posx=randommaker($(window).width());
+      snow[i].posy=0
+     }
+    }
+    setTimeout(movesnow,50);
+   }
+
+   $('body').append(plugin_advent.wrapper);
+
+   setTimeout(function(){
+     // wait for popup to show 
+     var s = "";
+     for (i=0;i<=snowmax;i++) {
+      s += '<span id="snow'+i+'" style="position:absolute;top:-'+snowmaxsize+'">'+snowletter+'</span>';
+     }
+     plugin_advent.winterSpecial.append($(s));
+     initsnow();
+     $("#winterSpecialBoxOuter").jrumble({speed: 5,y:2,x:2, rotation:0});
+     plugin_advent.rumbleInterval = setInterval(function(){
+       $("#winterSpecialBoxOuter").trigger("startRumble"); 
+       setTimeout(function(){$("#winterSpecialBoxOuter").trigger("stopRumble");},600); 
+     },5000);
+   },50);
+};
+
+plugin_advent.copyContent = null;
+plugin_advent.copyCalendar = function(){
+  var self = plugin_advent.self;
+  var items = plugin_advent.loadData('class') || [];
+  plugin_advent.copyContent = JSON.parse(JSON.stringify(items)); 
+  self.alert("Kalenderinhalt wurde kopiert. Du kannst ihn jetzt in einem anderen Kurs wieder einfügen. Öffne dazu den Kalender im anderen Kurs und wähle Kalender einfügen.");
+};
+plugin_advent.pasteCalendar = function(){
+  var self = plugin_advent.self;
+  if(!plugin_advent.copyContent){
+    self.alert("Es wurde noch kein Kalender kopiert. Kopiere zunächst in einem Kurs den gesamten Kalender, um ihn hier wieder einzufügen").
+    return;
+  }
+  self.confirm("Möchtest du den aktuellen Kalender mit dem Kalender aus der Zwischenablage überschreiben?").then(function(){
+    plugin_advent.saveItems(JSON.parse(JSON.stringify(plugin_advent.copyContent)));
+    plugin_advent.closeEdit();
+    plugin_advent.edit();
+  });
+};
+
+plugin_advent.closeEdit = function(){
+  plugin_advent.wrapperEdit.remove();
+  plugin_advent.open();
+};
+
+plugin_advent.toggleVisibility = function(e){
+  var items = plugin_advent.loadData('class') || [];
+  var hidden = false;
+  if(!items) return;
+  for(var i=0; i < items.length; i++){
+    hidden = hidden || (items[i] && items[i].hidden == 1);
+  }
+  
+  hidden = !hidden;
+
+  for(var i=0; i < items.length; i++){
+    if(!items[i]) continue;
+    if(hidden) 
+      items[i].hidden = 1; else delete(items[i].hidden);
+  }
+  
+  plugin_advent.saveData("class",items);
+  $('#adventPlugin_hideBtn i').removeClass('fa-square-o').removeClass('fa-check-square-o').addClass(hidden ? 'fa-square-o' : 'fa-check-square-o');  
+};
+
+plugin_advent.edit = function(){
+  var self = plugin_advent.self;
+  var items = plugin_advent.loadData('class') || [];
+  var hidden = false;
+  if(items)
+    for(var i=0; i < items.length; i++){
+      hidden = hidden || (items[i] && items[i].hidden == 1);
+    }
+
+  plugin_advent.remove();  
+  plugin_advent.wrapperEdit =
+  $('<div style="position:absolute;padding-left:8px;overflow:auto;background-color:#eee;background-position: 50% 50%;background-image: url(\'https://learningview.org/plugins/WinterSpecial.jpg\');background-size:cover;background-repeat:no-repeat;width:100%;left:0;height:100%;top:0px;z-index:50"><style>@import url(https://fonts.googleapis.com/css?family=Gorditas); @import url(https://fonts.googleapis.com/css?family=Merienda); .bi_eff {font-family:\'Gorditas\', cursive;font-size:7vw;color:#EDF2EE;text-transform:uppercase;text-shadow:2px 2px 0px #B5C1B8,-1px -1px #FFFFFF;} #winterSpecialBox { transition: all .3s ease-out;} #winterSpecialBox:hover { transform: scale(1.2); }</style><div onclick="plugin_advent.closeEdit()" style="z-index:100000;position:absolute;right:8px;top:8px;cursor:pointer;color:white"><i class="fa fa-fw fa-times" style="font-size:200%"></i></div> <div style="display:flex;margin:8px;"><div onclick="plugin_advent.copyCalendar()" style="cursor:pointer;color:white"><i class="fa fa-fw fa-copy" style="font-size:200%; vertical-align: middle;"></i> Kalender kopieren</div>'+(plugin_advent.copyContent && JSON.stringify(items) != JSON.stringify(plugin_advent.copyContent) ? '<div onclick="plugin_advent.pasteCalendar()" style="margin-left:1em;cursor:pointer;color:white"><i class="fa fa-fw fa-paste" style="font-size:200%; vertical-align: middle;"></i> Kalender einfügen</div>':'')+'</div>'+'<p style="margin-left: 8px;margin-right: 60px;color:white; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 8px;">Adventskalender befüllen: Pro Tag lässt sich entweder ein Foto, Audio, Video oder Weblink angeben. Du kannst jederzeit den Kalender weiter befüllen oder abändern - du musst also noch nicht sofort alle 24 Türchen  füllen. Wenn mindestens ein Türchen gefüllt wurde, sehen die Schülerinnen und Schüler ab dem 23.11. ein anklickbares Geschenk-Symbol im Kurs (lösche ggf. alle Inhalte, wenn du den Kalender nicht verwenden möchtest). <br>Tipp: Wenn du mehrere oder vergangene Kurse hast, kannst du Adventskalender von einem Kurs in einen anderen kopieren.</p></div>');
+
+  for(var i=0; i < 24; i++){
+    var door = $('<div style="float:left;position:relative;width:160px;height:160px;margin:8px;border:4px solid white;border-radius:1em;padding:8px;box-sizing:border-box;    background: rgba(255,255,255,'+(items[i] ? '1.0':'0.5')+');"><span style="position:relative;z-index:10">'+(i+1)+'</span></div>');
+    if(items[i]){
+      if(items[i].type == "image"){
+        door.append($('<div style="border-radius:1em;pointer-events:none;position:absolute;left:0;top:0;height:100%;width:100%;background-size:cover;background-position:center center;background-image:url(\''+items[i].URL+'\')"></div>'));
+      }
+      if(items[i].type == "audio"){
+        door.append($('<div style="border-radius:1em;pointer-events:none;position:absolute;left:0;top:0;height:100%;width:100%;display:flex;justify-content:center;align-items:center"><i style="font-size:50px" class="fa fa-fw fa-microphone"></i></div>'));
+      }
+      if(items[i].type == "video"){
+        door.append($('<div style="border-radius:1em;pointer-events:none;position:absolute;left:0;top:0;height:100%;width:100%;background-size:cover;background-position:center center;background-image:url(\''+items[i].URL+'.jpg\')"></div><div style="border-radius:1em;pointer-events:none;position:absolute;left:0;top:0;height:100%;width:100%;display:flex;justify-content:center;align-items:center"><i style="font-size:50px;-webkit-text-stroke: 4px white;text-stroke: 4px white;" class="fa fa-fw fa-play"></i></div>'));
+      }
+      if(items[i].type == "url"){
+        door.append($('<div style="border-radius:1em;pointer-events:none;position:absolute;left:0;top:0;height:100%;width:100%;display:flex;justify-content:center;align-items:center"><i style="font-size:50px" class="fa fa-fw fa-link"></i></div>'));
+      }
+    }
+    
+    door.append($('<div onclick="event.stopPropagation()" style="background: white;text-align:center;position:absolute;bottom:0;left:0;width:100%"><i style="cursor:pointer;'+(items[i] ? 'display:none':'')+'" class="fa fa-fw fa-image"></i><i style="cursor:pointer;'+(items[i] ? 'display:none':'')+'" class="fa fa-fw fa-microphone"></i><i style="cursor:pointer;'+(items[i] ? 'display:none':'')+'" class="fa fa-fw fa-video-camera"></i><i style="cursor:pointer;'+(items[i] ? 'display:none':'')+'" class="fa fa-fw fa-link"></i>'+'<i style="cursor:pointer;'+(items[i] ? '' : 'display:none')+'" class="fa fa-fw fa-angle-left"></i>'+'<i style="cursor:pointer;'+(items[i] ? '' : 'display:none')+'" class="fa fa-fw fa-trash-o"></i>'+'<i style="cursor:pointer;'+(items[i] ? '' : 'display:none')+'" class="fa fa-fw fa-angle-right"></i>'+'</div>'));
+    plugin_advent.wrapperEdit.append(door);
+
+    addClickMenu(door,i);
+  }
+
+  function addClickMenu(door,day){
+    $('.fa-image',door).on("click",function(){
+      self.takeUserMedia("image",null,function(results){
+        if(!items[day]) items[day] = {};
+        items[day].type = "image";
+        items[day].URL = results[0].URL;
+        plugin_advent.saveItems(items);
+      },{dialogMode: 0});
+    });
+    $('.fa-microphone',door).on("click",function(){
+      self.takeUserMedia("audio",null,function(results){
+        if(!items[day]) items[day] = {};
+        items[day].type = "audio";
+        items[day].URL = results[0].URL;
+        plugin_advent.saveItems(items);
+      },{dialogMode: 0});
+    });
+    $('.fa-video-camera',door).on("click",function(){
+      self.takeUserMedia("video",null,function(results){
+        if(!items[day]) items[day] = {};
+        items[day].type = "video";
+        items[day].URL = results[0].URL;
+        plugin_advent.saveItems(items);
+      },{dialogMode: 0});
+    });
+    $('.fa-link',door).on("click",function(){
+      self.takeUserMedia("link",items[day] ? items[day].URL : null,function(results){
+        if(!items[day]) items[day] = {};
+        items[day].type = "url";
+        items[day].URL = $.trim(results[0].URL);
+        plugin_advent.saveItems(items);
+      },{dialogMode: 1});
+    });
+    $('.fa-trash-o',door).on("click",function(){
+      self.confirm('<span style="color:red;font-weight:bold">Wirklich löschen?</span>','Löschen',null).then(function(){
+        delete items[day];
+        var c = 0;
+        for(var i=0; i < items.length; i++){
+          if(items[i]) c++;
+        }
+        if(c == 0) items = [];
+        plugin_advent.saveItems(items);
+      });
+    });
+    $('.fa-angle-left',door).on("click",function(){
+      var t = items[day];
+      if(day > 0){
+        items[day] = items[day-1];
+        items[day-1] = t;
+        plugin_advent.saveItems(items);
+      }
+    });
+    $('.fa-angle-right',door).on("click",function(){
+      var t = items[day];
+      if(day < 23){
+        items[day] = items[day+1];
+        items[day+1] = t;
+        plugin_advent.saveItems(items);
+      }
+    });
+    door.on("click",function(){
+      if(items[day] && items[day]){
+        plugin_advent.openDay(day);
+      }
+    });
+  }
+
+  $('body').append(plugin_advent.wrapperEdit);
+};
+
+plugin_advent.shareLink = function(){
+  var self = plugin_advent.self;
+  self.alert('<div style="max-width:400px">Du kannst diesen Adventskalender über einen Weblink zum Beispiel an Eltern versenden (es wird kein Login benötigt).<br><br>Der Link wurde in die Zwischenablage kopiert.</div>');
+  copyTextToClipboard('https://learningview.org/plugins/advent.php?id='+self.currentClass.ID+'&code='+self.currentClass.Created.replace(/[^0-9]/g,""));
+};
+
+plugin_advent.saveItems = function(items){
+  var self = plugin_advent.self;
+  plugin_advent.saveData("class",items);
+  plugin_advent.closeEdit();
+  plugin_advent.edit();
+};
+
+plugin_advent.refreshDate = function(callback){  
+  $.getJSON("https://learningview.org/api/getTime.php", function( data ) {
+    if(data && data.result == "OK"){
+      // override with server date
+      plugin_advent.now = new Date(parseInt(data.time)*1000); 
+      plugin_advent.showButton = false;
+      var items = plugin_advent.loadData('class');
+      var hidden = false;
+      if(items && items.length > 0){
+        for(var i=0; i < items.length; i++){
+          hidden = hidden || (items[i] && items[i].hidden == 1);
+        }
+        var currentdate = plugin_advent.now;
+        var day = currentdate.getDate();
+        var month = currentdate.getMonth()+1;
+        plugin_advent.showButton = !((month < 11) || (month == 11 && day < 23));
+        if(hidden) plugin_advent.showButton = false;
+        if(plugin_advent.self.user && plugin_advent.self.user.Teacher == 1 && 
+           month >= 11) plugin_advent.showButton = true;
+        if(callback) callback(plugin_advent.now);
+      }
+    }
+  });
+};
+
+plugin_advent.dataChanged = function(type,value,oldValue){
+  // called when data is changed by server  
+  plugin_advent.refreshDate();
+};
+
+// init the plugin and add the adventButton.html to the top of classcontent 
+window.initPlugin(plugin_advent,function($scope, $compile, $timeout, $interval){
+  var self = $scope.self;
+  self.plugin_advent = plugin_advent;
+  self.plugin_advent.injectInTemplate('classcontent.html',
+  "<!-- PLUGINS - CLASS START -->",
+  '<!-- PLUGINS - CLASS START --><ng-include src="\'adventButton.html\'"></ng-include>');
+  self.plugin_advent.refreshDate();
+  // refresh button when switching classes 
+  if(self.when) self.when('openClass',function(){self.plugin_advent.refreshDate(); });
+});
+
+
+

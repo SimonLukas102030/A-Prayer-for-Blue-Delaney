@@ -1,0 +1,315 @@
+var store = "";
+
+document.addEventListener("deviceready", function(){
+  store = typeof(cordova) != "undefined" ? cordova.file.dataDirectory : "http://learningview.org/";
+}, false);
+
+function reloadFiles() {
+  window.location.href = "index.html";
+}
+
+function renameFile(currentName, currentDir, newName, successFunction, failFunction) {
+  if(currentDir.length > 0 && currentDir[currentDir.length-1] != "/") currentDir += "/";
+
+  window.resolveLocalFileSystemURL(currentDir+currentName,function(fileEntry){
+    window.resolveLocalFileSystemURL(currentDir,function(dirEntry){
+      fileEntry.moveTo(dirEntry, newName, successFunction ? successFunction : null, failFunction ? failFunction : null);      
+    },failFunction ? failFunction : null);    
+  },failFunction ? failFunction : null);
+}
+
+function deleteFile(fileName,directory){
+  if(directory.length > 0 && directory[directory.length-1] != "/") directory += "/";
+  window.resolveLocalFileSystemURL(directory+fileName,function(fileEntry){
+    fileEntry.remove();
+  });
+}
+
+function fileGetContents(url,callback){
+  if(typeof(cordova) != "undefined" && url.indexOf("file://") == 0){
+    window.resolveLocalFileSystemURL(url,function(fileEntry){
+      fileEntry.file(function(file) {
+        var reader = new FileReader();
+        reader.onloadend = function(e) { if(callback) callback(this.result); }
+        reader.readAsText(file);
+      });
+    });
+  }else
+  if(window.electron){
+    var fileName = url.replace("file://","");
+    window.electron.fs.exists(fileName,function(exists){
+      if(exists){
+        window.electron.fs.readFile(fileName, {encoding: 'utf-8'}, function(err,data){
+          if (!err) {
+            if(callback) callback(data);
+          } else {
+            console.log(err);
+          }
+        });
+      }else{
+        $.ajax({
+          url: url,
+          cache: false
+        }).done(function(data){
+          if(callback) callback(data);
+        }).fail(function(){
+          if(window.failToFileGetContents) window.failToFileGetContents(url);
+        });      
+      }
+    });
+  }else
+    $.ajax({
+      url: url,
+      cache: false
+    }).done(function(data){
+      if(callback) callback(data);
+    }).fail(function(){
+      if(window.failToFileGetContents) window.failToFileGetContents(url);
+    });
+}
+
+// does not work right now because of permissions
+window.downloadAssetsInElectron = false;
+
+function downloadAssetOld(fileName, directory, sourceURL, callback, progress){
+
+  var createFoldersRecursive = function(targetDirectory,callbackSuccess,callbackError){
+    window.resolveLocalFileSystemURL(cordova.file.dataDirectory,function(rootDirEntry){
+      var folder = targetDirectory.replace(cordova.file.dataDirectory,"");
+      folder = folder.replace(/\/\//g,"/");
+      folder = folder.replace(/^\//g,"");
+      folder = folder.replace(/\/$/g,"");
+      var folders = folder.split("/");
+      var createDirsRecursive = function(parentDir, dir, subdirs){
+        parentDir.getDirectory(dir, {
+          create: true,
+          exclusive: false
+        }, function(newDir){
+          if(subdirs.length > 0){
+            var n = subdirs.shift();
+            createDirsRecursive(newDir,n,subdirs);
+          }else{
+            if(callbackSuccess) callbackSuccess(newDir);
+          }
+        }, callbackError);
+      };
+      var n = folders.shift();
+      createDirsRecursive(rootDirEntry,n,folders);
+    },callbackError);
+  };
+
+  var downloadFileXHR = function(sourceURL, targetDirectory, targetFile, callbackSuccess, callbackProgress, errorCallback){
+    if(targetDirectory.length > 0 && targetDirectory[targetDirectory.length-1] != "/") 
+       targetDirectory += "/";
+    function onFSError(error) {
+      console.log(JSON.stringify(error));
+      if(errorCallback) errorCallback(error);
+    }
+    function writeFile(fileEntry, data) {
+      fileEntry.createWriter(function (fileWriter) {
+        fileWriter.onerror = function(e) {
+          console.log("Failed file write: " + e.toString());
+          if(errorCallback) errorCallback(e);
+        };
+        function writeFinish() {
+          function success(file) {
+            if(callbackSuccess) callbackSuccess(file);
+          }
+          function fail(error) {
+            console.log("Unable to retrieve file properties: " + error.code);
+            if(errorCallback) errorCallback(error);
+          }
+          fileEntry.file(success, fail);
+        }
+        var written = 0;
+        var BLOCK_SIZE = 1*1024*1024; // write 1M 
+        function writeNext(cbFinish) {
+          fileWriter.onwrite = function(evt) {
+            if (written < data.size)
+              writeNext(cbFinish);
+            else
+              cbFinish();
+          };
+          if (written) fileWriter.seek(fileWriter.length);
+          fileWriter.write(data.slice(written, written + Math.min(BLOCK_SIZE, data.size - written)));
+          written += Math.min(BLOCK_SIZE, data.size - written);
+        }
+        writeNext(writeFinish);
+      });
+    };
+
+    createFoldersRecursive(targetDirectory,function(dirEntry){
+      // Creates a new file or returns the file if it already exists.
+      dirEntry.getFile(targetFile, {create: true, exclusive: false}, function(fileEntry) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', sourceURL, true);
+          xhr.responseType = 'blob';
+          xhr.onerror = onFSError;
+          xhr.onprogress = function (event) {
+            if(callbackProgress) callbackProgress(event);
+          };
+          xhr.onload = function() {
+            if (this.status == 200) {
+              var blob = new Blob([this.response], { type: 'image/jpeg' });
+              writeFile(fileEntry, blob);
+            }
+          };
+          xhr.send();
+      }, onFSError);
+    },onFSError);
+  };
+
+
+  if(typeof(cordova) != "undefined"){
+    console.log("Getting File: "+sourceURL);
+    if(directory.length > 0 && directory[directory.length-1] != "/") directory += "/";
+    if(sourceURL.indexOf("?") >= 0) 
+      sourceURL += "&r="+Math.random(); else
+      sourceURL += "?r="+Math.random();
+      
+    downloadFileXHR(sourceURL, directory, fileName+"_", function(){
+      renameFile(fileName+"_",directory, fileName,function(){
+        console.log("Finished loading: "+fileName);
+        var url = directory+fileName;
+        if(url.indexOf("file://") != -1){
+          if(window.Ionic && window.Ionic.WebView && window.Ionic.WebView.convertFileSrc){
+            url = window.Ionic.WebView.convertFileSrc(url);
+          }
+        }
+        if(callback) callback(url);
+      });
+    },function(progressEvent){
+      if(progress) progress(progressEvent);
+    },function(err){
+      window.resolveLocalFileSystemURL(directory+fileName, function(){
+        var url = directory+fileName;
+        if(url.indexOf("file://") != -1){
+          if(window.Ionic && window.Ionic.WebView && window.Ionic.WebView.convertFileSrc){
+            url = window.Ionic.WebView.convertFileSrc(url);
+          }
+        }
+        if(callback) callback(url);
+      }, showNeedForInternet);
+    });
+  }else
+  if(window.electron && window.downloadAssetsInElectron == true){
+    window.electron.download(sourceURL, directory+fileName+"_", function(loaded,total){
+      if(progress) progress({total:total,loaded:loaded});
+    }).then(function(){
+        window.electron.fs.rename(directory+fileName+"_",directory+fileName,function(err){
+          if(err){
+            console.log("Error renaming: "+directory+fileName,err);
+          }else{
+            console.log("Finished loading: "+fileName);
+            if(callback) callback("file://"+directory+fileName);
+          }
+        });      
+    }).catch(function(e){
+       if (window.electron.fs.existsSync(directory+fileName)){
+          if(callback) callback("file://"+directory+fileName);
+       }else{
+          showNeedForInternet();
+       }
+    });     
+  }else{
+    // webview online
+    if(callback) callback(sourceURL);
+  }
+}
+var wasDownloadedAsset = [];
+function downloadAsset(fileName, directory, sourceURL, callback, progress){
+  if(wasDownloadedAsset.indexOf(sourceURL) != -1) return; // already done
+  wasDownloadedAsset.push(sourceURL);
+  if(callback) callback(sourceURL);
+}
+
+/*
+function downloadAsset(fileName, directory, sourceURL, callback, progress){
+  if(typeof(cordova) != "undefined"){
+    var fileTransfer = new FileTransfer();
+    console.log("Getting File: "+sourceURL);
+
+    if(directory.length > 0 && directory[directory.length-1] != "/") directory += "/";
+
+    var progressCounter = 0;
+
+    fileTransfer.onprogress = function(progressEvent) {
+      if(progress) progress(progressEvent);
+    };
+    
+    if(sourceURL.indexOf("?") >= 0) 
+      sourceURL += "&r="+Math.random(); else
+      sourceURL += "?r="+Math.random();
+      
+    fileTransfer.download(sourceURL, directory+fileName+"_", 
+      function(entry) {
+        renameFile(fileName+"_",directory, fileName,function(){
+        console.log("Finished loading: "+fileName);
+        if(callback) callback(directory+fileName);
+        });
+      },
+      function(err) {
+        window.resolveLocalFileSystemURL(directory+fileName, function(){
+         if(callback) callback(directory+fileName);
+        }, showNeedForInternet);
+    }
+    );
+  }else{
+    // webview online
+    if(callback) callback(sourceURL);
+  }
+}
+*/
+function showNeedForInternet(){
+  alert("We need internet connection on first run!");
+}
+
+function loadScript(filename,callback){
+  if(filename.indexOf("?") >= 0) 
+    filename += "&r="+Math.random(); else
+    filename += "?r="+Math.random();
+
+  var fileref=document.createElement('script');
+  fileref.setAttribute("type","text/javascript");
+  
+  if(filename.indexOf("file://") != -1){
+    if(window.Ionic && window.Ionic.WebView && window.Ionic.WebView.convertFileSrc){
+      filename = window.Ionic.WebView.convertFileSrc(filename);
+    }
+  }
+  fileref.setAttribute("src", filename);
+  if(callback) {
+    fileref.onload = callback;
+    fileref.onreadystatechange = function() {
+      if (this.readyState == 'complete') callback();
+    }
+  }
+  document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+
+function loadCSS(filename,callback){
+  if(filename.indexOf("?") >= 0) 
+    filename += "&r="+Math.random(); else
+    filename += "?r="+Math.random();
+
+  if(filename.indexOf("file://") != -1){
+    if(window.Ionic && window.Ionic.WebView && window.Ionic.WebView.convertFileSrc){
+      filename = window.Ionic.WebView.convertFileSrc(filename);
+    }
+  }
+
+  var fileref=document.createElement('link');
+  fileref.setAttribute("rel", "stylesheet");
+  fileref.setAttribute("type", "text/css");
+  fileref.setAttribute("href", filename);
+  if(callback) {
+    fileref.onload = callback;
+    fileref.onreadystatechange = function() {
+      if (this.readyState == 'complete') callback();
+    }
+  }
+  document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+
+
+
