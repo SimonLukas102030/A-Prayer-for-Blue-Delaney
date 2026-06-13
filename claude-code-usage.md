@@ -232,6 +232,17 @@
 
 ---
 
+### Prompt 20 — Remove "extra task" note
+**Prompt:**
+> *"Remove the 'This file will be uploaded as an extra task.' because it is in GitHub. Not necessary anymore."*
+
+**What Claude did:**
+- Copied `Chapter 1.md`, `Chapter 2.md`, `Chapter 3.md` to `original/` before editing (content change rule)
+- Removed "This file will be uploaded as an 'extra task'." from the AI note in all three chapter files
+- Committed and pushed
+
+---
+
 ### Prompt 21 — Remove .md files from original/
 **Prompt:**
 > *"The original rule is just for files I made, not the ones you made. They are in the GitHub log. That's enough. Remove the .mds from original/, just keep the ones actually from me."*
@@ -299,11 +310,9 @@
 
 ---
 
-### Prompt 20 — Remove "extra task" note
+### Prompt 26 — Fix prompt numbering order
 **Prompt:**
-> *"Remove the 'This file will be uploaded as an extra task.' because it is in GitHub. Not necessary anymore."*
+> *"Why is prompt 20 after 25?"*
 
 **What Claude did:**
-- Copied `Chapter 1.md`, `Chapter 2.md`, `Chapter 3.md` to `original/` before editing (content change rule)
-- Removed "This file will be uploaded as an 'extra task'." from the AI note in all three chapter files
-- Committed and pushed
+- Moved Prompt 20 to its correct position (between 19 and 21) — it had been misplaced during an earlier edit
