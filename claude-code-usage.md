@@ -111,3 +111,72 @@
 **What Claude did:**
 - Updated `claude-code-usage.md` with this entry
 - Noted: Chapter 3 task type = **Summary** (counts as one of the required 3 texts with ~100 words)
+
+---
+
+### Prompt 10 — Chapter 3 submitted
+**Prompt:**
+> *"C:\Users\simon\Storage\Schule\Englisch\Readers-Log\A Prayer for Blue Delaney\Chapter 3.docx"*
+
+**What Claude did:**
+- Read `Chapter 3.docx` via PowerShell ZIP/XML extraction
+- Checked the summary text for errors
+
+**Findings:**
+- Word count ~150 words ✅ (meets ~100-word requirement)
+- Errors found: "scarred" → "scared" (2×), "h urricanes" → "hurricanes" (split word typo), "merry" → "Mary", "Marry" → "Mary" (2×)
+
+---
+
+### Prompt 11 — Fix errors and improve formatting
+**Prompt:**
+> *"Is it possible for you to fix those errors? Also do you mind making it a little better to look at using bold and cursive text and so on? Also important is that you have to write my whole current stage in claude code usage, so my teacher can see what I've done and what you've done."*
+
+**What Claude did:**
+- Read the raw XML of `Chapter 3.docx` to understand the document structure
+- Did not yet apply the fixes (interrupted by the .md vs .docx discussion below)
+
+---
+
+### Prompt 12 — .md vs .docx discussion
+**Prompt:**
+> *"Slight question — if it is not possible to do Word for you, is .md fine? But then I will have to do everything in .md. As pictures cannot be inside an .md (to my knowledge), we will probably have to use GitHub for storing the pictures."*
+
+**What Claude did:**
+- No files modified
+- Clarified that pictures *can* be embedded in `.md` via `![](path)`, but only work if the image is in the same folder as the file
+- Explained that sharing just the `.md` file without the images folder means broken image paths on the teacher's PC
+- Recommended: text-only chapters → `.md`; picture chapters → `.docx`
+
+---
+
+### Prompt 13 — GitHub repo question
+**Prompt:**
+> *"So should I just drop the entire folder into a GitHub repo?"*
+
+**What Claude did:**
+- No files modified
+- Recommended creating a public GitHub repo and pushing the entire folder — teacher gets one URL, everything renders (`.md`, images, `.docx` download buttons)
+
+---
+
+### Prompt 14 — GitHub repo created & pushed
+**Prompt:**
+> *"https://github.com/SimonLukas102030/A-Prayer-for-Blue-Delaney"*
+
+**What Claude did:**
+- Initialized a git repository in the Reader's Log folder
+- Configured git identity (name: SimonLukas102030, email: simonkoper27@gmail.com)
+- Committed all 14 files (`.md`, `.docx`, `.png`, `.pptx`) in an initial commit
+- Added the GitHub remote and pushed to `main` branch
+
+**Result:** All files are now live at https://github.com/SimonLukas102030/A-Prayer-for-Blue-Delaney
+
+---
+
+### Prompt 15 — Log all missing prompts
+**Prompt:**
+> *"Yes, log it in claude code usage. Also the past messages, not noted yet."*
+
+**What Claude did:**
+- Added Prompts 10–15 to `claude-code-usage.md` to catch up on all unlogged interactions
