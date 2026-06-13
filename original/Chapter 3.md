@@ -3,7 +3,7 @@
 
 ---
 
-> **Note:** AI Usage documented in "AI-Usage.md".
+> **Note:** AI Usage documented in "AI-Usage.md". This file will be uploaded as an "extra task".
 
 ---
 
