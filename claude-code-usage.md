@@ -339,3 +339,15 @@
 ---
 
 ## Session — 2026-06-13 | 19:52 – ongoing
+
+### Prompt 28 — Fix Chapter 3 errors
+**Prompt:**
+> *"Fix the Ch3 errors."*
+
+**What Claude did:**
+- Fixed all 5 errors in `Chapter 3.md` (content change approved by Simon):
+  - `scarred` → `scared` (2×)
+  - `h urricanes` → `hurricanes` (split word)
+  - `merry` → `Mary`
+  - `Marry` → `Mary`
+- Committed and pushed
