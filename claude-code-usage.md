@@ -244,6 +244,61 @@
 
 ---
 
+### Prompt 22 — Chapter 4 task recommendation
+**Prompt:**
+> *"Chapter 4 now, what kind of task do you recommend? It is about: Colm and Dibs arrive by bus in Australia in an orphanage. They get greeted by a mean brother. He makes fun of the name Colm. It is a bad place and the brothers aren't nice to the kids. For context, Colm is from Britain. In chapter 3 they have been on a ship from Britain to Australia. Later all the boys have time to write letters. Colm writes his mom. The kids have to work hard on the farmland etc. Later they went swimming, where Dibs was almost drowned by a brother. The brother said he was trying to teach him to swim. Colm had to rescue him. And Dibs got beaten up for accusing the brother of almost drowning him."*
+
+**What Claude did:**
+- No files modified
+- Recommended **Letter** (Colm to his mom) as the best fit — literally in the chapter, counts as ~100-word text, strong emotional material
+
+---
+
+### Prompt 23 — Letter already in the book
+**Prompt:**
+> *"The problem is that there is already this letter in the book — written."*
+
+**What Claude did:**
+- No files modified
+- Withdrew the letter recommendation (would be copying from the book)
+- New recommendation: **Diary entry** from Colm's perspective — personal, internal, not in the book, still counts as a ~100-word text
+
+---
+
+### Prompt 24 — Message to Mr. Olbrich
+**Prompt:**
+> *"Do you mind quickly writing a small message to Mr. Olbrich that I added all my results to GitHub and where he can find it? It should explain in short form why I had to choose GitHub. Also add all the previous stuff to claude code usage."*
+
+**What Claude did:**
+- No files modified
+- Drafted the following message for Simon to send to Mr. Olbrich:
+
+---
+
+*Dear Mr. Olbrich,*
+
+*I have uploaded all my Reader's Log results to GitHub, where you can find them here:*
+*https://github.com/SimonLukas102030/A-Prayer-for-Blue-Delaney*
+
+*The reason I chose GitHub over submitting individual files: I decided to use Markdown (.md) files for my chapters, as they are clean and easy to read. However, .md files can only display images if the image files are in the same folder — sharing just the file would result in broken images on your device. GitHub solves this by hosting everything together and rendering it directly in the browser, with no downloads or special software needed. It works on both PC and iPad.*
+
+*The repository includes all completed chapters, my AI usage documentation, and a README that links to everything.*
+
+*Best regards,*
+*Simon Köper*
+
+---
+
+### Prompt 25 — Message confirmed
+**Prompt:**
+> *"It's fine."*
+
+**What Claude did:**
+- No files modified
+- Simon confirmed the message to Mr. Olbrich is good to send as written
+
+---
+
 ### Prompt 20 — Remove "extra task" note
 **Prompt:**
 > *"Remove the 'This file will be uploaded as an extra task.' because it is in GitHub. Not necessary anymore."*
