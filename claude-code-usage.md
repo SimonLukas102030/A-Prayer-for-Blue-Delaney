@@ -180,3 +180,25 @@
 
 **What Claude did:**
 - Added Prompts 10–15 to `claude-code-usage.md` to catch up on all unlogged interactions
+
+---
+
+### Prompt 16 — README hub
+**Prompt:**
+> *"Make a small index.html that serves as a hub to get the teacher to the different chapters etc."*
+
+**What Claude did:**
+- Created `README.md` instead of `index.html` (GitHub renders README.md automatically on the repo homepage — no GitHub Pages setup needed)
+- Table with all 3 chapters, task types, and file links
+- Links to Cover, AI-Usage.md, claude-code-usage.md, and How-to-open-MD.md
+- Pushed to GitHub
+
+---
+
+### Prompt 17 — Replace Task.png with LearningView HTML
+**Prompt:**
+> *"Update. I have changed the Task.png with the HTML you actually get the info from."*
+
+**What Claude did:**
+- Detected via `git status`: `Assets/Task.png` deleted, `Assets/LearningView.org.html` and `Assets/LearningView.org_files/` added
+- Committed and pushed all changes (45 files total — the saved HTML page includes many JS/CSS files in the `_files` folder)
