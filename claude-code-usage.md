@@ -5,7 +5,7 @@
 
 ---
 
-## Session — 2026-06-13
+## Session — 2026-06-13 | 10:44 – 15:05
 
 ### Prompt 1 — Assignment check
 **Prompt:**
@@ -316,3 +316,22 @@
 
 **What Claude did:**
 - Moved Prompt 20 to its correct position (between 19 and 21) — it had been misplaced during an earlier edit
+
+---
+
+### Prompt 27 — Session close
+**Prompt:**
+> *"Close up this session. Have a look when it started (when was the folder created) and note when it ended. I'll be working on it later today."*
+
+**What Claude did:**
+- Checked folder creation time: **10:44**
+- Session ended: **15:05**
+- Total session duration: ~4h 21min
+- Updated session header with start/end times
+- Simon will continue work later today
+
+**Open for next session:**
+- Chapter 3 errors still not fixed (scared/hurricanes/Mary) — Simon needs to approve content edit first
+- Chapter 4 task decided: **Diary entry** (Colm's perspective)
+- Still need 2 more ~100-word texts (out of 3 required)
+- 7 more chapters to go before deadline 19.06.
