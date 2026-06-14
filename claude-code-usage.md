@@ -756,3 +756,15 @@
 - Extra vocab exercise not started
 - Ch6 description placeholder still needs to be filled in by Simon
 - Ask Mr. Olbrich about the interactive HTML task (Ch5) approval
+
+---
+
+## Session — 2026-06-14 | ongoing
+
+### Prompt 63 — Open new session
+**Prompt:**
+> *"I'm back, open new session."*
+
+**What Claude did:**
+- Opened new session, updated `claude-code-usage.md`
+- Committed and pushed
