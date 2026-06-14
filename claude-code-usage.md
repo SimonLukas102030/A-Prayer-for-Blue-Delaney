@@ -413,3 +413,89 @@
 ---
 
 ## Session — 2026-06-14 | 11:52 – ongoing
+
+### Prompt 34 — Chapter 5 task recommendation
+**Prompt:**
+> *"Ch5, what do you recommend? Its story is as following: A lot of time passes. Multiple months. Dibs gets smaller and Colm stronger and bigger. He tells about the punishment. Its every day at the evening after dinner. The brothers said it is 'for their own good'. That day, Colm and Dibs got punished for their 'lies'. Colm covered Dibs. So Dibs didn't get struck. He also talked about sleepwalking. He went sleepwalking and found himself in the office, with glass shards in his hand. That's about it."*
+
+**What Claude did:**
+- No files modified
+- Recommended **newspaper article** as best fit — dramatic material, last required ~100-word text
+
+---
+
+### Prompt 35 — Newspaper saved for Tommy
+**Prompt:**
+> *"Newspaper. That's something I want to use later, as Tommy dies."*
+
+**What Claude did:**
+- No files modified
+- Noted: newspaper article reserved for Tommy's death chapter
+- Revised Ch5 recommendation: **WH-questions** (safe, structured) or **different text** (creative, poem/drama)
+
+---
+
+### Prompt 36 — 100-word requirement covered by newspaper
+**Prompt:**
+> *"The 100 word thing will be newspaper for Tommy."*
+
+**What Claude did:**
+- No files modified
+- Noted: 3 required texts = Summary (Ch3) ✅, Diary entry (Ch4) ✅, Newspaper article (Tommy's chapter, future) ✅
+- Ch5 is now free format — no text requirement
+
+---
+
+### Prompt 37 — Creative coding idea for Ch5
+**Prompt:**
+> *"I feel like making something creative. I can code a bit. He said it is possible to think of a new kind of task. I want to go a little deeper into this punishment thing. It's an important part of the storyline."*
+
+**What Claude did:**
+- No files modified
+- Presented creative HTML/JS ideas: tally counter, fake official document, "The Office" interactive page, Colm vs. Dibs comparison, punishment book
+- Noted teacher approval needed for new task types
+
+---
+
+### Prompt 38 — Python question
+**Prompt:**
+> *"Can a viewer open a .py inside GitHub and execute?"*
+
+**What Claude did:**
+- No files modified
+- Explained: GitHub only renders Python source, does not execute it
+- Recommended HTML/CSS/JS instead — runs directly via GitHub Pages, no setup needed
+
+---
+
+### Prompt 39 — Interactive concept described
+**Prompt:**
+> *"I had the idea of like printing stuff slowly revealing the summary, about what happened. With the user having a little bit of control. Like, one text they can select about the sleepwalking, and one about the punishment etc."*
+
+**What Claude did:**
+- No files modified
+- Confirmed this is perfect for HTML/CSS/JS — typewriter effect + two selectable sections
+- Sketched rough structure: title, two buttons, text reveals on click
+
+---
+
+### Prompt 40 — Build the base
+**Prompt:**
+> *"Build the base, I'll fill in the text. In the main page, do like a button to the principal's office and on the right, one to the room with punishment. I think it's in the cafeteria, but it's not said straight. Because all the others are watching, so it must be a big room. Then in the 2 things, I'll do the text. Also all in one file. So just one HTML where everything is inside. Oh, and the chapter is called 'The first cut'."*
+
+**What Claude did:**
+- Created `Chapter 5.html` — single self-contained file with embedded CSS and JS
+- Dark atmospheric design, two "door" buttons on main page: **The Principal's Office** (sleepwalking) and **The Dining Hall** (punishment)
+- Typewriter effect on click, skip on second click, back button returns to main page
+- Two clearly marked placeholder strings at top of script for Simon to fill in
+- Added Chapter 5 row to `README.md`
+- Committed and pushed
+
+---
+
+### Prompt 41 — Log everything
+**Prompt:**
+> *"Note all in claude code usage."*
+
+**What Claude did:**
+- Added Prompts 34–41 to `claude-code-usage.md`
