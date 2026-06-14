@@ -25,15 +25,13 @@
 
         /* ── MUSIC PAPER ── */
         .paper {
-            background: #f5f0df;
-            width: 100%; max-width: 700px; min-height: 200px;
+            background: #f5f0df; width: 100%; max-width: 700px; min-height: 200px;
             padding: 1.8rem 2.2rem 1.4rem;
             box-shadow: 0 6px 28px rgba(0,0,0,0.7);
             position: relative; overflow: hidden;
         }
         .paper::before {
-            content: '';
-            position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: repeating-linear-gradient(180deg, transparent 0px, transparent 34px, #90a8c0 34px, #90a8c0 35px);
             pointer-events: none;
         }
@@ -53,11 +51,13 @@
 
         /* ── PIANO ── */
         /*
-          8 white keys × 46px + 7 gaps × 3px = 389px + 28px padding = 417px
+          10 white keys × 46px + 9 gaps × 3px = 487px + 28px padding = 515px
           White key left offsets (left padding = 14px, step = 49px):
-            C4=14  D4=63  E4=112  F4=161  G4=210  A4=259  B4=308  C5=357
-          Black key left = white_start + 46 - 15:
-            C#=45  D#=94  F#=192  G#=241  A#=290
+            C4=14  D4=63  E4=112  F4=161  G4=210
+            A4=259  B4=308  C5=357  D5=406  E5=455
+          Black key left = white_start + 31:
+            C#4=45   D#4=94   F#4=192  G#4=241  A#4=290
+            C#5=388  D#5=437  ← melody key, interactive
         */
         .piano-wrap { position: relative; }
         .piano {
@@ -83,16 +83,15 @@
 
         .key-lbl { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.6rem; color: #999; pointer-events: none; }
         .wk.active .key-lbl { color: #7a5c00; font-weight: bold; }
-
         .key-arrow {
-            position: absolute; top: -26px; left: 50%;
-            transform: translateX(-50%);
+            position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
             font-size: 1.2rem; color: #ffe84a; display: none; pointer-events: none;
             animation: arrowBounce 0.85s ease-in-out infinite;
         }
         .wk.active .key-arrow { display: block; }
         @keyframes arrowBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-5px)} }
 
+        /* Black keys */
         .bk {
             width: 30px; height: 94px;
             background: linear-gradient(180deg, #2a2a2a, #0a0a0a);
@@ -101,19 +100,30 @@
             pointer-events: none;
             box-shadow: 2px 5px 8px rgba(0,0,0,0.6);
         }
-        .bk-lbl { position: absolute; bottom: 6px; width: 100%; text-align: center; font-size: 0.5rem; color: #555; }
+        .bk.melody-key { pointer-events: auto; cursor: pointer; }
+        .bk.active { background: linear-gradient(180deg, #ffe84a, #c8a000); box-shadow: 2px 5px 14px rgba(255,200,0,0.5); }
+        .bk.pressed { transform: translateY(3px); }
+        .bk.wrong-flash { background: linear-gradient(180deg, #ff5050, #aa0000) !important; }
+
+        .bk .key-arrow {
+            position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
+            font-size: 1rem; color: #ffe84a; display: none; pointer-events: none;
+            animation: arrowBounce 0.85s ease-in-out infinite;
+        }
+        .bk.active .key-arrow { display: block; }
+
+        .bk-lbl { position: absolute; bottom: 6px; width: 100%; text-align: center; font-size: 0.5rem; color: #555; pointer-events: none; }
+        .bk.active .bk-lbl { color: #7a5c00; font-weight: bold; }
 
         .screen-flash { position: fixed; inset: 0; background: transparent; pointer-events: none; z-index: 99; }
         .screen-flash.wrong { animation: screenWrong 0.35s ease forwards; }
         @keyframes screenWrong { 0%{background:rgba(200,0,0,0.22)} 100%{background:transparent} }
 
-        /* Auto mode indicator */
         .auto-badge {
             position: fixed; top: 1rem; right: 1rem;
             color: #ffe84a; font-size: 0.65rem; letter-spacing: 0.3em;
             font-family: 'Courier New', monospace;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .auto-badge.on { opacity: 1; animation: autoPulse 1s ease-in-out infinite; }
         @keyframes autoPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
@@ -133,26 +143,37 @@
 </div>
 
 <div class="controls-info">
-    <div class="hint" id="hint">Press the glowing key &nbsp;·&nbsp; keyboard:&nbsp; A=C &nbsp; S=D &nbsp; D=E &nbsp; G=G &nbsp; H=A</div>
+    <div class="hint" id="hint">Press the glowing key &nbsp;·&nbsp; D#&nbsp;=&nbsp;P on keyboard</div>
     <div class="progress" id="progress"></div>
 </div>
 
 <div class="piano-wrap">
     <div class="piano" id="piano">
+
+        <!-- 10 white keys: C4 → E5 -->
         <div class="wk" id="key-C4" data-note="C4"><div class="key-arrow">&#9660;</div><div class="key-lbl">C</div></div>
         <div class="wk" id="key-D4" data-note="D4"><div class="key-arrow">&#9660;</div><div class="key-lbl">D</div></div>
         <div class="wk" id="key-E4" data-note="E4"><div class="key-arrow">&#9660;</div><div class="key-lbl">E</div></div>
         <div class="wk" id="key-F4" data-note="F4"><div class="key-lbl">F</div></div>
-        <div class="wk" id="key-G4" data-note="G4"><div class="key-arrow">&#9660;</div><div class="key-lbl">G</div></div>
+        <div class="wk" id="key-G4" data-note="G4"><div class="key-lbl">G</div></div>
         <div class="wk" id="key-A4" data-note="A4"><div class="key-arrow">&#9660;</div><div class="key-lbl">A</div></div>
-        <div class="wk" id="key-B4" data-note="B4"><div class="key-lbl">B</div></div>
-        <div class="wk" id="key-C5" data-note="C5"><div class="key-lbl">C</div></div>
+        <div class="wk" id="key-B4" data-note="B4"><div class="key-arrow">&#9660;</div><div class="key-lbl">B</div></div>
+        <div class="wk" id="key-C5" data-note="C5"><div class="key-arrow">&#9660;</div><div class="key-lbl">C</div></div>
+        <div class="wk" id="key-D5" data-note="D5"><div class="key-arrow">&#9660;</div><div class="key-lbl">D</div></div>
+        <div class="wk" id="key-E5" data-note="E5"><div class="key-arrow">&#9660;</div><div class="key-lbl">E</div></div>
 
+        <!-- Black keys (decorative) -->
         <div class="bk" style="left:45px;"><div class="bk-lbl">C#</div></div>
         <div class="bk" style="left:94px;"><div class="bk-lbl">D#</div></div>
         <div class="bk" style="left:192px;"><div class="bk-lbl">F#</div></div>
         <div class="bk" style="left:241px;"><div class="bk-lbl">G#</div></div>
         <div class="bk" style="left:290px;"><div class="bk-lbl">Bb</div></div>
+        <div class="bk" style="left:388px;"><div class="bk-lbl">C#</div></div>
+        <!-- D#5 — melody key, interactive -->
+        <div class="bk melody-key" id="key-Ds5" data-note="Ds5" style="left:437px;">
+            <div class="key-arrow">&#9660;</div>
+            <div class="bk-lbl">D#</div>
+        </div>
     </div>
 </div>
 
@@ -164,103 +185,88 @@
 const TEXT = "Replace this placeholder text with what you want to write about chapter ten. Write about Colm staying at Bill's house healing his foot. You can describe the old asylum how it looks and feels. Write about the weeks that passed and how Colm slowly felt better. Then describe how he found the piano and started learning it. Maybe write about how the music made him feel hopeful again for the first time. At the end mention the newspaper he read about the Queen visiting Fremantle the next day.";
 
 // ─────────────────────────────────────────────────────────────
-//  JUMP — Van Halen (1984)
-//  Exact 11-note melody: D E C C D D E C A G G → repeat
-//  Each press plays the melody note loud + backing chord soft
+//  FÜR ELISE — Beethoven
+//  Main theme: E5 D#5 E5 D#5 E5 B4 D5 C5 A4  →  repeat
+//  Backing: Am (A minor) and E7 chords
 // ─────────────────────────────────────────────────────────────
 const HZ = {
-    C3:130.81, E3:164.81, F3:174.61, G3:196.00, A3:220.00, B3:246.94,
-    C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00, A4:440.00, B4:493.88,
-    C5:523.25, D5:587.33, E5:659.25
+    A2: 110.00,
+    E3: 164.81, Gs3: 207.65,
+    A3: 220.00, B3: 246.94,
+    C4: 261.63, D4: 293.66, E4: 329.63,
+    A4: 440.00, B4: 493.88,
+    C5: 523.25,  D5: 587.33, Ds5: 622.25, E5: 659.25,
 };
 
-//  key      = which piano key to press
-//  lead     = the melody note played loud
-//  backing  = quieter chord notes underneath
+//  key     = which piano key to press (id suffix)
+//  lead    = the melody note (played loud)
+//  backing = soft chord notes underneath
 const MELODY = [
-    { key:'D4', lead:HZ.D4, backing:[HZ.G3, HZ.B3, HZ.G4]  },  // D over G
-    { key:'E4', lead:HZ.E4, backing:[HZ.C3, HZ.G3, HZ.C4]  },  // E over C/G
-    { key:'C4', lead:HZ.C4, backing:[HZ.F3, HZ.A3, HZ.F4]  },  // C over F
-    { key:'C4', lead:HZ.C4, backing:[HZ.F3, HZ.A3, HZ.F4]  },  // C over F
-    { key:'D4', lead:HZ.D4, backing:[HZ.G3, HZ.B3, HZ.G4]  },  // D over G
-    { key:'D4', lead:HZ.D4, backing:[HZ.G3, HZ.B3, HZ.G4]  },  // D over G
-    { key:'E4', lead:HZ.E4, backing:[HZ.C3, HZ.G3, HZ.C4]  },  // E over C/G
-    { key:'C4', lead:HZ.C4, backing:[HZ.F3, HZ.A3, HZ.F4]  },  // C over F
-    { key:'A4', lead:HZ.A4, backing:[HZ.C3, HZ.F3, HZ.C4]  },  // A over F/C
-    { key:'G4', lead:HZ.G4, backing:[HZ.C3, HZ.E3, HZ.C4]  },  // G over C
-    { key:'G4', lead:HZ.G4, backing:[HZ.C3, HZ.G3, HZ.D4]  },  // G over Csus2
+    { key:'E5',  lead: HZ.E5,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // E  over Am
+    { key:'Ds5', lead: HZ.Ds5, backing: [HZ.A2, HZ.E3, HZ.A3] },   // D# over Am
+    { key:'E5',  lead: HZ.E5,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // E  over Am
+    { key:'Ds5', lead: HZ.Ds5, backing: [HZ.A2, HZ.E3, HZ.A3] },   // D# over Am
+    { key:'E5',  lead: HZ.E5,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // E  over Am
+    { key:'B4',  lead: HZ.B4,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // B  over Am
+    { key:'D5',  lead: HZ.D5,  backing: [HZ.E3, HZ.Gs3, HZ.B3] },  // D  over E7
+    { key:'C5',  lead: HZ.C5,  backing: [HZ.E3, HZ.Gs3, HZ.B3] },  // C  over E7
+    { key:'A4',  lead: HZ.A4,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // A  over Am (tonic)
 ];
 
-const KB = { a:'C4', s:'D4', d:'E4', f:'F4', g:'G4', h:'A4', j:'B4', k:'C5' };
+// Keyboard shortcuts
+// White:  a=C4 s=D4 d=E4 f=F4 g=G4 h=A4 j=B4 k=C5 l=D5 ;=E5
+// Black:  p=D#5
+const KB = {
+    a:'C4', s:'D4', d:'E4', f:'F4', g:'G4',
+    h:'A4', j:'B4', k:'C5', l:'D5', ';':'E5',
+    p:'Ds5',
+};
 
 // ─────────────────────────────────────────────────────────────
-//  AUDIO — Oberheim OB-X lead + soft pad backing
+//  AUDIO — Piano sound (triangle wave + harmonics + reverb)
 // ─────────────────────────────────────────────────────────────
-let ctx = null;
+let actx = null;
 function getCtx() {
-    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (ctx.state === 'suspended') ctx.resume();
-    return ctx;
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
 }
 
-// OB-X lead voice: two detuned saws + filter
-function obxLead(freq, now, c, vol, dur) {
-    const amp    = c.createGain();
-    const filter = c.createBiquadFilter();
-    filter.type  = 'lowpass';
-    filter.Q.value = 3;
-    filter.frequency.setValueAtTime(500, now);
-    filter.frequency.exponentialRampToValueAtTime(5000, now + 0.05);
-    filter.frequency.exponentialRampToValueAtTime(3000, now + 0.3);
+// Piano-like voice: triangle fundamental + sine harmonics, fast attack/decay
+function pianoVoice(freq, now, c, vol, dur) {
+    const amp = c.createGain();
 
+    // Fundamental (triangle) + 2nd harmonic (sine, quieter)
+    [{ mult:1, type:'triangle', v:0.75 },
+     { mult:2, type:'sine',     v:0.18 },
+     { mult:3, type:'sine',     v:0.07 }]
+    .forEach(({ mult, type, v }) => {
+        const osc = c.createOscillator();
+        const g   = c.createGain();
+        osc.type  = type;
+        osc.frequency.value = freq * mult;
+        g.gain.value = v;
+        osc.connect(g); g.connect(amp);
+        osc.start(now); osc.stop(now + dur + 0.15);
+    });
+
+    // Piano envelope: instant attack → quick initial decay → long tail
     amp.gain.setValueAtTime(0, now);
-    amp.gain.linearRampToValueAtTime(vol, now + 0.02);
-    amp.gain.setValueAtTime(vol, now + 0.08);
+    amp.gain.linearRampToValueAtTime(vol, now + 0.006);
+    amp.gain.exponentialRampToValueAtTime(vol * 0.38, now + 0.10);
     amp.gain.exponentialRampToValueAtTime(0.0001, now + dur);
 
-    // Two detuned sawtooths (OB-X chorus character)
-    [0, 10].forEach(cents => {
-        const o = c.createOscillator();
-        o.type = 'sawtooth';
-        o.frequency.value = freq * Math.pow(2, cents / 1200);
-        o.connect(filter);
-        o.start(now); o.stop(now + dur + 0.05);
-    });
-    filter.connect(amp);
     return amp;
 }
 
-// Soft pad voice for backing chord
-function padVoice(freq, now, c, vol, dur) {
-    const amp    = c.createGain();
-    const filter = c.createBiquadFilter();
-    filter.type  = 'lowpass';
-    filter.Q.value = 0.8;
-    filter.frequency.value = 1200;
-
-    amp.gain.setValueAtTime(0, now);
-    amp.gain.linearRampToValueAtTime(vol, now + 0.08);
-    amp.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-
-    [-6, 6].forEach(cents => {
-        const o = c.createOscillator();
-        o.type = 'sawtooth';
-        o.frequency.value = freq * Math.pow(2, cents / 1200);
-        o.connect(filter);
-        o.start(now); o.stop(now + dur + 0.05);
-    });
-    filter.connect(amp);
-    return amp;
-}
-
-// Shared reverb
+// Shared reverb (hall feel, appropriate for classical piano)
 let revNode = null;
 function getRev(c) {
     if (revNode) return revNode;
-    const d = c.createDelay(1.0);
-    const fb = c.createGain(); fb.gain.value = 0.22;
-    const out = c.createGain(); out.gain.value = 0.18;
-    d.delayTime.value = 0.26;
+    const d   = c.createDelay(1.0);
+    const fb  = c.createGain(); fb.gain.value  = 0.30;
+    const out = c.createGain(); out.gain.value = 0.22;
+    d.delayTime.value = 0.32;
     d.connect(fb); fb.connect(d);
     d.connect(out); out.connect(c.destination);
     return (revNode = d);
@@ -271,14 +277,14 @@ function playStep(step) {
     const now = c.currentTime;
     const rev = getRev(c);
 
-    // Lead melody note — loud, bright OB-X
-    const lead = obxLead(step.lead, now, c, 0.32, 0.55);
+    // Lead note — loud and clear
+    const lead = pianoVoice(step.lead, now, c, 0.38, 1.0);
     lead.connect(c.destination);
     lead.connect(rev);
 
-    // Backing chord — quiet, warm pad
+    // Backing chord — soft, longer sustain
     step.backing.forEach(freq => {
-        const v = padVoice(freq, now, c, 0.08, 0.8);
+        const v = pianoVoice(freq, now, c, 0.07, 1.4);
         v.connect(c.destination);
         v.connect(rev);
     });
@@ -288,7 +294,6 @@ function playStep(step) {
 function playWrong() {
     const c   = getCtx();
     const now = c.currentTime;
-
     [{f:233,d:0.52},{f:277,d:0.58},{f:185,d:0.48},{f:312,d:0.62}].forEach(({f,d}) => {
         const o = c.createOscillator();
         const g = c.createGain();
@@ -300,15 +305,14 @@ function playWrong() {
         g.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
         o.start(now); o.stop(now + 0.6);
     });
-
-    const sz = Math.floor(c.sampleRate * 0.18);
+    const sz  = Math.floor(c.sampleRate * 0.18);
     const buf = c.createBuffer(1, sz, c.sampleRate);
-    const d   = buf.getChannelData(0);
+    const dat = buf.getChannelData(0);
     for (let i = 0; i < sz; i++)
-        d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (c.sampleRate * 0.035));
+        dat[i] = (Math.random() * 2 - 1) * Math.exp(-i / (c.sampleRate * 0.035));
     const src = c.createBufferSource(); src.buffer = buf;
-    const nf = c.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=200;
-    const ng = c.createGain(); ng.gain.value = 0.45;
+    const nf  = c.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=200;
+    const ng  = c.createGain(); ng.gain.value = 0.45;
     src.connect(nf); nf.connect(ng); ng.connect(c.destination);
     src.start(now);
 }
@@ -328,7 +332,7 @@ function cur() { return MELODY[melIdx % MELODY.length]; }
 function addWord() {
     if (wordIdx >= words.length) return;
     const s = document.createElement('span');
-    s.className   = 'word';
+    s.className = 'word';
     s.textContent = words[wordIdx] + ' ';
     wordArea.insertBefore(s, cursor);
     spans.push(s);
@@ -346,7 +350,7 @@ function removeLast() {
 }
 
 function refresh() {
-    document.querySelectorAll('.wk').forEach(k => k.classList.remove('active'));
+    document.querySelectorAll('.wk, .bk').forEach(k => k.classList.remove('active'));
     if (wordIdx >= words.length) {
         cursor.style.display = 'none';
         document.getElementById('doneMsg').classList.add('show');
@@ -375,18 +379,24 @@ function handle(noteKey) {
     }
 }
 
+// White key clicks
 document.querySelectorAll('.wk').forEach(k => {
+    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); });
+});
+// D#5 black key click
+document.querySelectorAll('.bk.melody-key').forEach(k => {
     k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); });
 });
 
 // ─────────────────────────────────────────────────────────────
-//  SECRET: type "auto" to make the piano play itself perfectly
+//  SECRET: type "auto" to play itself at Für Elise tempo
+//  (72 BPM, 16th notes ≈ 208 ms per note)
 //  Type "auto" again to stop.
 // ─────────────────────────────────────────────────────────────
-let secretBuf  = '';
-let autoTimer  = null;
-const badge    = document.getElementById('autoBadge');
-const MS_NOTE  = (60 / 129 / 2) * 1000; // 129 BPM, eighth note ≈ 232 ms
+let secretBuf = '';
+let autoTimer = null;
+const badge   = document.getElementById('autoBadge');
+const MS_NOTE = (60 / 72 / 4) * 1000; // ≈ 208 ms (Für Elise 16th note at 72 BPM)
 
 function stopAuto() {
     if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
@@ -394,7 +404,7 @@ function stopAuto() {
 }
 
 function startAuto() {
-    if (autoTimer) { stopAuto(); return; }   // toggle off if already running
+    if (autoTimer) { stopAuto(); return; }
 
     // Reset to beginning
     spans.forEach(s => s.remove());
@@ -409,10 +419,8 @@ function startAuto() {
 
     autoTimer = setInterval(() => {
         if (wordIdx >= words.length) { stopAuto(); return; }
-
         const s  = cur();
         const el = document.getElementById('key-' + s.key);
-
         playStep(s);
         if (el) { el.classList.add('pressed'); setTimeout(() => el.classList.remove('pressed'), 120); }
         addWord();
@@ -422,13 +430,13 @@ function startAuto() {
 document.addEventListener('keydown', e => {
     if (e.repeat || e.ctrlKey || e.metaKey) return;
 
-    // Secret sequence detection — append letter, keep last 4
+    // Secret "auto" sequence
     secretBuf = (secretBuf + e.key.toLowerCase()).slice(-4);
     if (secretBuf === 'auto') { secretBuf = ''; startAuto(); return; }
 
-    // Normal piano key
-    const n = KB[e.key.toLowerCase()];
-    if (n) { e.preventDefault(); if (!autoTimer) handle(n); }
+    // Piano keys (only when not in auto mode)
+    const n = KB[e.key];   // note: don't lowercase — ';' is already correct
+    if (n && !autoTimer) { e.preventDefault(); handle(n); }
 });
 
 document.getElementById('progress').textContent = `0 / ${words.length} words`;
