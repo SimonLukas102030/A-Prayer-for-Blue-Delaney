@@ -855,3 +855,33 @@
 **What Claude did:**
 - Opened new session, updated `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+### Prompt 71 — Fix Tommy's last name in Ch7
+**Prompt:**
+> *"Oh, Tommy's last name is Cassidy. Please update the newspaper."*
+
+**What Claude did:**
+- Replaced all 3 instances of `McMahon` → `Cassidy` in `Chapter 7.html`
+- Committed and pushed
+
+---
+
+### Prompt 72 — Push updated original/Chapter 7 Simon.html
+**Prompt:**
+> *"Push the Chapter 7 Simon.html of original/ to GitHub. I updated the last name."*
+
+**What Claude did:**
+- Staged and pushed `original/Chapter 7 Simon.html` (Simon had updated the last name to Cassidy)
+- Committed and pushed
+
+---
+
+### Prompt 73 — Log in claude code usage
+**Prompt:**
+> *"Note it in claude code usage and push."*
+
+**What Claude did:**
+- Added Prompts 71–73 to `claude-code-usage.md`
+- Committed and pushed
