@@ -11,6 +11,7 @@
 | Chapter 2 | Picture with thought bubbles | [Chapter 2.md](Chapter%202.md) |
 | Chapter 3 | Summary | [Chapter 3.md](Chapter%203.md) |
 | Chapter 4 | Diary entry | [Chapter 4.md](Chapter%204.md) |
+| Chapter 5 | Interactive HTML | [Chapter 5.html](Chapter%205.html) |
 
 ---
 
