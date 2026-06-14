@@ -532,3 +532,27 @@
 
 **What Claude did:**
 - Added Prompts 42–44 to `claude-code-usage.md`
+
+---
+
+### Prompt 45 — Add screenshots to assets and use in HTML
+**Prompt:**
+> *"Look at the two latest screenshots I made in the 'C:\Users\simon\Pictures\Screenshots' folder. These are the finals. Put them into assets. And rename them. Use them in the html."*
+
+**What Claude did:**
+- Read the two latest screenshots from `C:\Users\simon\Pictures\Screenshots\`
+- Copied them to `Assets/` as `Ch5-PrincipalsOffice.png` and `Ch5-DiningHall.png`
+- Added images to the room views in `Chapter 5.html` (side by side with the text box)
+- Committed and pushed
+
+---
+
+### Prompt 46 — Move images into door squares on main page
+**Prompt:**
+> *"No, not there. I mean in the main site. In the square. There it looks like an image is missing. So in `<div class='doors'>`..."*
+
+**What Claude did:**
+- Removed the `door::after` CSS pseudo-element (was drawing an empty panel outline)
+- Added `.door-img` CSS class: absolutely positioned, fills the upper portion of each door (same area the panel was)
+- Added `<img class="door-img">` inside each `.door` div on the main page — `Ch5-PrincipalsOffice.png` in the left door, `Ch5-DiningHall.png` in the right door
+- Committed and pushed

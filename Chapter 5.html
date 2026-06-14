@@ -94,15 +94,16 @@
             transform: translateY(-50%);
             box-shadow: 0 0 8px rgba(160,120,60,0.25);
         }
-        /* door panel */
-        .door::after {
-            content: '';
+        /* door image */
+        .door-img {
             position: absolute;
             top: 18px;
             left: 18px;
-            right: 18px;
+            width: calc(100% - 36px);
             height: 110px;
-            border: 1px solid #221a10;
+            object-fit: cover;
+            opacity: 0.7;
+            pointer-events: none;
         }
 
         .door-label {
@@ -223,10 +224,12 @@
 
         <div class="doors">
             <div class="door" onclick="openRoom('office')">
+                <img class="door-img" src="Assets/Ch5-PrincipalsOffice.png" alt="" />
                 <span class="door-label">The Principal's<br>Office</span>
                 <span class="door-sublabel">the sleepwalking</span>
             </div>
             <div class="door" onclick="openRoom('hall')">
+                <img class="door-img" src="Assets/Ch5-DiningHall.png" alt="" />
                 <span class="door-label">The Dining<br>Hall</span>
                 <span class="door-sublabel">the punishment</span>
             </div>
