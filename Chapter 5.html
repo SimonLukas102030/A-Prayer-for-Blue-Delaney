@@ -200,7 +200,7 @@
             width: 100%;
         }
 
-.fade-in { animation: fadeIn 0.7s ease forwards; }
+        .fade-in { animation: fadeIn 0.7s ease forwards; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -241,7 +241,7 @@
                 <p class="hint" id="office-hint">click anywhere to reveal</p>
             </div>
         </div>
-        <button class="back-btn" onclick="goBack()">← back</button>
+        <button class="back-btn" onclick="goBack()">&#8592; back</button>
     </div>
 
     <!-- ── HALL VIEW ── -->
@@ -256,18 +256,139 @@
                 <p class="hint" id="hall-hint">click anywhere to reveal</p>
             </div>
         </div>
-        <button class="back-btn" onclick="goBack()">← back</button>
+        <button class="back-btn" onclick="goBack()">&#8592; back</button>
     </div>
 
     <script>
+        // ── FILL IN YOUR TEXT HERE ───────────────────────────────────────────────
         const officeText = `That night Colm went sleepwalking. He does that often. This time around, he managed to get glass shards into his hands. Now Matron is picking them out one by one with tweezers. It´s very painful. Matron asked, what happened, but Colm couldn´t remember. He just woke up from a nightmare, and found himself there.`;
 
         const hallText = `Every day in the eve, all Boys get commanded to the Dining hall. Here they get punished <strong>"for their own good"</strong>. The Brothers hit them with belts and punish them hard in the most painful ways. The punishment is set at eve, as it overrules the huge hunger the Boys are set out to!`;
+        // ────────────────────────────────────────────────────────────────────────
 
-        let typing = false;
-        let done = { office: false, hall: false };
+        // ── Parse raw text into segments: {type:'text'|'strong', content:string} ──
+        function parseText(raw) {
+            const segs = [];
+            const re = /<strong>([\s\S]*?)<\/strong>/g;
+            let last = 0, m;
+            while ((m = re.exec(raw)) !== null) {
+                if (m.index > last) segs.push({ type: 'text', content: raw.slice(last, m.index) });
+                segs.push({ type: 'strong', content: m[1] });
+                last = re.lastIndex;
+            }
+            if (last < raw.length) segs.push({ type: 'text', content: raw.slice(last) });
+            return segs;
+        }
+
+        // ── Build innerHTML up to position (segIdx, charIdx) ─────────────────────
+        function buildHTML(segs, segIdx, charIdx) {
+            let html = '';
+            for (let i = 0; i < Math.min(segIdx, segs.length); i++) {
+                html += segs[i].type === 'strong'
+                    ? '<strong>' + segs[i].content + '</strong>'
+                    : segs[i].content;
+            }
+            if (segIdx < segs.length) {
+                const partial = segs[segIdx].content.slice(0, charIdx);
+                html += segs[segIdx].type === 'strong'
+                    ? '<strong>' + partial + '</strong>'
+                    : partial;
+            }
+            return html;
+        }
+
+        function isPause(ch) { return ch === '.' || ch === '!' || ch === '?'; }
+
+        // ── Per-room state ────────────────────────────────────────────────────────
+        const rooms = {
+            office: { raw: officeText, segs: null, segIdx: 0, charIdx: 0, phase: 'idle', timer: null, textId: 'office-text', hintId: 'office-hint' },
+            hall:   { raw: hallText,   segs: null, segIdx: 0, charIdx: 0, phase: 'idle', timer: null, textId: 'hall-text',   hintId: 'hall-hint'   }
+        };
+
+        function render(r) {
+            document.getElementById(r.textId).innerHTML =
+                buildHTML(r.segs, r.segIdx, r.charIdx) + '<span class="cursor"></span>';
+        }
+
+        // Advance past any fully-consumed segment
+        function advance(r) {
+            while (r.segIdx < r.segs.length && r.charIdx >= r.segs[r.segIdx].content.length) {
+                r.segIdx++; r.charIdx = 0;
+            }
+        }
+
+        function finish(r) {
+            document.getElementById(r.textId).innerHTML =
+                buildHTML(r.segs, r.segs.length, 0) + '<span class="cursor"></span>';
+            document.getElementById(r.hintId).textContent = '';
+            r.phase = 'done';
+        }
+
+        // Type one character, then schedule the next tick
+        function tick(r) {
+            advance(r);
+            if (r.segIdx >= r.segs.length) { finish(r); return; }
+
+            const seg = r.segs[r.segIdx];
+            const ch = seg.content[r.charIdx++];
+            render(r);
+
+            // Pause at sentence-ending punctuation in normal text
+            if (seg.type === 'text' && isPause(ch)) {
+                advance(r);
+                if (r.segIdx >= r.segs.length) {
+                    finish(r);
+                } else {
+                    r.phase = 'paused';
+                    document.getElementById(r.hintId).textContent = 'click to continue';
+                }
+                return;
+            }
+
+            // Strong text types at 70 ms/char, normal text at 28 ms/char
+            r.timer = setTimeout(() => tick(r), seg.type === 'strong' ? 70 : 28);
+        }
+
+        // Jump to the end of the current sentence on click-while-typing
+        function skipToNextPause(r) {
+            if (r.timer) { clearTimeout(r.timer); r.timer = null; }
+            advance(r);
+            while (r.segIdx < r.segs.length) {
+                const seg = r.segs[r.segIdx];
+                while (r.charIdx < seg.content.length) {
+                    const ch = seg.content[r.charIdx++];
+                    if (seg.type === 'text' && isPause(ch)) {
+                        render(r);
+                        advance(r);
+                        if (r.segIdx >= r.segs.length) { finish(r); }
+                        else { r.phase = 'paused'; document.getElementById(r.hintId).textContent = 'click to continue'; }
+                        return;
+                    }
+                }
+                r.segIdx++; r.charIdx = 0;
+            }
+            finish(r);
+        }
+
+        function handleClick(room) {
+            const r = rooms[room];
+            if (r.phase === 'idle') {
+                r.segs = parseText(r.raw);
+                r.segIdx = 0; r.charIdx = 0;
+                r.phase = 'typing';
+                document.getElementById(r.hintId).textContent = 'click to skip sentence';
+                tick(r);
+            } else if (r.phase === 'typing') {
+                skipToNextPause(r);
+            } else if (r.phase === 'paused') {
+                r.phase = 'typing';
+                document.getElementById(r.hintId).textContent = 'click to skip sentence';
+                tick(r);
+            }
+            // phase === 'done': do nothing
+        }
+
         let currentRoom = null;
-        let typeInterval = null;
 
         function openRoom(room) {
             currentRoom = room;
@@ -276,54 +397,24 @@
         }
 
         function goBack() {
+            const r = rooms[currentRoom];
+            if (r.timer) { clearTimeout(r.timer); r.timer = null; }
+            r.segs = null; r.segIdx = 0; r.charIdx = 0; r.phase = 'idle';
+            document.getElementById(r.textId).innerHTML = '<span class="cursor"></span>';
+            document.getElementById(r.hintId).textContent = 'click anywhere to reveal';
             document.getElementById(currentRoom + '-view').classList.remove('active');
             document.getElementById('main-view').classList.add('active');
-            document.getElementById('office-text').innerHTML = '<span class="cursor"></span>';
-            document.getElementById('hall-text').innerHTML = '<span class="cursor"></span>';
-            document.getElementById('office-hint').textContent = 'click anywhere to reveal';
-            document.getElementById('hall-hint').textContent = 'click anywhere to reveal';
-            done = { office: false, hall: false };
-            if (typeInterval) clearInterval(typeInterval);
-            typing = false;
             currentRoom = null;
-        }
-
-        function typeText(elementId, text, hintId) {
-            if (typing) {
-                clearInterval(typeInterval);
-                document.getElementById(elementId).innerHTML = text + '<span class="cursor"></span>';
-                document.getElementById(hintId).textContent = '';
-                typing = false;
-                done[currentRoom] = true;
-                return;
-            }
-            typing = true;
-            document.getElementById(hintId).textContent = 'click to skip';
-            let i = 0;
-            const el = document.getElementById(elementId);
-            el.innerHTML = '<span class="cursor"></span>';
-            typeInterval = setInterval(() => {
-                if (i < text.length) {
-                    el.innerHTML = text.substring(0, i + 1) + '<span class="cursor"></span>';
-                    i++;
-                } else {
-                    clearInterval(typeInterval);
-                    el.innerHTML = text + '<span class="cursor"></span>';
-                    document.getElementById(hintId).textContent = '';
-                    typing = false;
-                    done[currentRoom] = true;
-                }
-            }, 28);
         }
 
         document.getElementById('office-view').addEventListener('click', e => {
             if (e.target.classList.contains('back-btn')) return;
-            if (!done['office']) typeText('office-text', officeText, 'office-hint');
+            handleClick('office');
         });
 
         document.getElementById('hall-view').addEventListener('click', e => {
             if (e.target.classList.contains('back-btn')) return;
-            if (!done['hall']) typeText('hall-text', hallText, 'hall-hint');
+            handleClick('hall');
         });
     </script>
 
