@@ -705,3 +705,25 @@
 **What Claude did:**
 - Added Prompts 53–59 to `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+### Prompt 60 — Chapter 6 script done — copy to original and fix grammar
+**Prompt:**
+> *"Done. Check it out. Then btw, please make a copy to originals and after, fix grammar. Then note in claude code usage."*
+
+**What Claude did:**
+- Read `Chapter 6.md` — theater script for Bindoon, the escape scene (Tommy telling Colm he's running away)
+- Copied to `original/Chapter 6.md` (Simon's original version)
+- Fixed 8 grammar errors in `Chapter 6.md`:
+  - `thankfull` → `thankful`
+  - `This stupid.` → `This is stupid.`
+  - `wispering` → `whispering`
+  - `wands` → `wants`
+  - `your Irish` → `you're Irish`
+  - `Thats` → `That's`
+  - `Im 13` → `I'm 13`
+  - `Can i` → `Can I`
+- Also removed stale note `"This file will be uploaded as an 'extra task'."` (same note removed from all other chapters earlier)
+- Added Prompt 60 to `claude-code-usage.md`
+- Committed and pushed
