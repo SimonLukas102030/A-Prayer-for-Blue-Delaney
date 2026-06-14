@@ -143,7 +143,7 @@
 </div>
 
 <div class="controls-info">
-    <div class="hint" id="hint">Press the glowing key &nbsp;·&nbsp; D#&nbsp;=&nbsp;P on keyboard</div>
+    <div class="hint" id="hint">Press the glowing key &nbsp;·&nbsp; G#&nbsp;=&nbsp;Y &nbsp; D#&nbsp;=&nbsp;P</div>
     <div class="progress" id="progress"></div>
 </div>
 
@@ -166,7 +166,8 @@
         <div class="bk" style="left:45px;"><div class="bk-lbl">C#</div></div>
         <div class="bk" style="left:94px;"><div class="bk-lbl">D#</div></div>
         <div class="bk" style="left:192px;"><div class="bk-lbl">F#</div></div>
-        <div class="bk" style="left:241px;"><div class="bk-lbl">G#</div></div>
+        <!-- G#4 — melody key, interactive -->
+        <div class="bk melody-key" id="key-Gs4" data-note="Gs4" style="left:241px;"><div class="key-arrow">&#9660;</div><div class="bk-lbl">G#</div></div>
         <div class="bk" style="left:290px;"><div class="bk-lbl">Bb</div></div>
         <div class="bk" style="left:388px;"><div class="bk-lbl">C#</div></div>
         <!-- D#5 — melody key, interactive -->
@@ -194,32 +195,74 @@ const HZ = {
     E3: 164.81, Gs3: 207.65,
     A3: 220.00, B3: 246.94,
     C4: 261.63, D4: 293.66, E4: 329.63,
-    A4: 440.00, B4: 493.88,
-    C5: 523.25,  D5: 587.33, Ds5: 622.25, E5: 659.25,
+    Gs4: 415.30, A4: 440.00, B4: 493.88,
+    C5: 523.25, D5: 587.33, Ds5: 622.25, E5: 659.25,
 };
 
 //  key     = which piano key to press (id suffix)
 //  lead    = the melody note (played loud)
 //  backing = soft chord notes underneath
+//
+//  Full Für Elise A-section (34 notes):
+//  Phrase 1 — main theme
+//  Phrase 2 — Am arpeggio ascending
+//  Phrase 3 — E7 ascending (with G#4)
+//  Phrase 4 — main theme repeat
+//  Phrase 5 — Am arpeggio (same as 2)
+//  Phrase 6 — second ending, resolves to A4
+const Am  = [HZ.A2, HZ.E3, HZ.A3];
+const E7  = [HZ.E3, HZ.Gs3, HZ.B3];
+
 const MELODY = [
-    { key:'E5',  lead: HZ.E5,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // E  over Am
-    { key:'Ds5', lead: HZ.Ds5, backing: [HZ.A2, HZ.E3, HZ.A3] },   // D# over Am
-    { key:'E5',  lead: HZ.E5,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // E  over Am
-    { key:'Ds5', lead: HZ.Ds5, backing: [HZ.A2, HZ.E3, HZ.A3] },   // D# over Am
-    { key:'E5',  lead: HZ.E5,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // E  over Am
-    { key:'B4',  lead: HZ.B4,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // B  over Am
-    { key:'D5',  lead: HZ.D5,  backing: [HZ.E3, HZ.Gs3, HZ.B3] },  // D  over E7
-    { key:'C5',  lead: HZ.C5,  backing: [HZ.E3, HZ.Gs3, HZ.B3] },  // C  over E7
-    { key:'A4',  lead: HZ.A4,  backing: [HZ.A2, HZ.E3, HZ.A3] },   // A  over Am (tonic)
+    // ── Phrase 1: E D# E D# E B D C A ──
+    { key:'E5',  lead: HZ.E5,  backing: Am  },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
+    { key:'E5',  lead: HZ.E5,  backing: Am  },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
+    { key:'E5',  lead: HZ.E5,  backing: Am  },
+    { key:'B4',  lead: HZ.B4,  backing: Am  },
+    { key:'D5',  lead: HZ.D5,  backing: E7  },
+    { key:'C5',  lead: HZ.C5,  backing: E7  },
+    { key:'A4',  lead: HZ.A4,  backing: Am  },
+    // ── Phrase 2: C E A B ──
+    { key:'C4',  lead: HZ.C4,  backing: Am  },
+    { key:'E4',  lead: HZ.E4,  backing: Am  },
+    { key:'A4',  lead: HZ.A4,  backing: Am  },
+    { key:'B4',  lead: HZ.B4,  backing: E7  },
+    // ── Phrase 3: E G# B C ──
+    { key:'E4',  lead: HZ.E4,  backing: E7  },
+    { key:'Gs4', lead: HZ.Gs4, backing: E7  },   // ← G#4 black key
+    { key:'B4',  lead: HZ.B4,  backing: E7  },
+    { key:'C5',  lead: HZ.C5,  backing: Am  },
+    // ── Phrase 4: main theme again ──
+    { key:'E5',  lead: HZ.E5,  backing: Am  },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
+    { key:'E5',  lead: HZ.E5,  backing: Am  },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
+    { key:'E5',  lead: HZ.E5,  backing: Am  },
+    { key:'B4',  lead: HZ.B4,  backing: Am  },
+    { key:'D5',  lead: HZ.D5,  backing: E7  },
+    { key:'C5',  lead: HZ.C5,  backing: E7  },
+    { key:'A4',  lead: HZ.A4,  backing: Am  },
+    // ── Phrase 5: C E A B (same as phrase 2) ──
+    { key:'C4',  lead: HZ.C4,  backing: Am  },
+    { key:'E4',  lead: HZ.E4,  backing: Am  },
+    { key:'A4',  lead: HZ.A4,  backing: Am  },
+    { key:'B4',  lead: HZ.B4,  backing: E7  },
+    // ── Phrase 6: second ending — E C B A ──
+    { key:'E4',  lead: HZ.E4,  backing: E7  },
+    { key:'C5',  lead: HZ.C5,  backing: Am  },
+    { key:'B4',  lead: HZ.B4,  backing: E7  },
+    { key:'A4',  lead: HZ.A4,  backing: Am  },   // final resolution to Am
 ];
 
 // Keyboard shortcuts
 // White:  a=C4 s=D4 d=E4 f=F4 g=G4 h=A4 j=B4 k=C5 l=D5 ;=E5
-// Black:  p=D#5
+// Black:  y=G#4  p=D#5
 const KB = {
     a:'C4', s:'D4', d:'E4', f:'F4', g:'G4',
     h:'A4', j:'B4', k:'C5', l:'D5', ';':'E5',
-    p:'Ds5',
+    y:'Gs4', p:'Ds5',
 };
 
 // ─────────────────────────────────────────────────────────────
