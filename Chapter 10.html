@@ -106,6 +106,17 @@
         .screen-flash { position: fixed; inset: 0; background: transparent; pointer-events: none; z-index: 99; }
         .screen-flash.wrong { animation: screenWrong 0.35s ease forwards; }
         @keyframes screenWrong { 0%{background:rgba(200,0,0,0.22)} 100%{background:transparent} }
+
+        /* Auto mode indicator */
+        .auto-badge {
+            position: fixed; top: 1rem; right: 1rem;
+            color: #ffe84a; font-size: 0.65rem; letter-spacing: 0.3em;
+            font-family: 'Courier New', monospace;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .auto-badge.on { opacity: 1; animation: autoPulse 1s ease-in-out infinite; }
+        @keyframes autoPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
     </style>
 </head>
 <body>
@@ -146,6 +157,7 @@
 </div>
 
 <div class="screen-flash" id="screenFlash"></div>
+<div class="auto-badge" id="autoBadge">▶ AUTO</div>
 
 <script>
 // ── YOUR TEXT HERE ──
@@ -366,10 +378,57 @@ function handle(noteKey) {
 document.querySelectorAll('.wk').forEach(k => {
     k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); });
 });
+
+// ─────────────────────────────────────────────────────────────
+//  SECRET: type "auto" to make the piano play itself perfectly
+//  Type "auto" again to stop.
+// ─────────────────────────────────────────────────────────────
+let secretBuf  = '';
+let autoTimer  = null;
+const badge    = document.getElementById('autoBadge');
+const MS_NOTE  = (60 / 129 / 2) * 1000; // 129 BPM, eighth note ≈ 232 ms
+
+function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    badge.classList.remove('on');
+}
+
+function startAuto() {
+    if (autoTimer) { stopAuto(); return; }   // toggle off if already running
+
+    // Reset to beginning
+    spans.forEach(s => s.remove());
+    spans.length = 0;
+    wordIdx = 0; melIdx = 0;
+    cursor.style.display = '';
+    document.getElementById('doneMsg').classList.remove('show');
+    document.getElementById('hint').style.display = '';
+    refresh();
+
+    badge.classList.add('on');
+
+    autoTimer = setInterval(() => {
+        if (wordIdx >= words.length) { stopAuto(); return; }
+
+        const s  = cur();
+        const el = document.getElementById('key-' + s.key);
+
+        playStep(s);
+        if (el) { el.classList.add('pressed'); setTimeout(() => el.classList.remove('pressed'), 120); }
+        addWord();
+    }, MS_NOTE);
+}
+
 document.addEventListener('keydown', e => {
     if (e.repeat || e.ctrlKey || e.metaKey) return;
+
+    // Secret sequence detection — append letter, keep last 4
+    secretBuf = (secretBuf + e.key.toLowerCase()).slice(-4);
+    if (secretBuf === 'auto') { secretBuf = ''; startAuto(); return; }
+
+    // Normal piano key
     const n = KB[e.key.toLowerCase()];
-    if (n) { e.preventDefault(); handle(n); }
+    if (n) { e.preventDefault(); if (!autoTimer) handle(n); }
 });
 
 document.getElementById('progress').textContent = `0 / ${words.length} words`;

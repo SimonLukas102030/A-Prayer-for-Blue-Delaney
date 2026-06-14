@@ -959,3 +959,42 @@
 - Replaced paraphrased prompt summaries (76, 77) with Simon's exact original messages
 - Added missing Prompts 78 and 80
 - Committed and pushed
+
+---
+
+### Prompt 81 — Show sheet music for Jump
+**Prompt:**
+> *[Image of Jump by Van Halen sheet music — treble and bass clef showing the intro riff]*
+
+**What Claude did:**
+- Read the sheet music: bass pedal on C/G, treble shows rhythmic chord stabs
+- Looked up the exact melody sequence via web search
+- Rewrote `Chapter 10.html` with the correct 11-note Jump melody: D4–E4–C4–C4–D4–D4–E4–C4–A4–G4–G4 (repeating)
+- Each key press plays the melody note loud (OB-X lead: 2 detuned sawtooths + filter sweep) over a soft backing chord
+- Wrong key plays dissonant cluster with pitch drop + low noise thud
+
+---
+
+### Prompt 82 — Make piano sound like Jump from Van Halen
+**Prompt:**
+> *"Please. just make it sound like jump from van halen. look up the esact notes. It should be ovius"*
+
+**What Claude did:**
+- Looked up exact Jump notes: D4 E4 C4 C4 D4 D4 E4 C4 A4 G4 G4 (confirmed by agent web search)
+- Implemented OB-X lead voice (2 detuned sawtooths, filter sweep) for the recognizable melody note
+- Added soft pad backing chord underneath each melody step
+- Keys to press: D4, E4, C4, G4, A4 (all white keys, no black keys needed)
+
+---
+
+### Prompt 83 — Add "auto" secret cheat
+**Prompt:**
+> *"typing "auto" makes it play itself perfektly with exsact hits. Its like a little secret. If you done, update the claude usage"*
+
+**What Claude did:**
+- Added secret sequence detector: typing `a`–`u`–`t`–`o` triggers auto-play mode
+- Auto mode resets to word 0, then plays the full Jump melody at exact 129 BPM timing (eighth note = 232 ms per hit), revealing one word per note
+- A small pulsing `▶ AUTO` badge appears in the top-right corner while running
+- Typing `auto` again stops it (toggle)
+- Manual key presses are blocked while auto is running
+- Logged Prompts 81–83 in `claude-code-usage.md`, committed and pushed
