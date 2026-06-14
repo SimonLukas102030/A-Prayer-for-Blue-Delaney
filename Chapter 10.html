@@ -26,18 +26,36 @@
         /* ── MUSIC PAPER ── */
         .paper {
             background: #f5f0df; width: 100%; max-width: 700px; min-height: 200px;
-            padding: 1.8rem 2.2rem 1.4rem;
+            padding: 1.4rem 2.2rem 1.4rem;
             box-shadow: 0 6px 28px rgba(0,0,0,0.7);
             position: relative; overflow: hidden;
         }
+        /* Lines every 35px from paper top */
         .paper::before {
             content: ''; position: absolute; inset: 0;
             background: repeating-linear-gradient(180deg, transparent 0px, transparent 34px, #90a8c0 34px, #90a8c0 35px);
             pointer-events: none;
         }
-        .paper-label { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: #788898; margin-bottom: 0.9rem; position: relative; }
-        .word-area { position: relative; min-height: 110px; font-size: 1.04rem; color: #1a1a1e; line-height: 2.18; word-spacing: 0.15em; }
-        .word { display: inline; }
+        /* paper-label takes ~22px: pushes word-area to start at ~46px
+           first baseline lands at ~70px (2nd rule) with line-height 35px */
+        .paper-label {
+            font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #788898; margin-bottom: 0.55rem; position: relative;
+        }
+        .word-area {
+            position: relative; min-height: 110px;
+            font-size: 1.04rem; color: #1a1a1e;
+            line-height: 35px;          /* matches paper rule spacing */
+            word-spacing: 0.15em;
+            padding-top: 3px;           /* nudge baseline onto rule */
+        }
+        .word { display: inline-block; }
+        .word.pop-in { animation: wordPopIn 0.18s ease forwards; }
+        @keyframes wordPopIn {
+            0%   { opacity: 0; transform: scale(1.35) translateY(-3px); }
+            60%  { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
         .word.flash-out { color: #cc2020; animation: wordOut 0.22s ease forwards; }
         @keyframes wordOut { to { opacity: 0; font-size: 0; letter-spacing: 0; } }
         .cursor { display: inline-block; width: 2px; height: 1em; background: #2a2a3a; vertical-align: text-bottom; margin-left: 2px; animation: cursorBlink 1s step-end infinite; }
@@ -56,9 +74,9 @@
             C4=14  D4=63  E4=112  F4=161  G4=210
             A4=259  B4=308  C5=357  D5=406  E5=455  F5=504
           Black key left = white_start + 31:
-            C#4=45   D#4=94   F#4=192  G#4=241  A#4=290
+            C#4=45  D#4=94  F#4=192  G#4=241  A#4=290
             C#5=388  D#5=437  ← melody key, interactive
-          (no black key between E5 and F5 — natural half step)
+          (no black key between E5 and F5)
         */
         .piano-wrap { position: relative; }
         .piano {
@@ -73,12 +91,12 @@
             background: linear-gradient(180deg, #f8f8f4, #ddddd5);
             border-radius: 0 0 6px 6px;
             border: 1px solid #bbb; border-top: none;
-            position: relative; cursor: pointer;
+            position: relative; cursor: pointer; overflow: hidden;
             box-shadow: 0 5px 8px rgba(0,0,0,0.35);
             transition: background 0.06s; flex-shrink: 0; user-select: none;
         }
         .wk:hover { background: linear-gradient(180deg, #fff, #eee); }
-        .wk.active { background: linear-gradient(180deg, #ffe84a, #d4a800); box-shadow: 0 5px 18px rgba(255,200,0,0.6); }
+        .wk.active { background: linear-gradient(180deg, #ffe84a, #d4a800); box-shadow: 0 5px 22px rgba(255,200,0,0.7); }
         .wk.pressed { transform: translateY(4px); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
         .wk.wrong-flash { background: linear-gradient(180deg, #ff5050, #bb1010) !important; }
 
@@ -92,17 +110,30 @@
         .wk.active .key-arrow { display: block; }
         @keyframes arrowBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-5px)} }
 
+        /* Ripple inside key on correct press */
+        .key-ripple {
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(255,240,100,0.85) 0%, transparent 65%);
+            border-radius: inherit;
+            animation: keyRipple 0.38s ease forwards;
+            pointer-events: none;
+        }
+        @keyframes keyRipple {
+            0%   { opacity: 1; transform: scale(0.3); }
+            100% { opacity: 0; transform: scale(2.4); }
+        }
+
         /* Black keys */
         .bk {
             width: 30px; height: 94px;
             background: linear-gradient(180deg, #2a2a2a, #0a0a0a);
             border-radius: 0 0 4px 4px;
             position: absolute; top: 10px; z-index: 2;
-            pointer-events: none;
+            pointer-events: none; overflow: hidden;
             box-shadow: 2px 5px 8px rgba(0,0,0,0.6);
         }
         .bk.melody-key { pointer-events: auto; cursor: pointer; }
-        .bk.active { background: linear-gradient(180deg, #ffe84a, #c8a000); box-shadow: 2px 5px 14px rgba(255,200,0,0.5); }
+        .bk.active { background: linear-gradient(180deg, #ffe84a, #c8a000); box-shadow: 2px 5px 16px rgba(255,200,0,0.6); }
         .bk.pressed { transform: translateY(3px); }
         .bk.wrong-flash { background: linear-gradient(180deg, #ff5050, #aa0000) !important; }
 
@@ -112,22 +143,99 @@
             animation: arrowBounce 0.85s ease-in-out infinite;
         }
         .bk.active .key-arrow { display: block; }
-
         .bk-lbl { position: absolute; bottom: 6px; width: 100%; text-align: center; font-size: 0.5rem; color: #555; pointer-events: none; }
         .bk.active .bk-lbl { color: #7a5c00; font-weight: bold; }
 
+        /* ── SCREEN FLASH ── */
         .screen-flash { position: fixed; inset: 0; background: transparent; pointer-events: none; z-index: 99; }
-        .screen-flash.wrong { animation: screenWrong 0.35s ease forwards; }
-        @keyframes screenWrong { 0%{background:rgba(200,0,0,0.22)} 100%{background:transparent} }
+        .screen-flash.wrong   { animation: screenWrong   0.35s ease forwards; }
+        .screen-flash.correct { animation: screenCorrect 0.28s ease forwards; }
+        @keyframes screenWrong   { 0%{background:rgba(200,0,0,0.22)}   100%{background:transparent} }
+        @keyframes screenCorrect { 0%{background:rgba(255,215,40,0.10)} 100%{background:transparent} }
 
+        /* ── NOTE PARTICLES ── */
+        .note-particle {
+            position: fixed;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 200;
+            animation: particleFloat 1.1s ease forwards;
+        }
+        @keyframes particleFloat {
+            0%   { opacity: 1; transform: translateY(0)     scale(1)    rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-90px) scale(0.35) rotate(25deg); }
+        }
+
+        /* ── AUTO BADGE ── */
         .auto-badge {
-            position: fixed; top: 1rem; right: 1rem;
+            position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
             color: #ffe84a; font-size: 0.65rem; letter-spacing: 0.3em;
             font-family: 'Courier New', monospace;
             opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .auto-badge.on { opacity: 1; animation: autoPulse 1s ease-in-out infinite; }
         @keyframes autoPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+        /* ── SIDE MENU ── */
+        #side-menu {
+            position: fixed;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.38rem;
+            z-index: 50;
+            background: rgba(7, 5, 1, 0.92);
+            border: 1px solid rgba(200,168,64,0.28);
+            border-radius: 10px;
+            padding: 0.85rem 0.6rem;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.88), inset 0 1px 0 rgba(255,255,255,0.03);
+            min-width: 80px;
+        }
+        .menu-title {
+            font-size: 0.48rem; letter-spacing: 0.28em; text-transform: uppercase;
+            color: #4a3410; text-align: center; font-family: 'Courier New', monospace;
+            padding-bottom: 0.42rem;
+            border-bottom: 1px solid rgba(200,168,64,0.14);
+        }
+        .menu-sep { height: 1px; background: rgba(200,168,64,0.1); margin: 0.1rem 0; }
+        .menu-label {
+            font-size: 0.44rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #4a3410; text-align: center; font-family: 'Courier New', monospace;
+        }
+        #btn-auto {
+            width: 100%; padding: 0.42rem 0.2rem;
+            background: rgba(200,168,64,0.07);
+            border: 1px solid rgba(200,168,64,0.38);
+            border-radius: 5px;
+            color: #c8a840; font-size: 0.6rem; letter-spacing: 0.18em;
+            cursor: pointer; font-family: 'Courier New', monospace;
+            transition: all 0.15s;
+        }
+        #btn-auto:hover { background: rgba(200,168,64,0.18); color: #e8c860; }
+        #btn-auto.running {
+            color: #ffe84a; border-color: #ffe84a;
+            background: rgba(255,232,74,0.1);
+            animation: autoPulse 1s ease-in-out infinite;
+        }
+        .sound-btn {
+            width: 100%; padding: 0.28rem 0.22rem;
+            background: transparent;
+            border: 1px solid rgba(200,168,64,0.12);
+            border-radius: 4px;
+            color: #5a3e18; font-size: 0.57rem;
+            text-align: left; cursor: pointer;
+            transition: all 0.12s; letter-spacing: 0.04em;
+            font-family: Georgia, serif;
+        }
+        .sound-btn:hover { border-color: rgba(200,168,64,0.38); color: #9a6e30; }
+        .sound-btn.active {
+            border-color: rgba(200,168,64,0.65);
+            color: #e8c060;
+            background: rgba(200,168,64,0.09);
+        }
+        @media (max-width: 880px) { #side-menu { display: none; } }
     </style>
 </head>
 <body>
@@ -151,7 +259,7 @@
 <div class="piano-wrap">
     <div class="piano" id="piano">
 
-        <!-- 10 white keys: C4 → E5 -->
+        <!-- 11 white keys: C4 → F5 -->
         <div class="wk" id="key-C4" data-note="C4"><div class="key-arrow">&#9660;</div><div class="key-lbl">C</div></div>
         <div class="wk" id="key-D4" data-note="D4"><div class="key-arrow">&#9660;</div><div class="key-lbl">D</div></div>
         <div class="wk" id="key-E4" data-note="E4"><div class="key-arrow">&#9660;</div><div class="key-lbl">E</div></div>
@@ -164,34 +272,40 @@
         <div class="wk" id="key-E5" data-note="E5"><div class="key-arrow">&#9660;</div><div class="key-lbl">E</div></div>
         <div class="wk" id="key-F5" data-note="F5"><div class="key-arrow">&#9660;</div><div class="key-lbl">F</div></div>
 
-        <!-- Black keys (decorative) -->
+        <!-- Black keys -->
         <div class="bk" style="left:45px;"><div class="bk-lbl">C#</div></div>
         <div class="bk" style="left:94px;"><div class="bk-lbl">D#</div></div>
         <div class="bk" style="left:192px;"><div class="bk-lbl">F#</div></div>
-        <!-- G#4 — melody key, interactive -->
         <div class="bk melody-key" id="key-Gs4" data-note="Gs4" style="left:241px;"><div class="key-arrow">&#9660;</div><div class="bk-lbl">G#</div></div>
         <div class="bk" style="left:290px;"><div class="bk-lbl">Bb</div></div>
         <div class="bk" style="left:388px;"><div class="bk-lbl">C#</div></div>
-        <!-- D#5 — melody key, interactive -->
-        <div class="bk melody-key" id="key-Ds5" data-note="Ds5" style="left:437px;">
-            <div class="key-arrow">&#9660;</div>
-            <div class="bk-lbl">D#</div>
-        </div>
+        <div class="bk melody-key" id="key-Ds5" data-note="Ds5" style="left:437px;"><div class="key-arrow">&#9660;</div><div class="bk-lbl">D#</div></div>
     </div>
 </div>
 
 <div class="screen-flash" id="screenFlash"></div>
 <div class="auto-badge" id="autoBadge">▶ AUTO</div>
 
+<!-- ── SIDE MENU ── -->
+<div id="side-menu">
+    <div class="menu-title">CONTROLS</div>
+    <div class="menu-label">PLAY</div>
+    <button id="btn-auto">▶ AUTO</button>
+    <div class="menu-sep"></div>
+    <div class="menu-label">SOUND</div>
+    <button class="sound-btn active" data-mode="piano">Piano</button>
+    <button class="sound-btn" data-mode="guitar">E. Guitar</button>
+    <button class="sound-btn" data-mode="bells">Bells</button>
+    <button class="sound-btn" data-mode="techno">Techno</button>
+    <button class="sound-btn" data-mode="synth">Synth</button>
+</div>
+
 <script>
 // ── YOUR TEXT HERE ──
 const TEXT = "Replace this placeholder text with what you want to write about chapter ten. Write about Colm staying at Bill's house healing his foot. You can describe the old asylum how it looks and feels. Write about the weeks that passed and how Colm slowly felt better. Then describe how he found the piano and started learning it. Maybe write about how the music made him feel hopeful again for the first time. At the end mention the newspaper he read about the Queen visiting Fremantle the next day.";
 
 // ─────────────────────────────────────────────────────────────
-//  FÜR ELISE — Beethoven  (complete A–B–A form, 81 notes)
-//  A section: A minor main theme (E5 D#5 E5 D#5 E5 B4 D5 C5 A4 …)
-//  B section: F major lyrical theme (B4 C5 D5 E5 F5 E5 D5 … B4)
-//  Backing: Am / E7 (A section) and Fmaj / Cmaj (B section)
+//  FÜR ELISE — Beethoven  (A–B–A form, 81 notes)
 // ─────────────────────────────────────────────────────────────
 const HZ = {
     F2: 87.31,
@@ -203,72 +317,53 @@ const HZ = {
     C5: 523.25, D5: 587.33, Ds5: 622.25, E5: 659.25, F5: 698.46,
 };
 
-//  key     = which piano key to press (id suffix)
-//  lead    = the melody note (played loud)
-//  backing = soft chord notes underneath
-//
-//  Full Für Elise A-section (34 notes):
-//  Phrase 1 — main theme
-//  Phrase 2 — Am arpeggio ascending
-//  Phrase 3 — E7 ascending (with G#4)
-//  Phrase 4 — main theme repeat
-//  Phrase 5 — Am arpeggio (same as 2)
-//  Phrase 6 — second ending, resolves to A4
 const Am   = [HZ.A2, HZ.E3, HZ.A3];
 const E7   = [HZ.E3, HZ.Gs3, HZ.B3];
 const Fmaj = [HZ.F2, HZ.C3, HZ.A3];
 const Cmaj = [HZ.C3, HZ.G3, HZ.E3];
 
 const MELODY = [
-    // ══ A SECTION (34 notes) ══════════════════════════════════════════════
-    // Phrase 1: main theme  E D# E D# E B D C A
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: Am  },
-    { key:'D5',  lead: HZ.D5,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: E7  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    // Phrase 2: C E A B
-    { key:'C4',  lead: HZ.C4,  backing: Am  },
-    { key:'E4',  lead: HZ.E4,  backing: Am  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    // Phrase 3: E G# B C  (G#4 = black key Y)
-    { key:'E4',  lead: HZ.E4,  backing: E7  },
-    { key:'Gs4', lead: HZ.Gs4, backing: E7  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: Am  },
-    // Phrase 4: main theme repeat
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: Am  },
-    { key:'D5',  lead: HZ.D5,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: E7  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    // Phrase 5: C E A B
-    { key:'C4',  lead: HZ.C4,  backing: Am  },
-    { key:'E4',  lead: HZ.E4,  backing: Am  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    // Phrase 6: second ending  E C B A
-    { key:'E4',  lead: HZ.E4,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-
-    // ══ B SECTION (13 notes, F major lyrical) ══════════════════════════
-    // Ascending F major line B C D E F, then descending back to B
+    // ══ A SECTION (34 notes) ══════════════════════════════
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: Am   },
+    { key:'D5',  lead: HZ.D5,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: E7   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'C4',  lead: HZ.C4,  backing: Am   },
+    { key:'E4',  lead: HZ.E4,  backing: Am   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'E4',  lead: HZ.E4,  backing: E7   },
+    { key:'Gs4', lead: HZ.Gs4, backing: E7   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: Am   },
+    { key:'D5',  lead: HZ.D5,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: E7   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'C4',  lead: HZ.C4,  backing: Am   },
+    { key:'E4',  lead: HZ.E4,  backing: Am   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'E4',  lead: HZ.E4,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    // ══ B SECTION (13 notes, F major) ═════════════════════
     { key:'B4',  lead: HZ.B4,  backing: Fmaj },
     { key:'C5',  lead: HZ.C5,  backing: Fmaj },
     { key:'D5',  lead: HZ.D5,  backing: Fmaj },
     { key:'E5',  lead: HZ.E5,  backing: Cmaj },
-    { key:'F5',  lead: HZ.F5,  backing: Cmaj },   // ← peak note, white key O
+    { key:'F5',  lead: HZ.F5,  backing: Cmaj },
     { key:'E5',  lead: HZ.E5,  backing: Cmaj },
     { key:'D5',  lead: HZ.D5,  backing: Fmaj },
     { key:'E5',  lead: HZ.E5,  backing: Fmaj },
@@ -277,53 +372,43 @@ const MELODY = [
     { key:'D5',  lead: HZ.D5,  backing: Cmaj },
     { key:'C5',  lead: HZ.C5,  backing: Fmaj },
     { key:'B4',  lead: HZ.B4,  backing: Fmaj },
-
-    // ══ A SECTION REPEAT (34 notes) ══════════════════════════════════════
-    // Phrase 1
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: Am  },
-    { key:'D5',  lead: HZ.D5,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: E7  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    // Phrase 2
-    { key:'C4',  lead: HZ.C4,  backing: Am  },
-    { key:'E4',  lead: HZ.E4,  backing: Am  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    // Phrase 3
-    { key:'E4',  lead: HZ.E4,  backing: E7  },
-    { key:'Gs4', lead: HZ.Gs4, backing: E7  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: Am  },
-    // Phrase 4
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'Ds5', lead: HZ.Ds5, backing: Am  },
-    { key:'E5',  lead: HZ.E5,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: Am  },
-    { key:'D5',  lead: HZ.D5,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: E7  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    // Phrase 5
-    { key:'C4',  lead: HZ.C4,  backing: Am  },
-    { key:'E4',  lead: HZ.E4,  backing: Am  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    // Phrase 6
-    { key:'E4',  lead: HZ.E4,  backing: E7  },
-    { key:'C5',  lead: HZ.C5,  backing: Am  },
-    { key:'B4',  lead: HZ.B4,  backing: E7  },
-    { key:'A4',  lead: HZ.A4,  backing: Am  },
+    // ══ A SECTION REPEAT (34 notes) ═══════════════════════
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: Am   },
+    { key:'D5',  lead: HZ.D5,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: E7   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'C4',  lead: HZ.C4,  backing: Am   },
+    { key:'E4',  lead: HZ.E4,  backing: Am   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'E4',  lead: HZ.E4,  backing: E7   },
+    { key:'Gs4', lead: HZ.Gs4, backing: E7   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'Ds5', lead: HZ.Ds5, backing: Am   },
+    { key:'E5',  lead: HZ.E5,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: Am   },
+    { key:'D5',  lead: HZ.D5,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: E7   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'C4',  lead: HZ.C4,  backing: Am   },
+    { key:'E4',  lead: HZ.E4,  backing: Am   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'E4',  lead: HZ.E4,  backing: E7   },
+    { key:'C5',  lead: HZ.C5,  backing: Am   },
+    { key:'B4',  lead: HZ.B4,  backing: E7   },
+    { key:'A4',  lead: HZ.A4,  backing: Am   },
 ];
 
-// Keyboard shortcuts
-// White:  a=C4 s=D4 d=E4 f=F4 g=G4 h=A4 j=B4 k=C5 l=D5 ;=E5
-// Black:  y=G#4  p=D#5
 const KB = {
     a:'C4', s:'D4', d:'E4', f:'F4', g:'G4',
     h:'A4', j:'B4', k:'C5', l:'D5', ';':'E5', o:'F5',
@@ -331,7 +416,7 @@ const KB = {
 };
 
 // ─────────────────────────────────────────────────────────────
-//  AUDIO — Piano sound (triangle wave + harmonics + reverb)
+//  AUDIO
 // ─────────────────────────────────────────────────────────────
 let actx = null;
 function getCtx() {
@@ -340,71 +425,147 @@ function getCtx() {
     return actx;
 }
 
-// Piano-like voice: triangle fundamental + sine harmonics, fast attack/decay
+let revNode = null;
+function getRev(c) {
+    if (revNode) return revNode;
+    const d = c.createDelay(1.0), fb = c.createGain(), out = c.createGain();
+    fb.gain.value = 0.28; out.gain.value = 0.20; d.delayTime.value = 0.32;
+    d.connect(fb); fb.connect(d); d.connect(out); out.connect(c.destination);
+    return (revNode = d);
+}
+
+// ── Piano (triangle + harmonics) ──
 function pianoVoice(freq, now, c, vol, dur) {
     const amp = c.createGain();
-
-    // Fundamental (triangle) + 2nd harmonic (sine, quieter)
     [{ mult:1, type:'triangle', v:0.75 },
      { mult:2, type:'sine',     v:0.18 },
      { mult:3, type:'sine',     v:0.07 }]
     .forEach(({ mult, type, v }) => {
-        const osc = c.createOscillator();
-        const g   = c.createGain();
-        osc.type  = type;
-        osc.frequency.value = freq * mult;
-        g.gain.value = v;
-        osc.connect(g); g.connect(amp);
-        osc.start(now); osc.stop(now + dur + 0.15);
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = type; osc.frequency.value = freq * mult; g.gain.value = v;
+        osc.connect(g); g.connect(amp); osc.start(now); osc.stop(now + dur + 0.15);
     });
-
-    // Piano envelope: instant attack → quick initial decay → long tail
     amp.gain.setValueAtTime(0, now);
     amp.gain.linearRampToValueAtTime(vol, now + 0.006);
     amp.gain.exponentialRampToValueAtTime(vol * 0.38, now + 0.10);
     amp.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-
     return amp;
 }
-
-// Shared reverb (hall feel, appropriate for classical piano)
-let revNode = null;
-function getRev(c) {
-    if (revNode) return revNode;
-    const d   = c.createDelay(1.0);
-    const fb  = c.createGain(); fb.gain.value  = 0.30;
-    const out = c.createGain(); out.gain.value = 0.22;
-    d.delayTime.value = 0.32;
-    d.connect(fb); fb.connect(d);
-    d.connect(out); out.connect(c.destination);
-    return (revNode = d);
-}
-
-function playStep(step) {
-    const c   = getCtx();
-    const now = c.currentTime;
-    const rev = getRev(c);
-
-    // Lead note — loud and clear
+function playPiano(step) {
+    const c = getCtx(), now = c.currentTime, rev = getRev(c);
     const lead = pianoVoice(step.lead, now, c, 0.38, 1.0);
-    lead.connect(c.destination);
-    lead.connect(rev);
-
-    // Backing chord — soft, longer sustain
-    step.backing.forEach(freq => {
-        const v = pianoVoice(freq, now, c, 0.07, 1.4);
-        v.connect(c.destination);
-        v.connect(rev);
+    lead.connect(c.destination); lead.connect(rev);
+    step.backing.forEach(f => {
+        const v = pianoVoice(f, now, c, 0.07, 1.4);
+        v.connect(c.destination); v.connect(rev);
     });
 }
 
-// Wrong note: dissonant cluster + pitch drop + thud
+// ── Electric Guitar (distorted sawtooth) ──
+function playGuitar(step) {
+    const c = getCtx(), now = c.currentTime, rev = getRev(c);
+    const curve = new Float32Array(256);
+    for (let i = 0; i < 256; i++) {
+        const x = (i * 2) / 256 - 1;
+        curve[i] = (Math.PI + 80) * x / (Math.PI + 80 * Math.abs(x));
+    }
+    const osc = c.createOscillator(), dist = c.createWaveShaper(),
+          filt = c.createBiquadFilter(), amp = c.createGain();
+    dist.curve = curve; osc.type = 'sawtooth'; osc.frequency.value = step.lead;
+    filt.type = 'bandpass'; filt.frequency.value = step.lead * 1.8; filt.Q.value = 1.4;
+    amp.gain.setValueAtTime(0, now);
+    amp.gain.linearRampToValueAtTime(0.38, now + 0.008);
+    amp.gain.exponentialRampToValueAtTime(0.20, now + 0.14);
+    amp.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+    osc.connect(dist); dist.connect(filt); filt.connect(amp);
+    amp.connect(c.destination); amp.connect(rev);
+    osc.start(now); osc.stop(now + 1.0);
+    step.backing.forEach(f => {
+        const v = c.createOscillator(), vg = c.createGain();
+        v.type = 'sawtooth'; v.frequency.value = f;
+        vg.gain.setValueAtTime(0.045, now);
+        vg.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+        v.connect(vg); vg.connect(c.destination); v.start(now); v.stop(now + 0.7);
+    });
+}
+
+// ── Bells / Vibraphone (inharmonic sine partials) ──
+function playBells(step) {
+    const c = getCtx(), now = c.currentTime, rev = getRev(c);
+    [[1, 0.50, 1.5], [2.76, 0.18, 0.9], [5.4, 0.09, 0.55], [8.93, 0.04, 0.32]]
+    .forEach(([mult, vol, decay]) => {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine'; osc.frequency.value = step.lead * mult;
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(vol * 0.38, now + 0.003);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + decay * 2.2);
+        osc.connect(g); g.connect(c.destination); g.connect(rev);
+        osc.start(now); osc.stop(now + decay * 2.3);
+    });
+    step.backing.forEach(f => {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine'; osc.frequency.value = f;
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(0.05, now + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+        osc.connect(g); g.connect(c.destination); g.connect(rev);
+        osc.start(now); osc.stop(now + 1.7);
+    });
+}
+
+// ── Techno (filter-swept square + kick) ──
+function playTechno(step) {
+    const c = getCtx(), now = c.currentTime, rev = getRev(c);
+    const osc = c.createOscillator(), filt = c.createBiquadFilter(), amp = c.createGain();
+    osc.type = 'square'; osc.frequency.value = step.lead;
+    filt.type = 'lowpass'; filt.Q.value = 9;
+    filt.frequency.setValueAtTime(100, now);
+    filt.frequency.exponentialRampToValueAtTime(step.lead * 5, now + 0.04);
+    filt.frequency.exponentialRampToValueAtTime(step.lead * 1.4, now + 0.28);
+    amp.gain.setValueAtTime(0, now);
+    amp.gain.linearRampToValueAtTime(0.30, now + 0.008);
+    amp.gain.setValueAtTime(0.28, now + 0.07);
+    amp.gain.exponentialRampToValueAtTime(0.0001, now + 0.46);
+    osc.connect(filt); filt.connect(amp); amp.connect(c.destination); amp.connect(rev);
+    osc.start(now); osc.stop(now + 0.5);
+    // Kick drum
+    const kick = c.createOscillator(), kg = c.createGain();
+    kick.frequency.setValueAtTime(165, now);
+    kick.frequency.exponentialRampToValueAtTime(38, now + 0.12);
+    kg.gain.setValueAtTime(0.55, now);
+    kg.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    kick.connect(kg); kg.connect(c.destination);
+    kick.start(now); kick.stop(now + 0.2);
+}
+
+// ── Synth Pad (two detuned sawtooths) ──
+function playSynth(step) {
+    const c = getCtx(), now = c.currentTime, rev = getRev(c);
+    [-9, 9].forEach(cents => {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sawtooth'; osc.detune.value = cents; osc.frequency.value = step.lead;
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(0.16, now + 0.022);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.88);
+        osc.connect(g); g.connect(c.destination); g.connect(rev);
+        osc.start(now); osc.stop(now + 0.95);
+    });
+    step.backing.forEach(f => {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine'; osc.frequency.value = f;
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(0.055, now + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 1.15);
+        osc.connect(g); g.connect(c.destination); g.connect(rev);
+        osc.start(now); osc.stop(now + 1.2);
+    });
+}
+
+// Wrong note: dissonant cluster + thud
 function playWrong() {
-    const c   = getCtx();
-    const now = c.currentTime;
+    const c = getCtx(), now = c.currentTime;
     [{f:233,d:0.52},{f:277,d:0.58},{f:185,d:0.48},{f:312,d:0.62}].forEach(({f,d}) => {
-        const o = c.createOscillator();
-        const g = c.createGain();
+        const o = c.createOscillator(), g = c.createGain();
         o.type = 'sawtooth';
         o.frequency.setValueAtTime(f, now);
         o.frequency.exponentialRampToValueAtTime(f * d, now + 0.45);
@@ -413,25 +574,62 @@ function playWrong() {
         g.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
         o.start(now); o.stop(now + 0.6);
     });
-    const sz  = Math.floor(c.sampleRate * 0.18);
+    const sz = Math.floor(c.sampleRate * 0.18);
     const buf = c.createBuffer(1, sz, c.sampleRate);
     const dat = buf.getChannelData(0);
-    for (let i = 0; i < sz; i++)
-        dat[i] = (Math.random() * 2 - 1) * Math.exp(-i / (c.sampleRate * 0.035));
-    const src = c.createBufferSource(); src.buffer = buf;
-    const nf  = c.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=200;
-    const ng  = c.createGain(); ng.gain.value = 0.45;
-    src.connect(nf); nf.connect(ng); ng.connect(c.destination);
-    src.start(now);
+    for (let i = 0; i < sz; i++) dat[i] = (Math.random()*2-1) * Math.exp(-i/(c.sampleRate*0.035));
+    const src = c.createBufferSource(), nf = c.createBiquadFilter(), ng = c.createGain();
+    src.buffer = buf; nf.type = 'lowpass'; nf.frequency.value = 200; ng.gain.value = 0.45;
+    src.connect(nf); nf.connect(ng); ng.connect(c.destination); src.start(now);
+}
+
+// Sound mode dispatcher
+let currentMode = 'piano';
+function playNote(step) {
+    ({ piano: playPiano, guitar: playGuitar, bells: playBells,
+       techno: playTechno, synth: playSynth })[currentMode](step);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  VISUAL EFFECTS
+// ─────────────────────────────────────────────────────────────
+const PARTICLES = ['♪','♫','♩','♬'];
+const COLORS    = ['#ffe84a','#ffa84a','#84e8ff','#c8ff84','#ff84c8'];
+
+function spawnParticle(el) {
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const p = document.createElement('div');
+    p.className = 'note-particle';
+    p.textContent = PARTICLES[Math.floor(Math.random() * PARTICLES.length)];
+    const col = COLORS[Math.floor(Math.random() * COLORS.length)];
+    p.style.color = col;
+    p.style.textShadow = `0 0 10px ${col}`;
+    p.style.left = (rect.left + rect.width * (0.25 + Math.random() * 0.5)) + 'px';
+    p.style.top  = (rect.top - 8) + 'px';
+    document.body.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+}
+
+function spawnRipple(el) {
+    if (!el) return;
+    const r = document.createElement('div');
+    r.className = 'key-ripple';
+    el.appendChild(r);
+    r.addEventListener('animationend', () => r.remove());
+}
+
+const fl = document.getElementById('screenFlash');
+function triggerFlash(cls) {
+    fl.className = 'screen-flash'; void fl.offsetWidth; fl.classList.add(cls);
 }
 
 // ─────────────────────────────────────────────────────────────
 //  GAME
 // ─────────────────────────────────────────────────────────────
-const words   = TEXT.trim().split(/\s+/);
-let wordIdx   = 0;
-let melIdx    = 0;
-const spans   = [];
+const words    = TEXT.trim().split(/\s+/);
+let wordIdx    = 0, melIdx = 0;
+const spans    = [];
 const wordArea = document.getElementById('wordArea');
 const cursor   = document.getElementById('cursor');
 
@@ -440,10 +638,11 @@ function cur() { return MELODY[melIdx % MELODY.length]; }
 function addWord() {
     if (wordIdx >= words.length) return;
     const s = document.createElement('span');
-    s.className = 'word';
+    s.className = 'word pop-in';
     s.textContent = words[wordIdx] + ' ';
     wordArea.insertBefore(s, cursor);
     spans.push(s);
+    setTimeout(() => s.classList.remove('pop-in'), 220);
     wordIdx++; melIdx++;
     refresh();
 }
@@ -453,8 +652,7 @@ function removeLast() {
     const last = spans.pop();
     last.classList.add('flash-out');
     setTimeout(() => last.remove(), 230);
-    wordIdx--;
-    refresh();
+    wordIdx--; refresh();
 }
 
 function refresh() {
@@ -475,48 +673,58 @@ function handle(noteKey) {
     if (wordIdx >= words.length) return;
     const el = document.getElementById('key-' + noteKey);
     if (noteKey === cur().key) {
-        playStep(cur());
-        if (el) { el.classList.add('pressed'); setTimeout(() => el.classList.remove('pressed'), 120); }
+        playNote(cur());
+        if (el) {
+            el.classList.add('pressed');
+            spawnRipple(el);
+            spawnParticle(el);
+            setTimeout(() => el.classList.remove('pressed'), 120);
+        }
+        triggerFlash('correct');
         addWord();
     } else {
         playWrong();
-        const fl = document.getElementById('screenFlash');
-        fl.classList.remove('wrong'); void fl.offsetWidth; fl.classList.add('wrong');
+        triggerFlash('wrong');
         if (el) { el.classList.add('wrong-flash'); setTimeout(() => el.classList.remove('wrong-flash'), 300); }
         removeLast();
     }
 }
 
-// White key clicks
-document.querySelectorAll('.wk').forEach(k => {
-    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); });
-});
-// D#5 black key click
-document.querySelectorAll('.bk.melody-key').forEach(k => {
-    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); });
+document.querySelectorAll('.wk').forEach(k =>
+    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); }));
+document.querySelectorAll('.bk.melody-key').forEach(k =>
+    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); }));
+
+// ─────────────────────────────────────────────────────────────
+//  SIDE MENU — sound mode buttons
+// ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.sound-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentMode = btn.dataset.mode;
+        document.querySelectorAll('.sound-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        getCtx();
+    });
 });
 
 // ─────────────────────────────────────────────────────────────
-//  SECRET: type "auto" to play itself at Für Elise tempo
-//  (72 BPM, 16th notes ≈ 208 ms per note)
-//  Type "auto" again to stop.
+//  AUTO MODE  (type "auto" OR click ▶ AUTO button)
 // ─────────────────────────────────────────────────────────────
-let secretBuf = '';
-let autoTimer = null;
+let secretBuf = '', autoTimer = null;
 const badge   = document.getElementById('autoBadge');
-const MS_NOTE = (60 / 72 / 4) * 1000; // ≈ 208 ms (Für Elise 16th note at 72 BPM)
+const btnAuto = document.getElementById('btn-auto');
+const MS_NOTE = (60 / 72 / 4) * 1000; // ~208 ms — Für Elise 16th note at 72 BPM
 
 function stopAuto() {
     if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
     badge.classList.remove('on');
+    btnAuto.classList.remove('running');
+    btnAuto.textContent = '▶ AUTO';
 }
 
 function startAuto() {
     if (autoTimer) { stopAuto(); return; }
-
-    // Reset to beginning
-    spans.forEach(s => s.remove());
-    spans.length = 0;
+    spans.forEach(s => s.remove()); spans.length = 0;
     wordIdx = 0; melIdx = 0;
     cursor.style.display = '';
     document.getElementById('doneMsg').classList.remove('show');
@@ -524,26 +732,31 @@ function startAuto() {
     refresh();
 
     badge.classList.add('on');
+    btnAuto.classList.add('running');
+    btnAuto.textContent = '■ STOP';
 
     autoTimer = setInterval(() => {
         if (wordIdx >= words.length) { stopAuto(); return; }
-        const s  = cur();
-        const el = document.getElementById('key-' + s.key);
-        playStep(s);
-        if (el) { el.classList.add('pressed'); setTimeout(() => el.classList.remove('pressed'), 120); }
+        const s = cur(), el = document.getElementById('key-' + s.key);
+        playNote(s);
+        if (el) {
+            el.classList.add('pressed');
+            spawnRipple(el);
+            spawnParticle(el);
+            setTimeout(() => el.classList.remove('pressed'), 120);
+        }
+        triggerFlash('correct');
         addWord();
     }, MS_NOTE);
 }
 
+btnAuto.addEventListener('click', startAuto);
+
 document.addEventListener('keydown', e => {
     if (e.repeat || e.ctrlKey || e.metaKey) return;
-
-    // Secret "auto" sequence
     secretBuf = (secretBuf + e.key.toLowerCase()).slice(-4);
     if (secretBuf === 'auto') { secretBuf = ''; startAuto(); return; }
-
-    // Piano keys (only when not in auto mode)
-    const n = KB[e.key];   // note: don't lowercase — ';' is already correct
+    const n = KB[e.key];
     if (n && !autoTimer) { e.preventDefault(); handle(n); }
 });
 

@@ -1041,3 +1041,28 @@
 - Extended HZ frequency table with F2 (87.31 Hz), C3 (130.81 Hz), G3 (196.00 Hz), F5 (698.46 Hz)
 - Updated keyboard hint: G#=Y · D#=P · F5=O
 - Committed and pushed to GitHub Pages
+
+---
+
+### Prompt 87 — Press effects, text alignment, side menu + sound modes
+**Prompt:**
+> *"mehr effecte, wenn man einen button drückt. Zudem, ist der text nicht allind mit den zeilen in dem papier. Oh, und mach rechts ein mini menü mit der auto funktion und einer funktion mit der man zwischen tönen wechseln kann. Standert (klassisches piano); techno; e gitarr. ans so on. what ever ist the most interesing. abt btw, why didnt you tell me english? almost forgot!!! And when your done, update claude code usage"*
+
+**What Claude did:**
+- **Text alignment:** changed `.word-area` `line-height` to `35px` to match the paper's repeating grid (blue rule every 35px); added `padding-top: 3px` nudge and reduced paper `padding-top` to `1.4rem` + label `margin-bottom` to `0.55rem` so the first text baseline lands on the second paper rule (~70px from paper top)
+- **Press effects:** added three layered effects on correct key presses:
+  1. **Ripple inside the key** — radial gold gradient that scales out and fades (`.key-ripple`, CSS `@keyframes keyRipple`)
+  2. **Floating note particle** — ♪ ♫ ♩ ♬ symbols rise from the key in random colours (#ffe84a, amber, cyan, green, pink) and fade over 1.1 s (`spawnParticle()`)
+  3. **Golden screen shimmer** — subtle full-screen gold flash on correct note (`.screen-flash.correct`)
+  4. **Word pop-in** — new word scales down from 135% and settles (`.word.pop-in`, `display: inline-block`)
+- **Side menu** (fixed, right side, hidden ≤880px): two sections:
+  - **PLAY** — `▶ AUTO` button: starts/stops auto-play, turns amber + pulses while running, label changes to `■ STOP`
+  - **SOUND** — five buttons switching `currentMode` with active highlight:
+    - **Piano** (default): triangle + sine harmonics (unchanged)
+    - **E. Guitar**: distorted sawtooth through waveshaper + bandpass filter; power-chord backing
+    - **Bells**: four inharmonic sine partials (×1, ×2.76, ×5.4, ×8.93) each with different decay; sine pad backing
+    - **Techno**: filter-swept square wave (lowpass Q=9, cutoff ramps up then falls); kick drum (165→38 Hz sine)
+    - **Synth**: two sawtooth oscillators detuned ±9 cents; sine pad backing
+- Auto mode now also triggers ripple + particle effects on each auto-played key
+- All effects (particles, ripple, screen flash) also fire during auto-play
+- Committed and pushed to GitHub Pages
