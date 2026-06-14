@@ -998,3 +998,46 @@
 - Typing `auto` again stops it (toggle)
 - Manual key presses are blocked while auto is running
 - Logged Prompts 81–83 in `claude-code-usage.md`, committed and pushed
+
+---
+
+### Prompt 84 — Switch melody to Für Elise
+**Prompt:**
+> *"für elise"*
+
+**What Claude did:**
+- Replaced the Van Halen Jump synthesizer sound with a classical piano voice (triangle fundamental + 2nd/3rd sine harmonics, fast 6 ms attack, exponential decay)
+- Replaced the Jump chord hits with the Für Elise main theme (9 notes: E5 D#5 E5 D#5 E5 B4 D5 C5 A4)
+- Changed backing chords to Am [A2 E3 A3] and E7 [E3 G#3 B3]
+- Changed auto-play tempo from 129 BPM to 72 BPM (Für Elise tempo, ≈ 208 ms per 16th note)
+- Added reverb (delay feedback loop, 0.32 s delay, 0.30 feedback)
+
+---
+
+### Prompt 85 — Continue extending the melody
+**Prompt:**
+> *"und weiter."*
+
+**What Claude did:**
+- Extended from the 9-note main theme to the full Für Elise A-section (34 notes, 6 phrases)
+- Phrase 1 & 4: main theme E5 D#5 E5 D#5 E5 B4 D5 C5 A4 (×2)
+- Phrase 2 & 5: ascending line C4 E4 A4 B4 (×2)
+- Phrase 3: E4 G#4 B4 C5 (first ending)
+- Phrase 6: E4 C5 B4 A4 (second ending, leads to B section)
+- Added G#4 as second interactive black key (id `key-Gs4`, left: 241px, keyboard shortcut Y)
+- Wrong-note penalty revised: removes last revealed word and plays dissonant cluster
+
+---
+
+### Prompt 86 — Full Für Elise ("the whole song") — 2026-06-14
+**Prompt:**
+> *"longer. the hole song."*
+
+**What Claude did:**
+- Extended MELODY array from 34 notes to 81 (complete A–B–A form)
+- Added B section (F major, 13 notes): B4 C5 D5 E5 F5 E5 D5 E5 D5 C5 D5 C5 B4 — ascending F major line peaking at F5, then descending back
+- Added F5 as 11th white key on the piano (keyboard shortcut O)
+- Added Fmaj [F2 C3 A3] and Cmaj [C3 G3 E3] backing chords for the B section
+- Extended HZ frequency table with F2 (87.31 Hz), C3 (130.81 Hz), G3 (196.00 Hz), F5 (698.46 Hz)
+- Updated keyboard hint: G#=Y · D#=P · F5=O
+- Committed and pushed to GitHub Pages
