@@ -412,7 +412,7 @@
 
 ---
 
-## Session — 2026-06-14 | 11:52 – ongoing
+## Session — 2026-06-14 | 11:52 – 14:30
 
 ### Prompt 34 — Chapter 5 task recommendation
 **Prompt:**
@@ -727,3 +727,32 @@
 - Also removed stale note `"This file will be uploaded as an 'extra task'."` (same note removed from all other chapters earlier)
 - Added Prompt 60 to `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+### Prompt 61 — Add Chapter 6 to README
+**Prompt:**
+> *"It's not in the README yet."*
+
+**What Claude did:**
+- Added Chapter 6 row to the chapter table in `README.md` (Theater script → Chapter 6.md)
+- Committed and pushed
+
+---
+
+### Prompt 62 — Session close
+**Prompt:**
+> *"Short session pause. End the session."*
+
+**What Claude did:**
+- Session ended: **14:30**
+- Updated session header with end time
+- Added Prompts 61–62 to `claude-code-usage.md`
+- Committed and pushed
+
+**Open for next session:**
+- 4 more chapters needed before deadline 19.06.
+- Still need 2 Story tasks (Characterization, Book review, Creative writing, Drama) — 0 done
+- Extra vocab exercise not started
+- Ch6 description placeholder still needs to be filled in by Simon
+- Ask Mr. Olbrich about the interactive HTML task (Ch5) approval
