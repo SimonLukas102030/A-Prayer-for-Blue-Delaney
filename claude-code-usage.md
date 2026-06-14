@@ -499,3 +499,36 @@
 
 **What Claude did:**
 - Added Prompts 34–41 to `claude-code-usage.md`
+
+---
+
+### Prompt 42 — GitHub Pages link in README
+**Prompt:**
+> *"The link in README.md must go to: https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/Chapter%205.html"*
+
+**What Claude did:**
+- Updated Ch5 link in `README.md` to the full GitHub Pages URL
+- Committed and pushed
+
+---
+
+### Prompt 43 — Refine Gemini prompts in AI-Usage.md
+**Prompt:**
+> *"Look in AI usage. Do you see the two prompts I made to Gemini? Refine them and put your recommended prompt there."*
+
+**What Claude did:**
+- Read `AI-Usage.md` and found two rough image prompts for Chapter 5 (principal's office and dining hall)
+- Fixed duplicate "## Chapter 4" heading → "## Chapter 5" (Simon had already fixed this)
+- Added refined Claude-written prompts after each "What Claude Code came up with:" line:
+  - **Image 1 (Office):** dark 1950s principal's office, two silhouetted figures, crucifix, high-contrast cinematic lighting
+  - **Image 2 (Hall):** run-down dining hall, raised stage, leather belt and restraints, flickering lights, no people
+- Committed and pushed
+
+---
+
+### Prompt 44 — Log claude code usage
+**Prompt:**
+> *"claude code usage"*
+
+**What Claude did:**
+- Added Prompts 42–44 to `claude-code-usage.md`
