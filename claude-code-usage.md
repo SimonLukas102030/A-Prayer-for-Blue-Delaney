@@ -568,3 +568,37 @@
 - Removed the `.room-img` CSS class (no longer needed)
 - Images now only appear in the door squares on the main page
 - Committed and pushed
+
+---
+
+### Prompt 48 — Copy to original, fix bold markup, explain **
+**Prompt:**
+> *"Done! copy to orginals and then edid. btw, why ain't the ** working?"*
+
+**What Claude did:**
+- Copied `Chapter 5.html` to `original/Chapter 5.html` (Simon had filled in both text placeholders)
+- Replaced `**"for their own good"**` with `<strong>"for their own good"</strong>` in `hallText`
+- Explained: `**...**` is Markdown syntax — only works in `.md` files. In HTML, bold requires `<strong>` tags. Since the typewriter uses `innerHTML`, HTML tags render correctly inside the JS strings
+- Committed and pushed
+
+---
+
+### Prompt 49 — Fix typos in Ch5 texts
+**Prompt:**
+> *"fix typos"*
+
+**What Claude did:**
+- Fixed 10 typos across both JS text strings in `Chapter 5.html`:
+  - `officeText`: `wend` → `went`, `arround` → `around`, `tweasers` → `tweezers`, `painfull` → `painful`, `happend` → `happened`, `butColm` → `but Colm`, `himselfe` → `himself`
+  - `hallText`: `Evry` → `Every`, `painfull` → `painful`, `hard it` → `hard in`
+- Committed and pushed
+
+---
+
+### Prompt 50 — Log in claude code usage
+**Prompt:**
+> *"note it in claude code usage and push"*
+
+**What Claude did:**
+- Added Prompts 48–50 to `claude-code-usage.md`
+- Committed and pushed
