@@ -26,4 +26,17 @@
 
 ---
 
+## Orginals
+> I made copys of the orginal files, were the text is completly unedited from claude nor from gemini. <br> Also the templates Claude Code gave me for the .html are in there.
+
+- [Chapter 1](original/Chapter%201.docx)
+- [Chapter 2](original/Chapter%202.docx)
+- [Chapter 3](original/Chapter%203.docx)
+- [Chapter 4](original/Chapter%204.md)
+- [Chapter 5](original/Chapter%205%20Claude%20Base.html) - Claude Code Base
+- [Chapter 5](original/Chapter%205.html)
+- [Chapter 6](original/Chapter%206.md)
+- [Chapter 7](original/Chapter%207%20Claude%20Template.html) - Claude Code Base
+- [Chapter 7](original/Chapter%207%20Simon.html)
+
 *More chapters will be added as the project progresses. Deadline: 19.06.2026*
