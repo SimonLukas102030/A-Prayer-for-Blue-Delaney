@@ -20,17 +20,13 @@
         }
 
         /* ── TITLE ── */
-        .ch-header {
-            text-align: center;
-        }
-
+        .ch-header { text-align: center; }
         .ch-header h1 {
             color: #e8d8a0;
             font-size: 1.3rem;
             font-weight: normal;
             letter-spacing: 0.08em;
         }
-
         .ch-header .sub {
             color: #806840;
             font-size: 0.72rem;
@@ -43,7 +39,7 @@
         .paper {
             background: #f5f0df;
             width: 100%;
-            max-width: 680px;
+            max-width: 700px;
             min-height: 200px;
             padding: 1.8rem 2.2rem 1.4rem;
             box-shadow: 0 6px 28px rgba(0,0,0,0.7);
@@ -82,17 +78,15 @@
             word-spacing: 0.15em;
         }
 
-        .word {
-            display: inline;
-        }
+        .word { display: inline; }
 
         .word.flash-out {
             color: #cc2020;
-            animation: wordOut 0.25s ease forwards;
+            animation: wordOut 0.22s ease forwards;
         }
 
         @keyframes wordOut {
-            to { opacity: 0; font-size: 0; }
+            to { opacity: 0; font-size: 0; letter-spacing: 0; }
         }
 
         .cursor {
@@ -123,22 +117,12 @@
         .done-msg.show { opacity: 1; }
 
         /* ── HINT + PROGRESS ── */
-        .controls-info {
-            text-align: center;
-        }
+        .controls-info { text-align: center; }
+        .hint { color: #c8a840; font-size: 0.78rem; letter-spacing: 0.1em; }
+        .progress { color: #604820; font-size: 0.72rem; margin-top: 0.3rem; }
 
-        .hint {
-            color: #c8a840;
-            font-size: 0.78rem;
-            letter-spacing: 0.1em;
-        }
-
-        .progress {
-            color: #604820;
-            font-size: 0.72rem;
-            margin-top: 0.3rem;
-            letter-spacing: 0.05em;
-        }
+        /* ── PIANO WRAPPER ── */
+        .piano-wrap { position: relative; }
 
         /* ── PIANO ── */
         .piano {
@@ -148,12 +132,11 @@
             background: #0e0e0e;
             padding: 10px 14px 0;
             border-radius: 5px 5px 10px 10px;
-            box-shadow:
-                0 10px 36px rgba(0,0,0,0.9),
-                inset 0 1px 0 rgba(255,255,255,0.08);
+            box-shadow: 0 10px 36px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.07);
         }
 
         /* ── WHITE KEYS ── */
+        /* 8 white keys × (46px + 3px gap) = 392px inner, + 28px padding = 420px total */
         .wk {
             width: 46px;
             height: 150px;
@@ -166,23 +149,23 @@
             box-shadow: 0 5px 8px rgba(0,0,0,0.35);
             transition: background 0.06s;
             flex-shrink: 0;
+            user-select: none;
         }
 
         .wk:hover { background: linear-gradient(180deg, #fff 0%, #eee 100%); }
 
         .wk.active {
             background: linear-gradient(180deg, #ffe84a 0%, #d4a800 100%);
-            box-shadow: 0 5px 16px rgba(255,200,0,0.55);
+            box-shadow: 0 5px 18px rgba(255,200,0,0.6);
         }
 
         .wk.pressed {
             transform: translateY(4px);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
-        .wk.wrong {
-            background: linear-gradient(180deg, #ff5050 0%, #bb1010 100%);
-            transition: background 0s;
+        .wk.wrong-flash {
+            background: linear-gradient(180deg, #ff5050 0%, #bb1010 100%) !important;
         }
 
         .key-lbl {
@@ -192,13 +175,12 @@
             text-align: center;
             font-size: 0.6rem;
             color: #999;
-            letter-spacing: 0.04em;
             pointer-events: none;
         }
 
         .wk.active .key-lbl { color: #7a5c00; font-weight: bold; }
 
-        /* Arrow above active key */
+        /* Down arrow above active white key */
         .key-arrow {
             position: absolute;
             top: -26px;
@@ -208,7 +190,7 @@
             color: #ffe84a;
             display: none;
             pointer-events: none;
-            animation: arrowBounce 0.9s ease-in-out infinite;
+            animation: arrowBounce 0.85s ease-in-out infinite;
         }
 
         .wk.active .key-arrow { display: block; }
@@ -219,23 +201,24 @@
         }
 
         /* ── BLACK KEYS ── */
-        /* White key step = 46px wide + 3px gap = 49px per white key
-           Piano left padding = 14px
-           White key starts:
-             C4 = 14
-             D4 = 63
-             E4 = 112
-             F4 = 161
-             G4 = 210
-             A4 = 259
-             B4 = 308
-             C5 = 357
-           Black key = 30px wide, centered at right edge of left white key:
-             C# = 14 + 46 - 15 = 45
-             D# = 63 + 46 - 15 = 94
-             F# = 161 + 46 - 15 = 192
-             G# = 210 + 46 - 15 = 241
-             A# = 259 + 46 - 15 = 290  */
+        /*
+          White key positions within piano (left padding = 14px, step = 49px):
+            C4  = 14
+            D4  = 63
+            E4  = 112
+            F4  = 161
+            G4  = 210
+            A4  = 259
+            B4  = 308
+            C5  = 357
+
+          Black key = 30px wide, centered over right edge of left white key:
+            C#4 = 14 + 46 - 15 = 45
+            D#4 = 63 + 46 - 15 = 94
+            F#4 = 161 + 46 - 15 = 192
+            G#4 = 210 + 46 - 15 = 241
+            A#4 = 259 + 46 - 15 = 290   ← Bb, part of melody
+        */
         .bk {
             width: 30px;
             height: 94px;
@@ -244,23 +227,65 @@
             position: absolute;
             top: 10px;
             z-index: 2;
-            pointer-events: none;
             box-shadow: 2px 5px 8px rgba(0,0,0,0.6);
+            pointer-events: none;   /* default: non-interactive */
         }
 
-        /* ── WRONG FLASH ── */
+        /* A#4 is a melody key → make it interactive */
+        .bk.melody-key {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .bk.active {
+            background: linear-gradient(180deg, #ffe84a 0%, #c8a000 100%);
+            box-shadow: 2px 5px 14px rgba(255,200,0,0.5);
+        }
+
+        .bk.pressed {
+            transform: translateY(3px);
+        }
+
+        .bk.wrong-flash {
+            background: linear-gradient(180deg, #ff5050 0%, #aa0000 100%) !important;
+        }
+
+        .bk .key-arrow {
+            top: -26px;
+            font-size: 1rem;
+            color: #ffe84a;
+        }
+
+        .bk.active .key-arrow { display: block; }
+
+        .bk-lbl {
+            position: absolute;
+            bottom: 6px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.52rem;
+            color: #666;
+            pointer-events: none;
+        }
+
+        .bk.active .bk-lbl { color: #7a5c00; font-weight: bold; }
+
+        /* ── SCREEN FLASH (wrong note) ── */
         .screen-flash {
             position: fixed;
             inset: 0;
-            background: rgba(200,0,0,0);
+            background: transparent;
             pointer-events: none;
             z-index: 99;
-            transition: background 0.3s ease;
         }
 
         .screen-flash.wrong {
-            background: rgba(200,0,0,0.18);
-            transition: background 0s;
+            animation: screenWrong 0.35s ease forwards;
+        }
+
+        @keyframes screenWrong {
+            0%   { background: rgba(200,0,0,0.22); }
+            100% { background: transparent; }
         }
     </style>
 </head>
@@ -280,67 +305,96 @@
 </div>
 
 <div class="controls-info">
-    <div class="hint" id="hint">Press the glowing key to reveal the next word</div>
+    <div class="hint" id="hint">Press the glowing key to reveal the next word &nbsp;·&nbsp; keyboard: A&nbsp;F&nbsp;G&nbsp;U</div>
     <div class="progress" id="progress">0 / 0 words</div>
 </div>
 
-<div class="piano" id="piano">
-    <!-- White keys -->
-    <div class="wk" id="key-C4" data-note="C4">
-        <div class="key-arrow">&#9660;</div>
-        <div class="key-lbl">C</div>
-    </div>
-    <div class="wk" id="key-D4" data-note="D4">
-        <div class="key-lbl">D</div>
-    </div>
-    <div class="wk" id="key-E4" data-note="E4">
-        <div class="key-lbl">E</div>
-    </div>
-    <div class="wk" id="key-F4" data-note="F4">
-        <div class="key-arrow">&#9660;</div>
-        <div class="key-lbl">F</div>
-    </div>
-    <div class="wk" id="key-G4" data-note="G4">
-        <div class="key-arrow">&#9660;</div>
-        <div class="key-lbl">G</div>
-    </div>
-    <div class="wk" id="key-A4" data-note="A4">
-        <div class="key-arrow">&#9660;</div>
-        <div class="key-lbl">A</div>
-    </div>
-    <div class="wk" id="key-B4" data-note="B4">
-        <div class="key-lbl">B</div>
-    </div>
-    <div class="wk" id="key-C5" data-note="C5">
-        <div class="key-lbl">C</div>
-    </div>
+<div class="piano-wrap">
+    <div class="piano" id="piano">
 
-    <!-- Black keys (positioned absolutely, pointer-events: none) -->
-    <div class="bk" style="left:45px;"></div>   <!-- C# -->
-    <div class="bk" style="left:94px;"></div>   <!-- D# -->
-    <div class="bk" style="left:192px;"></div>  <!-- F# -->
-    <div class="bk" style="left:241px;"></div>  <!-- G# -->
-    <div class="bk" style="left:290px;"></div>  <!-- A# -->
+        <!-- White keys C4 → C5 -->
+        <div class="wk" id="key-C4" data-note="C4">
+            <div class="key-arrow">&#9660;</div>
+            <div class="key-lbl">C</div>
+        </div>
+        <div class="wk" id="key-D4" data-note="D4">
+            <div class="key-lbl">D</div>
+        </div>
+        <div class="wk" id="key-E4" data-note="E4">
+            <div class="key-lbl">E</div>
+        </div>
+        <div class="wk" id="key-F4" data-note="F4">
+            <div class="key-arrow">&#9660;</div>
+            <div class="key-lbl">F</div>
+        </div>
+        <div class="wk" id="key-G4" data-note="G4">
+            <div class="key-arrow">&#9660;</div>
+            <div class="key-lbl">G</div>
+        </div>
+        <div class="wk" id="key-A4" data-note="A4">
+            <div class="key-lbl">A</div>
+        </div>
+        <div class="wk" id="key-B4" data-note="B4">
+            <div class="key-lbl">B</div>
+        </div>
+        <div class="wk" id="key-C5" data-note="C5">
+            <div class="key-lbl">C</div>
+        </div>
+
+        <!-- Black keys -->
+        <div class="bk" id="key-Cs4" data-note="Cs4" style="left:45px;">
+            <div class="bk-lbl">C#</div>
+        </div>
+        <div class="bk" id="key-Ds4" data-note="Ds4" style="left:94px;">
+            <div class="bk-lbl">D#</div>
+        </div>
+        <div class="bk" id="key-Fs4" data-note="Fs4" style="left:192px;">
+            <div class="bk-lbl">F#</div>
+        </div>
+        <div class="bk" id="key-Gs4" data-note="Gs4" style="left:241px;">
+            <div class="bk-lbl">G#</div>
+        </div>
+        <!-- A#4 / Bb — melody key, interactive -->
+        <div class="bk melody-key" id="key-As4" data-note="As4" style="left:290px;">
+            <div class="key-arrow">&#9660;</div>
+            <div class="bk-lbl">Bb</div>
+        </div>
+
+    </div>
 </div>
 
 <div class="screen-flash" id="screenFlash"></div>
 
 <script>
-// ── YOUR TEXT HERE ──
-// Replace this placeholder with your chapter 10 text.
-// Each word will appear one by one as you press the piano keys.
+// ─────────────────────────────────────────────
+//  YOUR TEXT HERE
+//  Replace this placeholder with your chapter 10 text.
+//  Each word appears one by one when you press the correct key.
+// ─────────────────────────────────────────────
 const TEXT = "Replace this placeholder text with what you want to write about chapter ten. Write about Colm staying at Bill's house healing his foot. You can describe the old asylum how it looks and feels. Write about the weeks that passed and how Colm slowly felt better. Then describe how he found the piano and started learning it. Maybe write about how the music made him feel hopeful again for the first time. At the end mention the newspaper he read about the Queen visiting Fremantle the next day.";
 
-// ── MELODY (C – G – Am – F, hopeful progression) ──
-// Each step: which white key to press → which chord plays
+// ─────────────────────────────────────────────
+//  MELODY  —  C · G · F · Bb  (Jump / Van Halen)
+//  Press these keys in order, repeating until all words are shown.
+//  Each press plays the chord + reveals one word.
+// ─────────────────────────────────────────────
 const MELODY = [
-    { key: 'C4', chord: 'C'  },
-    { key: 'G4', chord: 'G'  },
-    { key: 'A4', chord: 'Am' },
-    { key: 'F4', chord: 'F'  },
+    { key: 'C4',  chord: 'C'  },
+    { key: 'G4',  chord: 'G'  },
+    { key: 'F4',  chord: 'F'  },
+    { key: 'As4', chord: 'Bb' },   // A#4 = Bb (black key)
 ];
 
-// ── AUDIO ──
+// Keyboard shortcuts  (a=C4  f=F4  g=G4  u=Bb)
+const KB_MAP = {
+    a: 'C4', s: 'D4', d: 'E4', f: 'F4',
+    g: 'G4', h: 'A4', j: 'B4', k: 'C5',
+    u: 'As4',   // Bb / A#
+};
+
+// ─────────────────────────────────────────────
+//  AUDIO  —  Roland Jupiter-8 style synthesiser
+// ─────────────────────────────────────────────
 let audioCtx = null;
 
 function getCtx() {
@@ -349,45 +403,136 @@ function getCtx() {
     return audioCtx;
 }
 
-const FREQ = {
-    C3: 130.81, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
-    C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-    C5: 523.25, D5: 587.33, E5: 659.25
+// All note frequencies used
+const F = {
+    C3:130.81, E3:164.81, F3:174.61, G3:196.00, A3:220.00,
+    Bb3:233.08,
+    C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00,
+    A4:440.00, Bb4:466.16, B4:493.88,
+    C5:523.25, D5:587.33, E5:659.25, F5:698.46
 };
 
+// Chords: bass (left hand) + 3-note voicing (right hand)
 const CHORDS = {
-    C:  { left: 'C3', right: ['C4', 'E4', 'G4'] },
-    G:  { left: 'G3', right: ['G4', 'B4', 'D5'] },
-    Am: { left: 'A3', right: ['A4', 'C5', 'E5'] },
-    F:  { left: 'F3', right: ['F4', 'A4', 'C5'] },
+    C:  { bass: F.C3,   right: [F.C4,  F.E4,  F.G4]  },
+    G:  { bass: F.G3,   right: [F.G4,  F.B4,  F.D5]  },
+    F:  { bass: F.F3,   right: [F.F4,  F.A4,  F.C5]  },
+    Bb: { bass: F.Bb3,  right: [F.Bb4, F.D5,  F.F5]  },
 };
 
-function playNote(noteKey, startTime, duration, ctx, volume) {
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'triangle';
-    osc.frequency.value = FREQ[noteKey];
-    gain.gain.setValueAtTime(0, startTime);
-    gain.gain.linearRampToValueAtTime(volume, startTime + 0.018);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-    osc.start(startTime);
-    osc.stop(startTime + duration + 0.05);
+// One Jupiter-8 voice: 3 detuned sawtooths + lowpass filter sweep
+function jupiterVoice(freq, now, ctx, vol, isBass) {
+    const detunes = isBass ? [0, 5, -5] : [0, 8, -8]; // cents
+    const filter  = ctx.createBiquadFilter();
+    const amp     = ctx.createGain();
+
+    filter.type = 'lowpass';
+    filter.Q.value = isBass ? 1.5 : 2.5;
+    // Filter opens on attack then settles — signature Jupiter sound
+    filter.frequency.setValueAtTime(isBass ? 200 : 300, now);
+    filter.frequency.exponentialRampToValueAtTime(isBass ? 1200 : 4200, now + 0.08);
+    filter.frequency.exponentialRampToValueAtTime(isBass ? 800  : 2400, now + 0.55);
+
+    amp.gain.setValueAtTime(0, now);
+    amp.gain.linearRampToValueAtTime(vol, now + 0.04);
+    amp.gain.setValueAtTime(vol, now + 0.45);
+    amp.gain.exponentialRampToValueAtTime(0.0001, now + (isBass ? 3.0 : 2.2));
+
+    detunes.forEach(c => {
+        const osc = ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.value = freq * Math.pow(2, c / 1200);
+        osc.connect(filter);
+        osc.start(now);
+        osc.stop(now + 3.5);
+    });
+
+    filter.connect(amp);
+    return amp; // connect to destination / reverb
+}
+
+// Shared reverb (created once, reused)
+let reverbNode = null;
+function getReverb(ctx) {
+    if (reverbNode) return reverbNode;
+    const delay    = ctx.createDelay(1.0);
+    const fbGain   = ctx.createGain();
+    const outGain  = ctx.createGain();
+    delay.delayTime.value = 0.28;
+    fbGain.gain.value     = 0.28;   // feedback factor — keep < 1!
+    outGain.gain.value    = 0.22;
+    delay.connect(fbGain);
+    fbGain.connect(delay);
+    delay.connect(outGain);
+    outGain.connect(ctx.destination);
+    reverbNode = delay; // we feed into delay.input
+    return reverbNode;
 }
 
 function playChord(chordName) {
     const ctx  = getCtx();
     const now  = ctx.currentTime;
     const ch   = CHORDS[chordName];
-    playNote(ch.left, now, 2.4, ctx, 0.22);            // bass (left hand)
-    ch.right.forEach(n => playNote(n, now, 1.9, ctx, 0.14)); // treble (right hand)
+    const rev  = getReverb(ctx);
+
+    const bass = jupiterVoice(ch.bass, now, ctx, 0.22, true);
+    bass.connect(ctx.destination);
+    bass.connect(rev);
+
+    ch.right.forEach(freq => {
+        const v = jupiterVoice(freq, now, ctx, 0.12, false);
+        v.connect(ctx.destination);
+        v.connect(rev);
+    });
 }
 
-// ── WORDS ──
+// Wrong note: dissonant cluster + pitch drop + low thud
+function playWrongSound() {
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+
+    // Off-pitch dissonant cluster (tritones + minor 2nds)
+    [{ f:233, drop:0.52 }, { f:278, drop:0.58 }, { f:185, drop:0.48 }, { f:310, drop:0.62 }]
+        .forEach(({ f, drop }) => {
+            const osc  = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(f, now);
+            osc.frequency.exponentialRampToValueAtTime(f * drop, now + 0.45); // pitch drops
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            gain.gain.setValueAtTime(0.14, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+            osc.start(now);
+            osc.stop(now + 0.6);
+        });
+
+    // Low thud — short noise burst
+    const bufSize = Math.floor(ctx.sampleRate * 0.18);
+    const buf     = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data    = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.035));
+    }
+    const noise  = ctx.createBufferSource();
+    noise.buffer = buf;
+    const nf     = ctx.createBiquadFilter();
+    nf.type      = 'lowpass';
+    nf.frequency.value = 220;
+    const ng     = ctx.createGain();
+    ng.gain.value = 0.45;
+    noise.connect(nf);
+    nf.connect(ng);
+    ng.connect(ctx.destination);
+    noise.start(now);
+}
+
+// ─────────────────────────────────────────────
+//  GAME STATE
+// ─────────────────────────────────────────────
 const words = TEXT.trim().split(/\s+/);
-let wordIdx   = 0;  // number of words currently shown
-let melodyIdx = 0;  // position in melody (mod 4)
+let wordIdx   = 0;
+let melodyIdx = 0;
 
 const wordArea = document.getElementById('wordArea');
 const cursor   = document.getElementById('cursor');
@@ -400,96 +545,94 @@ function addWord() {
     if (wordIdx >= words.length) return;
     const span = document.createElement('span');
     span.className = 'word';
-    span.textContent = words[wordIdx] + ' ';
+    span.textContent = words[wordIdx] + ' ';
     wordArea.insertBefore(span, cursor);
     spans.push(span);
     wordIdx++;
     melodyIdx++;
-    updateHighlight();
-    updateProgress();
+    refresh();
 }
 
 function removeLastWord() {
     if (!spans.length) return;
     const last = spans.pop();
     last.classList.add('flash-out');
-    setTimeout(() => last.remove(), 250);
+    setTimeout(() => last.remove(), 230);
     wordIdx--;
-    updateProgress();
+    refresh();
 }
 
-function updateHighlight() {
-    document.querySelectorAll('.wk').forEach(k => k.classList.remove('active'));
-    if (wordIdx < words.length) {
-        const el = document.getElementById('key-' + currentKey());
-        if (el) el.classList.add('active');
-    } else {
-        // All words shown — game complete
+function refresh() {
+    // un-highlight all keys
+    document.querySelectorAll('.wk, .bk').forEach(k => k.classList.remove('active'));
+
+    if (wordIdx >= words.length) {
         cursor.style.display = 'none';
         document.getElementById('doneMsg').classList.add('show');
         document.getElementById('hint').style.display = 'none';
         document.getElementById('progress').textContent = 'Complete';
+        return;
     }
-}
 
-function updateProgress() {
+    const el = document.getElementById('key-' + currentKey());
+    if (el) el.classList.add('active');
     document.getElementById('progress').textContent = `${wordIdx} / ${words.length} words`;
 }
 
-// ── KEY PRESS HANDLER ──
+// ─────────────────────────────────────────────
+//  INPUT HANDLING
+// ─────────────────────────────────────────────
 function handleKey(noteKey) {
     if (wordIdx >= words.length) return;
 
     const el = document.getElementById('key-' + noteKey);
 
     if (noteKey === currentKey()) {
-        // Correct!
+        // ── Correct ──
         playChord(currentChord());
         if (el) {
             el.classList.add('pressed');
-            setTimeout(() => el.classList.remove('pressed'), 140);
+            setTimeout(() => el.classList.remove('pressed'), 130);
         }
         addWord();
     } else {
-        // Wrong!
+        // ── Wrong ──
+        playWrongSound();
+
         const flash = document.getElementById('screenFlash');
         flash.classList.remove('wrong');
-        void flash.offsetWidth;
+        void flash.offsetWidth; // force reflow to restart animation
         flash.classList.add('wrong');
-        setTimeout(() => flash.classList.remove('wrong'), 320);
 
         if (el) {
-            el.classList.add('wrong');
-            setTimeout(() => el.classList.remove('wrong'), 300);
+            el.classList.add('wrong-flash');
+            setTimeout(() => el.classList.remove('wrong-flash'), 300);
         }
 
         removeLastWord();
     }
 }
 
-// Click on white keys
-document.querySelectorAll('.wk').forEach(key => {
-    key.addEventListener('click', e => {
-        e.stopPropagation();
-        handleKey(key.dataset.note);
-    });
+// Click events — white keys
+document.querySelectorAll('.wk').forEach(k => {
+    k.addEventListener('click', e => { e.stopPropagation(); handleKey(k.dataset.note); });
 });
 
-// Keyboard: a s d f g h j k → C4 D4 E4 F4 G4 A4 B4 C5
-const KEY_MAP = {
-    a: 'C4', s: 'D4', d: 'E4', f: 'F4',
-    g: 'G4', h: 'A4', j: 'B4', k: 'C5',
-};
+// Click events — Bb black key (melody-key only)
+document.querySelectorAll('.bk.melody-key').forEach(k => {
+    k.addEventListener('click', e => { e.stopPropagation(); handleKey(k.dataset.note); });
+});
 
+// Keyboard
 document.addEventListener('keydown', e => {
     if (e.repeat || e.ctrlKey || e.metaKey) return;
-    const note = KEY_MAP[e.key.toLowerCase()];
+    const note = KB_MAP[e.key.toLowerCase()];
     if (note) { e.preventDefault(); handleKey(note); }
 });
 
 // Init
-updateProgress();
-updateHighlight();
+document.getElementById('progress').textContent = `0 / ${words.length} words`;
+refresh();
 </script>
 </body>
 </html>
