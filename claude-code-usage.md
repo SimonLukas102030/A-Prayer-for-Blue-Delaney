@@ -768,3 +768,61 @@
 **What Claude did:**
 - Opened new session, updated `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+### Prompt 64 — Chapter 7 story + newspaper recommendation
+**Prompt:**
+> *"Ch7, following story: Tommy gone from last night. Questioning, Colm didn't say anything. Then hard work because next week is open day. Brother Dennis comes with car — Tommy inside, can barely walk, extremely crippled. Tommy sent inside, seen after tea time: bald, one eye swollen shut, back full of red scars and cuts. Didn't talk to anyone. Next day washing bags. Tommy had no energy. Pushing cart up hill, Colm slipped, cart went down with Tommy on top. Screamed at Tommy to jump, he didn't — died."*
+
+**What Claude did:**
+- No files modified
+- Confirmed this is the Tommy death chapter Simon reserved for the newspaper article
+- Recommended Brothers' cover-up version (cold, official, lying) over honest boy's version
+
+---
+
+### Prompt 65 — Build newspaper HTML template
+**Prompt:**
+> *"Can you make me a template with HTML for a newspaper article? I'll make the text, headline, sections etc. Also give me a list of tags I can use."*
+
+**What Claude did:**
+- Created `Chapter 7.html` — 1950s newspaper layout with aged paper aesthetic, masthead, two-column article body, drop-cap, blockquote styling
+- Saved template to `original/Chapter 7 Claude Template.html`
+- Provided tag reference list: `<h1>`, `<h2>`, `<h3>`, `<p>`, `<strong>`, `<em>`, `<br>`, `<blockquote>`, `<div class="full-width">`
+- Committed and pushed
+
+---
+
+### Prompt 66 — Simon fills in Ch7, fix grammar and push
+**Prompt:**
+> *"Done, fix grammar and push. Before, save to originals as Chapter 7 Simon.html. Also put the appropriate link in README.md, just like Chapter 5."*
+
+**What Claude did:**
+- Copied `Chapter 7.html` to `original/Chapter 7 Simon.html`
+- Fixed 17 grammar errors: `acedent` → `accident`, `14 year old` → `14-year-old`, `an wheelbarrow` → `a wheelbarrow`, `whent` → `went`, `didn't managed` → `didn't manage`, `jump of` → `jump off`, `flow off` → `flew off`, `were` → `where`, `construcktors` → `contractors`, `possable` → `possible`, `terrable` → `terribly`, `wand` → `want`, `an propper` → `a proper`, `chash` → `cash`, `evry` → `every`, `Pennys` → `Pennies`
+- Added Chapter 7 to `README.md` with GitHub Pages link
+- Committed and pushed
+
+---
+
+### Prompt 67 — Creative intent clarification
+**Prompt:**
+> *"I did that on purpose. Brother Dennis is lying. And the donations don't go to the funeral — they go to like beer for the brothers."*
+
+**What Claude did:**
+- No files modified
+- Acknowledged the intentional dark cover-up: Brother Dennis as lying author, donation money going to the Brothers themselves
+- Flagged only the IBAN as worth fixing (anachronistic for 1950s Australia)
+
+---
+
+### Prompt 68 — Replace IBAN with period-accurate address
+**Prompt:**
+> *"For point 2, can you change that to an address? I don't know how they worked in the 50s. Also then update claude usage."*
+
+**What Claude did:**
+- Replaced `IBAN: 15845 78723 98923` with a 1950s-accurate postal donation line: *"Send a postal order or cheque to: The Brothers of Bindoon Boys Town, P.O. Box 47, Bindoon, Western Australia."*
+- In the 1950s, donations were sent via postal order or cheque by mail — no bank transfer numbers
+- Added Prompts 64–68 to `claude-code-usage.md`
+- Committed and pushed
