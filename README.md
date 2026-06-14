@@ -33,10 +33,12 @@
 - [Chapter 2](original/Chapter%202.docx)
 - [Chapter 3](original/Chapter%203.docx)
 - [Chapter 4](original/Chapter%204.md)
-- [Chapter 5](original/Chapter%205%20Claude%20Base.html) - Claude Code Base
-- [Chapter 5](original/Chapter%205.html)
+- [Chapter 5](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%205%20Claude%20Base.html) - Claude Code Base
+- [Chapter 5](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%205.html)
 - [Chapter 6](original/Chapter%206.md)
-- [Chapter 7](original/Chapter%207%20Claude%20Template.html) - Claude Code Base
-- [Chapter 7](original/Chapter%207%20Simon.html)
+- [Chapter 7](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%207%20Claude%20Template.html) - Claude Code Base
+- [Chapter 7](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%207%20Simon.html)
+
+---
 
 *More chapters will be added as the project progresses. Deadline: 19.06.2026*
