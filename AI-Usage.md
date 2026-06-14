@@ -97,3 +97,23 @@ I then had Claude Code read it and fix grammar. More detail in [Claude Code Usag
 
 ---
 **Prompt:** 29
+
+<br><br><br>
+
+## Chapter 5
+
+<p>I desided to go with a little mor interactiv kind of task for this Chapter. I had the Idea, to make a web Page, were you can select something to read about and then look at it. And as my css skills are not jet the greatest, i had Claude Code help. I wrote the text myselve, but had help with grammar from Claude Code. I also decided, to use 2 images for the two parts. The promts are as following. I did had them be clearafied from Claude Code:
+
+### Image 1:
+> Make an Image of an dark principals Office. Its the office of the principal from the "Clontarf, Christian Brothers Orphanage". In the room, there is the principal, blacked out. So you cant see, who it is. There is also a 10 to 11 yo boy. He is sitting infront of the desk. Also blacked out. The hole scene is very dark and should be a little scarry. 
+---
+What Claude Code came up with:
+> A dark, oppressive interior scene set in the 1950s. A dimly lit principal's office at the Clontarf Christian Brothers Orphanage in Australia. The room is austere and intimidating: a heavy wooden desk dominates the space, with a single dim lamp casting harsh shadows. Seated behind the desk is a figure in a black clerical robe — face entirely in shadow, unrecognisable. Across the desk sits a young boy, 10–11 years old, also silhouetted — only his tense posture visible. Dark walls, bare floorboards, a crucifix on the wall. Cinematic, high-contrast lighting. Photorealistic style. No text or watermarks.
+<br>
+<br>
+
+### Image 2:
+> make an Image of a dining hall. In the back, there is a little stage. On the wall were the stage is, hangs a lether belt and torchering stuff. On the stage is an table with an chair, that has like handcuffs on it. The tables in the dining hall are all a little damaged and old. It is overall a very bad place. its dark and mystirious.
+---
+What Claude Code came up with:
+> A dark, run-down institutional dining hall set in a 1950s Australian orphanage. Long rows of old, scarred wooden tables fill the room. At the far end, a raised stage or platform. On the back wall above the stage hangs a worn leather belt and other punishment instruments. On the stage stands a heavy wooden chair with leather restraints on the armrests. The room is dimly lit with flickering overhead lights casting an eerie, oppressive atmosphere. The space feels cold and institutional. No people. Cinematic, photorealistic style. No text or watermarks.
