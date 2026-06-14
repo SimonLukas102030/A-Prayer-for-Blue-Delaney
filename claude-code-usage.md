@@ -602,3 +602,30 @@
 **What Claude did:**
 - Added Prompts 48–50 to `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+### Prompt 51 — Sentence-by-sentence typewriter with slow strong text
+**Prompt:**
+> *"Can you make the code so it listens to '.'. So the sentences get shown bit by bit? After every . it stops and the user clicks again. And when something is `<strong>`, it gets slow."*
+
+**What Claude did:**
+- Rewrote the entire JS in `Chapter 5.html`:
+  - `parseText()` splits raw text into `{type:'text'|'strong', content}` segments so `<strong>` tags render correctly during char-by-char typing
+  - `tick()` types one character at a time using `setTimeout` (28 ms normal, 70 ms for `<strong>` segments)
+  - Auto-pauses after every `.`, `!`, or `?` — hint changes to "click to continue"
+  - Click while typing → skips to end of current sentence (`skipToNextPause`), then pauses
+  - Click while paused → resumes next sentence
+  - Going back resets room state so it starts fresh on re-entry
+- Committed and pushed
+
+---
+
+### Prompt 52 — Push updated and new files
+**Prompt:**
+> *"Push all claude code usage + push all files. I updated some and added some."*
+
+**What Claude did:**
+- Found `AI-Usage.md` (modified by Simon) and `original/Chapter 5 Claude Base.html` (new file added by Simon)
+- Added Prompts 51–52 to `claude-code-usage.md`
+- Staged and pushed all changed files

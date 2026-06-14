@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5 — The First Cut</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #0d0d0d;
+            color: #c9b99a;
+            font-family: Georgia, 'Times New Roman', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .view {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .view.active { display: flex; }
+
+        /* ── MAIN VIEW ── */
+        #main-view {
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .chapter-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: #5a4a35;
+            margin-bottom: 0.6rem;
+        }
+        .chapter-title {
+            font-size: 2.6rem;
+            font-weight: normal;
+            color: #c9b99a;
+            margin-bottom: 0.4rem;
+            text-align: center;
+        }
+        .chapter-subtitle {
+            font-size: 0.85rem;
+            color: #44362a;
+            font-style: italic;
+            margin-bottom: 4rem;
+        }
+
+        .doors {
+            display: flex;
+            gap: 3rem;
+            align-items: stretch;
+        }
+
+        .door {
+            width: 175px;
+            height: 275px;
+            border: 2px solid #2e2318;
+            background: linear-gradient(180deg, #1c1510 0%, #110d08 100%);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 1.6rem;
+            position: relative;
+            transition: border-color 0.3s, transform 0.25s, box-shadow 0.3s;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.6), 0 0 25px rgba(0,0,0,0.9);
+        }
+        .door:hover {
+            border-color: #7a6a50;
+            transform: scale(1.04);
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.4), 0 0 35px rgba(0,0,0,0.9);
+        }
+        /* door knob */
+        .door::before {
+            content: '';
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #5a4a35;
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 8px rgba(160,120,60,0.25);
+        }
+        /* door image */
+        .door-img {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            width: calc(100% - 36px);
+            height: 110px;
+            object-fit: cover;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .door-label {
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #7a6a50;
+            text-align: center;
+            line-height: 1.7;
+        }
+        .door-sublabel {
+            font-size: 0.68rem;
+            color: #3a2e20;
+            margin-top: 0.35rem;
+            font-style: italic;
+        }
+
+        /* ── ROOM VIEWS ── */
+        #office-view {
+            background: radial-gradient(ellipse at 35% 25%, #18120a 0%, #080604 100%);
+        }
+        #hall-view {
+            background: radial-gradient(ellipse at 50% 20%, #0f0f15 0%, #060608 100%);
+        }
+
+        .room-header { text-align: center; margin-bottom: 2.5rem; }
+        .room-title {
+            font-size: 1.7rem;
+            font-weight: normal;
+            color: #c9b99a;
+            margin-bottom: 0.4rem;
+        }
+        .room-subtitle {
+            font-size: 0.75rem;
+            color: #5a4a35;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+        }
+
+        .text-box {
+            max-width: 680px;
+            width: 100%;
+            min-height: 180px;
+            background: rgba(0,0,0,0.25);
+            border-left: 2px solid #2e2318;
+            padding: 1.8rem 2rem;
+            font-size: 1rem;
+            line-height: 1.95;
+            color: #b0a080;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #7a6a50;
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hint {
+            font-size: 0.72rem;
+            color: #3a2e20;
+            margin-top: 1.2rem;
+            font-style: italic;
+            min-height: 1rem;
+        }
+
+        .back-btn {
+            margin-top: 2rem;
+            background: none;
+            border: 1px solid #2e2318;
+            color: #5a4a35;
+            padding: 0.55rem 1.6rem;
+            font-family: Georgia, serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .back-btn:hover { border-color: #7a6a50; color: #c9b99a; }
+
+        .room-layout {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+.fade-in { animation: fadeIn 0.7s ease forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── MAIN VIEW ── -->
+    <div class="view active fade-in" id="main-view">
+        <p class="chapter-label">A Prayer for Blue Delaney</p>
+        <h1 class="chapter-title">The First Cut</h1>
+        <p class="chapter-subtitle">Chapter 5 — Choose a door.</p>
+
+        <div class="doors">
+            <div class="door" onclick="openRoom('office')">
+                <img class="door-img" src="Assets/Ch5-PrincipalsOffice.png" alt="" />
+                <span class="door-label">The Principal's<br>Office</span>
+                <span class="door-sublabel">the sleepwalking</span>
+            </div>
+            <div class="door" onclick="openRoom('hall')">
+                <img class="door-img" src="Assets/Ch5-DiningHall.png" alt="" />
+                <span class="door-label">The Dining<br>Hall</span>
+                <span class="door-sublabel">the punishment</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── OFFICE VIEW ── -->
+    <div class="view" id="office-view">
+        <div class="room-header fade-in">
+            <h2 class="room-title">The Principal's Office</h2>
+            <p class="room-subtitle">night — no memory</p>
+        </div>
+        <div class="room-layout fade-in">
+            <div>
+                <div class="text-box" id="office-text"><span class="cursor"></span></div>
+                <p class="hint" id="office-hint">click anywhere to reveal</p>
+            </div>
+        </div>
+        <button class="back-btn" onclick="goBack()">← back</button>
+    </div>
+
+    <!-- ── HALL VIEW ── -->
+    <div class="view" id="hall-view">
+        <div class="room-header fade-in">
+            <h2 class="room-title">The Dining Hall</h2>
+            <p class="room-subtitle">every evening — after dinner</p>
+        </div>
+        <div class="room-layout fade-in">
+            <div>
+                <div class="text-box" id="hall-text"><span class="cursor"></span></div>
+                <p class="hint" id="hall-hint">click anywhere to reveal</p>
+            </div>
+        </div>
+        <button class="back-btn" onclick="goBack()">← back</button>
+    </div>
+
+    <script>
+        const officeText = ``;
+
+        const hallText = ``;
+
+        let typing = false;
+        let done = { office: false, hall: false };
+        let currentRoom = null;
+        let typeInterval = null;
+
+        function openRoom(room) {
+            currentRoom = room;
+            document.getElementById('main-view').classList.remove('active');
+            document.getElementById(room + '-view').classList.add('active');
+        }
+
+        function goBack() {
+            document.getElementById(currentRoom + '-view').classList.remove('active');
+            document.getElementById('main-view').classList.add('active');
+            document.getElementById('office-text').innerHTML = '<span class="cursor"></span>';
+            document.getElementById('hall-text').innerHTML = '<span class="cursor"></span>';
+            document.getElementById('office-hint').textContent = 'click anywhere to reveal';
+            document.getElementById('hall-hint').textContent = 'click anywhere to reveal';
+            done = { office: false, hall: false };
+            if (typeInterval) clearInterval(typeInterval);
+            typing = false;
+            currentRoom = null;
+        }
+
+        function typeText(elementId, text, hintId) {
+            if (typing) {
+                clearInterval(typeInterval);
+                document.getElementById(elementId).innerHTML = text + '<span class="cursor"></span>';
+                document.getElementById(hintId).textContent = '';
+                typing = false;
+                done[currentRoom] = true;
+                return;
+            }
+            typing = true;
+            document.getElementById(hintId).textContent = 'click to skip';
+            let i = 0;
+            const el = document.getElementById(elementId);
+            el.innerHTML = '<span class="cursor"></span>';
+            typeInterval = setInterval(() => {
+                if (i < text.length) {
+                    el.innerHTML = text.substring(0, i + 1) + '<span class="cursor"></span>';
+                    i++;
+                } else {
+                    clearInterval(typeInterval);
+                    el.innerHTML = text + '<span class="cursor"></span>';
+                    document.getElementById(hintId).textContent = '';
+                    typing = false;
+                    done[currentRoom] = true;
+                }
+            }, 28);
+        }
+
+        document.getElementById('office-view').addEventListener('click', e => {
+            if (e.target.classList.contains('back-btn')) return;
+            if (!done['office']) typeText('office-text', officeText, 'office-hint');
+        });
+
+        document.getElementById('hall-view').addEventListener('click', e => {
+            if (e.target.classList.contains('back-btn')) return;
+            if (!done['hall']) typeText('hall-text', hallText, 'hall-hint');
+        });
+    </script>
+
+</body>
+</html>

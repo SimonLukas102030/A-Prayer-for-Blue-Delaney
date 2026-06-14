@@ -82,8 +82,8 @@ The resulting Image is: <br>
 
 ## Chapter 3
 
-<p>I wrote the summary myselve, and the orginal I wrote is in [Original Chapter 3](original/Chapter%203.md). <br>
-I then had Claude Code read it and fix grammar. More detail in [Claude Code Usage](claude-code-usage.md). <br><p>
+I wrote the summary myselve, and the orginal I wrote is in [Original Chapter 3](original/Chapter%203.md). <br>
+I then had Claude Code read it and fix grammar. More detail in [Claude Code Usage](claude-code-usage.md). <br>
 
 ---
 **Prompts:** 10 $\rightarrow$ 11 + 28
@@ -92,8 +92,8 @@ I then had Claude Code read it and fix grammar. More detail in [Claude Code Usag
 
 ## Chapter 4
 
-<p>I wrote the diary entry myselve, and the orginal I wrote is in [Original Chapter 4](original/Chapter%204.md). <br>
-I then had Claude Code read it and fix grammar. More detail in [Claude Code Usage](claude-code-usage.md). <br><p>
+I wrote the diary entry myselve, and the orginal I wrote is in [Original Chapter 4](original/Chapter%204.md). <br>
+I then had Claude Code read it and fix grammar. More detail in [Claude Code Usage](claude-code-usage.md). <br>
 
 ---
 **Prompt:** 29
@@ -109,6 +109,9 @@ I then had Claude Code read it and fix grammar. More detail in [Claude Code Usag
 ---
 What Claude Code came up with:
 > A dark, oppressive interior scene set in the 1950s. A dimly lit principal's office at the Clontarf Christian Brothers Orphanage in Australia. The room is austere and intimidating: a heavy wooden desk dominates the space, with a single dim lamp casting harsh shadows. Seated behind the desk is a figure in a black clerical robe — face entirely in shadow, unrecognisable. Across the desk sits a young boy, 10–11 years old, also silhouetted — only his tense posture visible. Dark walls, bare floorboards, a crucifix on the wall. Cinematic, high-contrast lighting. Photorealistic style. No text or watermarks.
+---
+The resulting Image is: <br>
+<img src="Assets/Ch5-PrincipalsOffice.png" alt="Picture Ch5-PrincipalsOffice" width="25%" /><br>
 <br>
 <br>
 
@@ -117,3 +120,18 @@ What Claude Code came up with:
 ---
 What Claude Code came up with:
 > A dark, run-down institutional dining hall set in a 1950s Australian orphanage. Long rows of old, scarred wooden tables fill the room. At the far end, a raised stage or platform. On the back wall above the stage hangs a worn leather belt and other punishment instruments. On the stage stands a heavy wooden chair with leather restraints on the armrests. The room is dimly lit with flickering overhead lights casting an eerie, oppressive atmosphere. The space feels cold and institutional. No people. Cinematic, photorealistic style. No text or watermarks.
+---
+The resulting Image is: <br>
+<img src="Assets/Ch5-DiningHall.png" alt="Picture Ch5-DiningHall" width="25%" /><br>
+
+### The help from Claude for the Idea and Implementation
+
+Claude helped with the css, js and the base of the html. Also grammar was fixed by Claude. For more detail, read the [Claude Code Usage](claude-code-usage.md). <br>
+Also, the orginal html, is in [Original Chapter 5](original/Chapter%205.html)!<br>
+
+---
+**Prompts:**
+- 34 $\rightarrow$ 40
+- 43
+- 45 $\rightarrow$ 49
+- 51
