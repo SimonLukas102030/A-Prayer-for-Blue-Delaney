@@ -759,7 +759,7 @@
 
 ---
 
-## Session — 2026-06-14 | 16:03 – ongoing
+## Session — 2026-06-14 | 16:03 – 17:15
 
 ### Prompt 63 — Open new session
 **Prompt:**
@@ -826,3 +826,20 @@
 - In the 1950s, donations were sent via postal order or cheque by mail — no bank transfer numbers
 - Added Prompts 64–68 to `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+### Prompt 69 — Session close
+**Prompt:**
+> *"Thanks. End session now. I have to go."*
+
+**What Claude did:**
+- Session ended: **17:15**
+- Updated session header with end time
+- Committed and pushed
+
+**Open for next session:**
+- 3 more chapters needed before deadline 19.06.
+- Still need 2 Story tasks (Characterization, Book review, Creative writing, Drama) — 0 done
+- Extra vocab exercise not started
+- Ch6 description placeholder still needs to be filled in by Simon
