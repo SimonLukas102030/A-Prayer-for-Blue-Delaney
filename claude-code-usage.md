@@ -909,20 +909,53 @@
 
 ---
 
-### Prompt 76 — Plan chapters 8, 9, 10
+### Prompt 76 — Chapter 8 story
 **Prompt:**
-> *"ch8, let me tell you the story: [...] for 9 [...] for 10 [...]"*
+> *"ch8, let me tell you the story: Colm sad. Can´t eat. Many others sad to, dont eat as well. Dennis hits who doesnt eat. Colm was mad and through a potato in his face. He got dragged by his hair. He didnt care. That night, he climbed out the window and wend to tommys grave and placed his card of merry there. This was important to him. he then ran away and fell asleep in the grass. In the afternoon, he woke up and thought about, how he´d get to his mom. He was hiding from evry car, that came by. Then a bike came and he couldnt hide. young brown eyed man. the man, knew of his outfit, that he is from bindoon. The man didnt bring him back to bindoon. He just asked, were he was going. Colm wandet to go to Fremantle. Then the man gave him advice, brought him to an intersection and wend away. the advise was, that there were farmers who go there. He has to hop on. Its 50 miles. in the afternoon it was too hot, so he layed beneth a tree. In the night he walked for hours and in the morning a dumper lost a peach, which he ate. oh, it aint a dumpr, its a food truck, thouse of the farmers. sorry. after 2 days, he had the currage, to hit one of them up to get him to his destination. They let him in the back. there he ate a bit."*
 
 **What Claude did:**
-- Received story outlines for chapters 8, 9, 10 from Simon
-- Discussed task type options; agreed Ch9 = dock-themed conversation interface, Ch10 = interactive piano
+- Received Ch8 story outline from Simon
+- Discussed task type options for chapters 8, 9, 10
 
 ---
 
-### Prompt 77 — Build Ch9 and Ch10 templates
+### Prompt 77 — Chapter 9 and 10 stories
 **Prompt:**
-> *"Build the 2 templates and log all in claude code usage"*
+> *"let me first read the next 2 chapters. then we can plan. Chapter 9: he got to the docks. he is looking for a ship back to england. He saw an dog with an fisherman. He seat down nexto the dog. a while later, the fisherman ask him, if the dog is boughtering him. Colm sas no. the man gave him something to drink. dog name rusty. the man wandt to go, but instead, he seat down nexto colm. coml sas, he wands to get back ton england. the man sas, he once tryed to smuggle himself on a ship as well. The man gave him tea an biscuts. The man ask him for his name, and at first colm ingnored it. The man then said, "well im Bill Dare". "you can call me Bill". Colm sas, he is from the boys home, and doesnt wand to go back, and thinks, the man is goint to take him there and trys to go away. but the man sas, he aint brining him back. just wandting to get him back on his feet and invits colm into his house. His house is an asylum. The man gave him food and put a bandage on his foot. Then there is also chapter 10: the man goes fishing. Colm is scarred, and told to stay, because he is sick. Colm walks arround, falles trough a glass thing, because he heard someone call. well whatever. He then sits down with the man. the man wands top help him with something. idk, what it was again, but he lifts his shirt and sees the scars on his back. Colm then fell asleep, that instance and awoke to another man in black and the man arguing, if colm was deserving, of the punishing, to what the man was very against. The doctor said, he has to take colm back. but he has to get his car first. Afert he was gone, colm told the man, he cant go back and the men hides colm. He sas, he ran away. Colm stayed in bed for a cupple of days, before he could walk again. He found a piano and lernd it. weeks past. In a newspaper he read, that the queen of england was making a great tour through austrailia. And tomorrow she is coming to fremantle. because of an epedamic, evrything was changed and also billy didnt wand to, so he didnt go there."*
+
+**What Claude did:**
+- Received Ch9 and Ch10 story outlines from Simon
+- Suggested task types: Ch9 = dock-themed conversation interface, Ch10 = interactive piano
+
+---
+
+### Prompt 78 — Refine plan for Ch9 and Ch10
+**Prompt:**
+> *"for 8, its not fitting, as we have too little information. but for 9, thats an great idia. I would say, like set as fisher design, with idk, like fishernets and rods. And for 10, the idea is good. I would do it as following: the next key to press is highlited. Pressig it, plays the tune and shows the next line. The lines are on the note paper for the song. they are revealed word by word. So there are many tunes. They should form a song. btw, pressing the wrong key, makes one word go away. The notes should make a hopefull song. they should play not singular notes, but accords. like 3 notes with the right and one left. That way, it sounds better. it should be a basic melodie. Tit should just repead, as often, as there are words, to play it."*
+
+**What Claude did:**
+- Noted Ch8 interactive map idea dropped (too little info)
+- Confirmed Ch9 design: fisher/dock theme with fishnets and rods
+- Confirmed Ch10 design: highlighted piano key → chord + word revealed, wrong key removes word, chords (3 right hand + 1 left bass), C–G–Am–F hopeful melody repeating
+
+---
+
+### Prompt 79 — Build Ch9 and Ch10 templates
+**Prompt:**
+> *"no. the lyrics, aint lyrics. its just a text. i write all the content. You just make the templates. But, im not a composer. so you create the melodie. Build the 2 templates and log all in claude code usage"*
 
 **What Claude did:**
 - Created `Chapter 9.html`: dock/fisher-themed conversation interface with rope and fishnet decorations, Bill/Colm dialogue revealed line by line on click, placeholder dialogue for Simon to fill in
-- Created `Chapter 10.html`: interactive piano — C–G–Am–F chord progression (3 right-hand notes + 1 bass), highlighted key advances one word of text on the music-paper display, wrong key removes last word; keyboard shortcuts a–k also work; Simon fills in the text placeholder
+- Created `Chapter 10.html`: interactive piano — C–G–Am–F chord progression (3 right-hand notes + 1 bass), highlighted key advances one word of text on the music-paper display, wrong key removes last word; keyboard shortcuts a–k also work; Simon fills in the TEXT placeholder
+- Logged Prompts 74–79 in `claude-code-usage.md`, committed and pushed
+
+---
+
+### Prompt 80 — Put exact prompts in claude code usage
+**Prompt:**
+> *"please put my hole promts exactly in claude code usage."*
+
+**What Claude did:**
+- Replaced paraphrased prompt summaries (76, 77) with Simon's exact original messages
+- Added missing Prompts 78 and 80
+- Committed and pushed
