@@ -629,3 +629,79 @@
 - Found `AI-Usage.md` (modified by Simon) and `original/Chapter 5 Claude Base.html` (new file added by Simon)
 - Added Prompts 51–52 to `claude-code-usage.md`
 - Staged and pushed all changed files
+
+---
+
+### Prompt 53 — Chapter 6 story + task recommendation
+**Prompt:**
+> *"For the next chapter, let me tell you the story: Colm gets moved to another orphanage — Bindoon Orphanage. This is where Tommy was sent months ago. Now he meets him. The new orphanage looks great, but Tommy says it's not how it looks. Tommy was made to sing for visitors, who think the world in here must be great. After they are gone, the boys have to work. Colm has to concrete the floor. The new brothers are harsh too. As Colm was humming, he got kicked for humming while working. The Brothers use the boys as bed warmers. Colm was lying in one for that reason, when Tommy got him out of there and explained that he was running away. Then he went off. Colm went to sleep."*
+
+**What Claude did:**
+- No files modified
+- Recommended **Drama/Script** — the night scene where Tommy tells Colm he's running away
+- Also noted Drama is one of the 2 required Story tasks, so it could do double duty
+
+---
+
+### Prompt 54 — Correction: diary entry counts as 100-word text
+**Prompt:**
+> *"No, diary is also over 100 words."*
+
+**What Claude did:**
+- No files modified
+- Corrected the text count: Summary (Ch3) ✓, Diary entry (Ch4) ✓, Newspaper article (future Tommy chapter) ✓ — all 3 required texts already covered
+- Ch6 has no word count requirement at all
+
+---
+
+### Prompt 55 — Does the task require the entire chapter?
+**Prompt:**
+> *"Does the task say to do the entire chapter, or can I just do this one scene?"*
+
+**What Claude did:**
+- No files modified
+- Checked the assignment — confirmed the wording is "Turn a chapter **(or a part of it)** into a different text"
+- One scene is explicitly allowed
+
+---
+
+### Prompt 56 — Read all files for context
+**Prompt:**
+> *"Please, read in, all in the folder — better context."*
+
+**What Claude did:**
+- Read `Chapter 1.md`, `Chapter 2.md`, `Chapter 3.md`, `Chapter 4.md`, and the Ch5 section of `AI-Usage.md`
+- Built full picture of task types used: Chat room (Ch1), Picture (Ch2), Summary (Ch3), Diary entry (Ch4), Interactive HTML (Ch5)
+
+---
+
+### Prompt 57 — Assignment screenshot
+**Prompt:**
+> *[Screenshot of full LearningView assignment page]*
+
+**What Claude did:**
+- Read the assignment screenshot
+- Confirmed full task list, rules (no type more than twice, 3 × ~100 words, no skipping more than 3 chapters at once)
+- Confirmed "or a part of it" wording for different text tasks
+- Noted Story tasks (Characterization, Book review, Creative writing, Drama) are 2 extra tasks on top of the 10 chapters
+
+---
+
+### Prompt 58 — Extract assignment from saved HTML
+**Prompt:**
+> *"Last time, Claude could get information from the saved HTML. Is there really nothing? Try to extract the info. But do not load the entire script into your context."*
+
+**What Claude did:**
+- Used Python to search the saved `Assets/LearningView.org.html` for assignment text by keyword
+- Successfully extracted the full Chapter tasks section by stripping HTML tags around the match
+- Story task descriptions (Characterization, Book review, Creative writing, Drama) are server-side only — not in the saved file
+
+---
+
+### Prompt 59 — Update claude code usage
+**Prompt:**
+> *"claude code usage? update please"*
+
+**What Claude did:**
+- Added Prompts 53–59 to `claude-code-usage.md`
+- Committed and pushed
