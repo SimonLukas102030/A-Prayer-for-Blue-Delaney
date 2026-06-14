@@ -191,6 +191,21 @@
         }
         .back-btn:hover { border-color: #7a6a50; color: #c9b99a; }
 
+        .room-layout {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .room-img {
+            width: 280px;
+            min-width: 280px;
+            border: 1px solid #2e2318;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
         .fade-in { animation: fadeIn 0.7s ease forwards; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -224,8 +239,13 @@
             <h2 class="room-title">The Principal's Office</h2>
             <p class="room-subtitle">night — no memory</p>
         </div>
-        <div class="text-box fade-in" id="office-text"><span class="cursor"></span></div>
-        <p class="hint" id="office-hint">click anywhere to reveal</p>
+        <div class="room-layout fade-in">
+            <img src="Assets/Ch5-PrincipalsOffice.png" class="room-img" alt="The Principal's Office" />
+            <div>
+                <div class="text-box" id="office-text"><span class="cursor"></span></div>
+                <p class="hint" id="office-hint">click anywhere to reveal</p>
+            </div>
+        </div>
         <button class="back-btn" onclick="goBack()">← back</button>
     </div>
 
@@ -235,8 +255,13 @@
             <h2 class="room-title">The Dining Hall</h2>
             <p class="room-subtitle">every evening — after dinner</p>
         </div>
-        <div class="text-box fade-in" id="hall-text"><span class="cursor"></span></div>
-        <p class="hint" id="hall-hint">click anywhere to reveal</p>
+        <div class="room-layout fade-in">
+            <img src="Assets/Ch5-DiningHall.png" class="room-img" alt="The Dining Hall" />
+            <div>
+                <div class="text-box" id="hall-text"><span class="cursor"></span></div>
+                <p class="hint" id="hall-hint">click anywhere to reveal</p>
+            </div>
+        </div>
         <button class="back-btn" onclick="goBack()">← back</button>
     </div>
 
