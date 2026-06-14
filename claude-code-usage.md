@@ -556,3 +556,15 @@
 - Added `.door-img` CSS class: absolutely positioned, fills the upper portion of each door (same area the panel was)
 - Added `<img class="door-img">` inside each `.door` div on the main page — `Ch5-PrincipalsOffice.png` in the left door, `Ch5-DiningHall.png` in the right door
 - Committed and pushed
+
+---
+
+### Prompt 47 — Remove images from room views
+**Prompt:**
+> *"The image inside must go now. It interferes with the text box. I mean the image in `<!-- ── OFFICE VIEW ── -->` and `<!-- ── HALL VIEW ── -->`."*
+
+**What Claude did:**
+- Removed both `<img class="room-img">` tags from the office and hall room views
+- Removed the `.room-img` CSS class (no longer needed)
+- Images now only appear in the door squares on the main page
+- Committed and pushed
