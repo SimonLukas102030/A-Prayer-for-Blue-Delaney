@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 9 — The Docks</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #081828;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+            font-family: Georgia, 'Times New Roman', serif;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 100% 50% at 50% 100%, rgba(5,30,60,0.7), transparent);
+            pointer-events: none;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            z-index: 1;
+        }
+
+        /* ── ROPE ── */
+        .rope {
+            height: 14px;
+            background: repeating-linear-gradient(
+                90deg,
+                #b8923a 0px, #8a6020 3px,
+                #c8a840 7px, #a07830 10px,
+                #b8923a 13px
+            );
+            border-radius: 7px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.12);
+        }
+
+        /* ── DOCK PANEL ── */
+        .dock {
+            background: repeating-linear-gradient(
+                180deg,
+                #2e1c0c 0px, #3a2210 38px,
+                #1e1008 38px, #1e1008 40px
+            );
+            border-left: 10px solid #1a0e06;
+            border-right: 10px solid #1a0e06;
+            padding: 2.2rem 2.8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fishnet corner decorations */
+        .dock::before, .dock::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.13;
+            background-image:
+                linear-gradient(rgba(200,168,64,1) 1.5px, transparent 1.5px),
+                linear-gradient(90deg, rgba(200,168,64,1) 1.5px, transparent 1.5px);
+            background-size: 18px 18px;
+            pointer-events: none;
+        }
+        .dock::before { top: 0; left: 0; }
+        .dock::after  { top: 0; right: 0; }
+
+        /* ── HEADER ── */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(200,168,64,0.25);
+            padding-bottom: 1rem;
+        }
+
+        .location {
+            font-size: 0.68rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #c8a840;
+            opacity: 0.75;
+        }
+
+        .ch-title {
+            font-size: 1.55rem;
+            color: #e8d89a;
+            margin-top: 0.3rem;
+            font-weight: normal;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+        }
+
+        /* ── CONVERSATION ── */
+        .conversation {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            min-height: 300px;
+        }
+
+        .line {
+            animation: appear 0.35s ease forwards;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(7px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .speaker-tag {
+            font-size: 0.63rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            margin-bottom: 0.22rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .speaker-tag.bill    { color: #e8a840; }
+        .speaker-tag.colm    { color: #80c0e8; }
+
+        .speech {
+            font-size: 0.96rem;
+            line-height: 1.68;
+            padding-left: 1.1rem;
+        }
+
+        .speech.bill {
+            color: #f0e4c0;
+            border-left: 3px solid #c8882a;
+        }
+
+        .speech.colm {
+            color: #cce8ff;
+            border-left: 3px solid #3e8fc0;
+            margin-left: 2.8rem;
+        }
+
+        .speech.narrator {
+            color: #907050;
+            font-style: italic;
+            padding-left: 0;
+            font-size: 0.88rem;
+            border-left: none;
+        }
+
+        /* ── CLICK PROMPT ── */
+        .click-prompt {
+            text-align: center;
+            color: #c8a840;
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            margin-top: 1.8rem;
+            animation: blink 2.3s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.35; }
+            50%       { opacity: 0.85; }
+        }
+
+        .end-card {
+            text-align: center;
+            color: #c8a840;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            margin-top: 1.8rem;
+            opacity: 0;
+            transition: opacity 0.8s;
+        }
+        .end-card.show { opacity: 1; }
+    </style>
+</head>
+<body>
+<div class="scene">
+    <div class="rope"></div>
+    <div class="dock">
+        <div class="header">
+            <div class="location">Fremantle Docks &nbsp;·&nbsp; Western Australia &nbsp;·&nbsp; 1951</div>
+            <div class="ch-title">The Fisherman</div>
+        </div>
+
+        <div class="conversation" id="conv"></div>
+
+        <div class="click-prompt" id="prompt">— click anywhere to continue —</div>
+        <div class="end-card" id="end">— End of Chapter 9 —</div>
+    </div>
+    <div class="rope"></div>
+</div>
+
+<script>
+// ── YOUR DIALOGUE HERE ──
+// who: 'narrator' | 'bill' | 'colm'
+const lines = [
+    { who: 'narrator', text: '[Opening scene: Colm arrives at the Fremantle docks. Describe what he sees and smells. He is looking for a ship back to England.]' },
+    { who: 'narrator', text: '[He spots a dog sitting beside a fisherman and walks over. He sits down next to the dog.]' },
+    { who: 'bill',     text: '[Bill asks whether the dog is bothering him.]' },
+    { who: 'colm',     text: '[Colm says no.]' },
+    { who: 'narrator', text: '[Bill gives him something to drink. He gets up to leave — but then sits down beside Colm instead.]' },
+    { who: 'colm',     text: '[Colm says he wants to get back to England.]' },
+    { who: 'bill',     text: '[Bill says he once tried to smuggle himself onto a ship too. Replace with what he actually says.]' },
+    { who: 'narrator', text: '[Bill gives him tea and biscuits. Then he asks for Colm\'s name. Colm ignores the question.]' },
+    { who: 'bill',     text: 'Well, I\'m Bill Dare. You can call me Bill.' },
+    { who: 'narrator', text: '[Colm says he is from the Boys\' Home. He starts to leave, sure Bill will drag him back.]' },
+    { who: 'bill',     text: '[Bill says he isn\'t taking him back anywhere. He just wants to help — and invites Colm to his house.]' },
+    { who: 'narrator', text: '[Bill\'s house turns out to be an old asylum. He gives Colm food and bandages his foot.]' },
+];
+
+let idx = 0;
+const conv   = document.getElementById('conv');
+const prompt = document.getElementById('prompt');
+const end    = document.getElementById('end');
+
+function next() {
+    if (idx >= lines.length) {
+        prompt.style.display = 'none';
+        end.classList.add('show');
+        return;
+    }
+    const l = lines[idx++];
+    const wrap = document.createElement('div');
+    wrap.className = 'line';
+
+    if (l.who !== 'narrator') {
+        const tag = document.createElement('div');
+        tag.className = `speaker-tag ${l.who}`;
+        tag.textContent = l.who === 'bill' ? 'Bill Dare' : 'Colm';
+        wrap.appendChild(tag);
+    }
+
+    const speech = document.createElement('div');
+    speech.className = `speech ${l.who}`;
+    speech.textContent = l.text;
+    wrap.appendChild(speech);
+
+    conv.appendChild(wrap);
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.addEventListener('click', next);
+document.addEventListener('keydown', e => {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+});
+
+next();
+</script>
+</body>
+</html>

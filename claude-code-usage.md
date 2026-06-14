@@ -885,3 +885,44 @@
 **What Claude did:**
 - Added Prompts 71–73 to `claude-code-usage.md`
 - Committed and pushed
+
+---
+
+## Session — 2026-06-14 | ongoing
+
+### Prompt 74 — Push README with Originals section
+**Prompt:**
+> *"Push Readme.md"*
+
+**What Claude did:**
+- Committed and pushed `README.md` (Simon had added an "Originals" section listing all original files in `original/`)
+
+---
+
+### Prompt 75 — Update Originals links to full GitHub Pages URLs
+**Prompt:**
+> *"again"*
+
+**What Claude did:**
+- Simon had updated Ch5 and Ch7 links in the Originals section to full GitHub Pages URLs
+- Committed and pushed `README.md`
+
+---
+
+### Prompt 76 — Plan chapters 8, 9, 10
+**Prompt:**
+> *"ch8, let me tell you the story: [...] for 9 [...] for 10 [...]"*
+
+**What Claude did:**
+- Received story outlines for chapters 8, 9, 10 from Simon
+- Discussed task type options; agreed Ch9 = dock-themed conversation interface, Ch10 = interactive piano
+
+---
+
+### Prompt 77 — Build Ch9 and Ch10 templates
+**Prompt:**
+> *"Build the 2 templates and log all in claude code usage"*
+
+**What Claude did:**
+- Created `Chapter 9.html`: dock/fisher-themed conversation interface with rope and fishnet decorations, Bill/Colm dialogue revealed line by line on click, placeholder dialogue for Simon to fill in
+- Created `Chapter 10.html`: interactive piano — C–G–Am–F chord progression (3 right-hand notes + 1 bass), highlighted key advances one word of text on the music-paper display, wrong key removes last word; keyboard shortcuts a–k also work; Simon fills in the text placeholder
