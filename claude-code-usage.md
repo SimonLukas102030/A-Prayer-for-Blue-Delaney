@@ -1106,6 +1106,20 @@
 
 ---
 
+### Prompt 91 — Chapter 9 template redesign — 2026-06-15
+**Prompt:**
+> *"mach die template für 9 besser. hat leichte überlappungs und erkennungs probleme. Es sollte sehr clean sein."*
+
+**What Claude did:**
+- Removed fishnet `::before`/`::after` pseudo-elements — they overlapped the header content area
+- Removed `overflow: hidden` on `.dock` (was only needed to clip those decorations)
+- Removed `body::before` radial gradient (added no value)
+- **Bill left / Colm right**: proper chat layout using `align-self: flex-start/end` on a flex column + `max-width: 82%` — replaced the old `margin-left: 2.8rem` hack
+- **Narrator**: own `.narrator-block` / `.narrator-text` classes, centered, italic, `#a08858` (brighter than old `#907050` — was low contrast on the dark wood background)
+- **Speech bubbles**: speaker name rendered as a small monospace tag above each bubble; bubble has a subtle colour-tinted background + coloured left/right border for instant speaker recognition
+
+---
+
 ### Prompt 90 — Melody keys silent + hide yellow active key — 2026-06-15
 **Prompt:**
 > *"wtf. lass die gespielten noten so, aber die sollen kein ton machen. der soll von der mp3 kommen. Außerdem, der gelbe button, soll wärenddessen nicht gelb sein"*

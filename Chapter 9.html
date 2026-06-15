@@ -8,177 +8,161 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #081828;
+            background: #06111e;
             min-height: 100vh;
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            padding: 2.5rem 1rem;
+            padding: 2.5rem 1rem 4rem;
             font-family: Georgia, 'Times New Roman', serif;
             cursor: pointer;
             user-select: none;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse 100% 50% at 50% 100%, rgba(5,30,60,0.7), transparent);
-            pointer-events: none;
-        }
-
         .scene {
-            position: relative;
             width: 100%;
-            max-width: 700px;
-            z-index: 1;
+            max-width: 680px;
         }
 
         /* ── ROPE ── */
         .rope {
-            height: 14px;
+            height: 12px;
             background: repeating-linear-gradient(
                 90deg,
                 #b8923a 0px, #8a6020 3px,
                 #c8a840 7px, #a07830 10px,
                 #b8923a 13px
             );
-            border-radius: 7px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.12);
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
         }
 
         /* ── DOCK PANEL ── */
         .dock {
             background: repeating-linear-gradient(
                 180deg,
-                #2e1c0c 0px, #3a2210 38px,
-                #1e1008 38px, #1e1008 40px
+                #2c1a0a 0px, #3a2210 36px,
+                #1c0e06 36px, #1c0e06 38px
             );
-            border-left: 10px solid #1a0e06;
-            border-right: 10px solid #1a0e06;
-            padding: 2.2rem 2.8rem 2rem;
-            position: relative;
-            overflow: hidden;
+            border-left: 8px solid #150b04;
+            border-right: 8px solid #150b04;
+            padding: 2rem 2.4rem 2.4rem;
         }
-
-        /* Fishnet corner decorations */
-        .dock::before, .dock::after {
-            content: '';
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            opacity: 0.13;
-            background-image:
-                linear-gradient(rgba(200,168,64,1) 1.5px, transparent 1.5px),
-                linear-gradient(90deg, rgba(200,168,64,1) 1.5px, transparent 1.5px);
-            background-size: 18px 18px;
-            pointer-events: none;
-        }
-        .dock::before { top: 0; left: 0; }
-        .dock::after  { top: 0; right: 0; }
 
         /* ── HEADER ── */
         .header {
             text-align: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(200,168,64,0.25);
-            padding-bottom: 1rem;
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid rgba(200,168,64,0.2);
         }
 
         .location {
-            font-size: 0.68rem;
-            letter-spacing: 0.28em;
+            font-size: 0.66rem;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
             color: #c8a840;
-            opacity: 0.75;
+            opacity: 0.7;
+            font-family: 'Courier New', monospace;
         }
 
         .ch-title {
-            font-size: 1.55rem;
+            font-size: 1.5rem;
             color: #e8d89a;
-            margin-top: 0.3rem;
+            margin-top: 0.35rem;
             font-weight: normal;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            letter-spacing: 0.04em;
         }
 
         /* ── CONVERSATION ── */
         .conversation {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-            min-height: 300px;
+            gap: 1.4rem;
         }
 
-        .line {
-            animation: appear 0.35s ease forwards;
-        }
+        .line { animation: appear 0.3s ease forwards; }
 
         @keyframes appear {
-            from { opacity: 0; transform: translateY(7px); }
+            from { opacity: 0; transform: translateY(6px); }
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        .speaker-tag {
-            font-size: 0.63rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            margin-bottom: 0.22rem;
-            font-family: 'Courier New', monospace;
+        /* Narrator — centered, italic */
+        .narrator-block {
+            text-align: center;
+            padding: 0 1.2rem;
         }
-
-        .speaker-tag.bill    { color: #e8a840; }
-        .speaker-tag.colm    { color: #80c0e8; }
-
-        .speech {
-            font-size: 0.96rem;
-            line-height: 1.68;
-            padding-left: 1.1rem;
-        }
-
-        .speech.bill {
-            color: #f0e4c0;
-            border-left: 3px solid #c8882a;
-        }
-
-        .speech.colm {
-            color: #cce8ff;
-            border-left: 3px solid #3e8fc0;
-            margin-left: 2.8rem;
-        }
-
-        .speech.narrator {
-            color: #907050;
+        .narrator-text {
             font-style: italic;
-            padding-left: 0;
-            font-size: 0.88rem;
-            border-left: none;
+            font-size: 0.87rem;
+            color: #a08858;
+            line-height: 1.7;
         }
 
-        /* ── CLICK PROMPT ── */
+        /* Dialogue — Bill left, Colm right */
+        .dia-block {
+            display: flex;
+            flex-direction: column;
+            max-width: 82%;
+        }
+        .dia-block.bill { align-self: flex-start; }
+        .dia-block.colm { align-self: flex-end;   }
+
+        .speaker-name {
+            font-size: 0.58rem;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 0.28rem;
+        }
+        .dia-block.bill .speaker-name { color: #d4903a; padding-left: 0.9rem; }
+        .dia-block.colm .speaker-name { color: #5aace0; text-align: right; padding-right: 0.9rem; }
+
+        .speech-bubble {
+            padding: 0.6rem 0.9rem;
+            font-size: 0.94rem;
+            line-height: 1.68;
+            border-radius: 3px;
+        }
+        .dia-block.bill .speech-bubble {
+            background: rgba(200,136,42,0.09);
+            border-left: 3px solid #c8882a;
+            color: #f0e4c0;
+        }
+        .dia-block.colm .speech-bubble {
+            background: rgba(62,143,192,0.09);
+            border-right: 3px solid #3e8fc0;
+            color: #d8f0ff;
+        }
+
+        /* ── CONTROLS ── */
         .click-prompt {
             text-align: center;
             color: #c8a840;
-            font-size: 0.72rem;
-            letter-spacing: 0.16em;
-            margin-top: 1.8rem;
-            animation: blink 2.3s ease-in-out infinite;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            margin-top: 2rem;
+            font-family: 'Courier New', monospace;
+            animation: blink 2.4s ease-in-out infinite;
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 0.35; }
-            50%       { opacity: 0.85; }
+            0%, 100% { opacity: 0.3; }
+            50%       { opacity: 0.8; }
         }
 
         .end-card {
             text-align: center;
             color: #c8a840;
-            font-size: 0.82rem;
-            letter-spacing: 0.12em;
-            margin-top: 1.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.14em;
+            margin-top: 2rem;
+            font-family: 'Courier New', monospace;
             opacity: 0;
             transition: opacity 0.8s;
         }
-        .end-card.show { opacity: 1; }
+        .end-card.show { opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -192,14 +176,13 @@
 
         <div class="conversation" id="conv"></div>
 
-        <div class="click-prompt" id="prompt">— click anywhere to continue —</div>
+        <div class="click-prompt" id="prompt">— click to continue —</div>
         <div class="end-card" id="end">— End of Chapter 9 —</div>
     </div>
     <div class="rope"></div>
 </div>
 
 <script>
-// ── YOUR DIALOGUE HERE ──
 // who: 'narrator' | 'bill' | 'colm'
 const lines = [
     { who: 'narrator', text: '[Opening scene: Colm arrives at the Fremantle docks. Describe what he sees and smells. He is looking for a ship back to England.]' },
@@ -231,17 +214,30 @@ function next() {
     const wrap = document.createElement('div');
     wrap.className = 'line';
 
-    if (l.who !== 'narrator') {
-        const tag = document.createElement('div');
-        tag.className = `speaker-tag ${l.who}`;
-        tag.textContent = l.who === 'bill' ? 'Bill Dare' : 'Colm';
-        wrap.appendChild(tag);
-    }
+    if (l.who === 'narrator') {
+        const nb = document.createElement('div');
+        nb.className = 'narrator-block';
+        const nt = document.createElement('div');
+        nt.className = 'narrator-text';
+        nt.textContent = l.text;
+        nb.appendChild(nt);
+        wrap.appendChild(nb);
+    } else {
+        const db = document.createElement('div');
+        db.className = `dia-block ${l.who}`;
 
-    const speech = document.createElement('div');
-    speech.className = `speech ${l.who}`;
-    speech.textContent = l.text;
-    wrap.appendChild(speech);
+        const sn = document.createElement('div');
+        sn.className = 'speaker-name';
+        sn.textContent = l.who === 'bill' ? 'Bill Dare' : 'Colm';
+
+        const sb = document.createElement('div');
+        sb.className = 'speech-bubble';
+        sb.textContent = l.text;
+
+        db.appendChild(sn);
+        db.appendChild(sb);
+        wrap.appendChild(db);
+    }
 
     conv.appendChild(wrap);
     wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
