@@ -831,7 +831,7 @@ refresh();
 //    • treble/mid energy  → continuous dim shimmer on random keys
 //    • both scale with amplitude (quiet = subtle, loud = wild)
 // ─────────────────────────────────────────────────────────────
-let oppMode = false, oppRafId = null;
+let oppMode = false, oppRafId = null, oppTimerId = null;
 let noteSeqBuf = [];
 let oppAnalyser = null, oppMediaSrc = null;
 let oppEnergyHist = new Array(45).fill(0), oppLastBeat = 0;
@@ -882,12 +882,19 @@ function startOppenheimer() {
     oppAudioEl.play().catch(() => {});
     oppAudioEl.addEventListener('ended', stopOppenheimer, { once: true });
 
-    oppRafId = requestAnimationFrame(oppLoop);
+    if (oppAnalyser) {
+        // Served origin (GitHub Pages etc.) — beat-reactive via FFT
+        oppRafId = requestAnimationFrame(oppLoop);
+    } else {
+        // file:// or CORS blocked — full timer fallback
+        oppStartTimer();
+    }
 }
 
 function stopOppenheimer() {
     oppMode = false;
-    if (oppRafId) { cancelAnimationFrame(oppRafId); oppRafId = null; }
+    if (oppRafId)   { cancelAnimationFrame(oppRafId); oppRafId = null; }
+    if (oppTimerId) { clearInterval(oppTimerId);      oppTimerId = null; }
     oppAudioEl.pause();
     oppAudioEl.currentTime = 0;
     document.body.classList.remove('opp-mode');
@@ -909,11 +916,7 @@ function oppLoop() {
 
     const keys = oppKeys();
 
-    if (!oppAnalyser) {
-        // No analyser — subtle fallback shimmer so something still happens
-        if (Math.random() < 0.03) oppDimFlash(keys, 110);
-        return;
-    }
+    if (!oppAnalyser) return; // timer path handles it
 
     const freq = new Uint8Array(oppAnalyser.frequencyBinCount);
     oppAnalyser.getByteFrequencyData(freq);
@@ -980,6 +983,17 @@ function oppDimFlash(keys, dur) {
     el.style.setProperty('--oc', col);
     el.classList.add('opp-dim');
     setTimeout(() => { el.classList.remove('opp-dim'); el.style.removeProperty('--oc'); }, dur);
+}
+
+// Timer fallback for file:// where createMediaElementSource is blocked by CORS.
+// Runs the same visual logic as the beat path but on a fixed 230 ms interval.
+function oppStartTimer() {
+    const keys = oppKeys();
+    oppTimerId = setInterval(() => {
+        if (!oppMode) return;
+        oppBeat(keys, 0.35 + Math.random() * 0.55);        // random strength each tick
+        if (Math.random() < 0.45) oppDimFlash(keys, 130);  // occasional shimmer too
+    }, 230);
 }
 </script>
 </body>
