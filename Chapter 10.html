@@ -36,8 +36,6 @@
             background: repeating-linear-gradient(180deg, transparent 0px, transparent 34px, #90a8c0 34px, #90a8c0 35px);
             pointer-events: none;
         }
-        /* paper-label takes ~22px: pushes word-area to start at ~46px
-           first baseline lands at ~70px (2nd rule) with line-height 35px */
         .paper-label {
             font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
             color: #788898; margin-bottom: 0.55rem; position: relative;
@@ -45,9 +43,9 @@
         .word-area {
             position: relative; min-height: 110px;
             font-size: 1.04rem; color: #1a1a1e;
-            line-height: 35px;          /* matches paper rule spacing */
+            line-height: 35px;
             word-spacing: 0.15em;
-            padding-top: 3px;           /* nudge baseline onto rule */
+            padding-top: 3px;
         }
         .word { display: inline-block; }
         .word.pop-in { animation: wordPopIn 0.18s ease forwards; }
@@ -68,16 +66,6 @@
         .progress { color: #604820; font-size: 0.72rem; margin-top: 0.3rem; }
 
         /* ── PIANO ── */
-        /*
-          11 white keys × 46px + 10 gaps × 3px = 506px + 28px padding = 534px
-          White key left offsets (left padding = 14px, step = 49px):
-            C4=14  D4=63  E4=112  F4=161  G4=210
-            A4=259  B4=308  C5=357  D5=406  E5=455  F5=504
-          Black key left = white_start + 31:
-            C#4=45  D#4=94  F#4=192  G#4=241  A#4=290
-            C#5=388  D#5=437  ← melody key, interactive
-          (no black key between E5 and F5)
-        */
         .piano-wrap { position: relative; }
         .piano {
             position: relative; display: flex; gap: 3px;
@@ -110,7 +98,6 @@
         .wk.active .key-arrow { display: block; }
         @keyframes arrowBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-5px)} }
 
-        /* Ripple inside key on correct press */
         .key-ripple {
             position: absolute; inset: 0;
             background: radial-gradient(circle at 50% 30%, rgba(255,240,100,0.85) 0%, transparent 65%);
@@ -123,7 +110,6 @@
             100% { opacity: 0; transform: scale(2.4); }
         }
 
-        /* Black keys */
         .bk {
             width: 30px; height: 94px;
             background: linear-gradient(180deg, #2a2a2a, #0a0a0a);
@@ -150,8 +136,10 @@
         .screen-flash { position: fixed; inset: 0; background: transparent; pointer-events: none; z-index: 99; }
         .screen-flash.wrong   { animation: screenWrong   0.35s ease forwards; }
         .screen-flash.correct { animation: screenCorrect 0.28s ease forwards; }
+        .screen-flash.opp     { animation: screenOpp     0.22s ease forwards; }
         @keyframes screenWrong   { 0%{background:rgba(200,0,0,0.22)}   100%{background:transparent} }
         @keyframes screenCorrect { 0%{background:rgba(255,215,40,0.10)} 100%{background:transparent} }
+        @keyframes screenOpp     { 0%{background:rgba(255,50,140,0.18)} 100%{background:transparent} }
 
         /* ── NOTE PARTICLES ── */
         .note-particle {
@@ -175,6 +163,48 @@
         }
         .auto-badge.on { opacity: 1; animation: autoPulse 1s ease-in-out infinite; }
         @keyframes autoPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+        /* ── OPPENHEIMER MODE ── */
+        .wk.opp-active {
+            background: var(--oc, #ff4466) !important;
+            box-shadow: 0 0 30px var(--oc, #ff4466), 0 0 60px var(--oc, #ff4466) !important;
+            transform: translateY(4px);
+        }
+        .bk.opp-active {
+            background: var(--oc, #ff4466) !important;
+            box-shadow: 0 0 22px var(--oc, #ff4466) !important;
+            transform: translateY(3px);
+        }
+        .wk.opp-dim {
+            background: rgba(255, 60, 120, 0.28) !important;
+            box-shadow: 0 0 14px rgba(255, 60, 120, 0.45) !important;
+        }
+        .bk.opp-dim {
+            background: rgba(255, 60, 120, 0.50) !important;
+            box-shadow: 0 0 10px rgba(255, 60, 120, 0.40) !important;
+        }
+        .opp-badge {
+            position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+            color: #ff4488; font-size: 0.65rem; letter-spacing: 0.35em;
+            font-family: 'Courier New', monospace; white-space: nowrap;
+            opacity: 0; pointer-events: none; z-index: 100;
+            text-shadow: 0 0 20px #ff4488;
+            transition: opacity 0.4s;
+        }
+        .opp-badge.on { opacity: 1; animation: oppPulse 1.4s ease-in-out infinite; }
+        @keyframes oppPulse {
+            0%,100% { opacity: 0.65; text-shadow: 0 0 20px #ff4488; }
+            50%     { opacity: 1;    text-shadow: 0 0 40px #ff4488, 0 0 80px #ff44ff; }
+        }
+        body.opp-mode { animation: oppBgPulse 2s ease-in-out infinite; }
+        @keyframes oppBgPulse {
+            0%, 100% { background: #111008; }
+            50%      { background: #1a0312; }
+        }
+        /* Piano glows red during opp mode */
+        body.opp-mode .piano {
+            box-shadow: 0 10px 36px rgba(0,0,0,0.9), 0 0 60px rgba(255,30,100,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
+        }
 
         /* ── SIDE MENU ── */
         #side-menu {
@@ -285,6 +315,10 @@
 
 <div class="screen-flash" id="screenFlash"></div>
 <div class="auto-badge" id="autoBadge">▶ AUTO</div>
+<div class="opp-badge" id="oppBadge">◉ OPPENHEIMER</div>
+
+<!-- Audio for Oppenheimer mode -->
+<audio id="opp-audio" src="Assets/Can You Hear The Music.mp3" preload="auto"></audio>
 
 <!-- ── SIDE MENU ── -->
 <div id="side-menu">
@@ -419,11 +453,28 @@ const KB = {
 //  AUDIO
 // ─────────────────────────────────────────────────────────────
 let actx = null;
+let oppVol = 1.0; // multiplied on all voice gains — set to 0.10 in opp mode
+
 function getCtx() {
     if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
     if (actx.state === 'suspended') actx.resume();
     return actx;
 }
+
+// iOS Safari: must call resume() + play a silent buffer inside a user gesture.
+// Piano key touchstart handlers call getCtx() synchronously, which handles this.
+// Additionally hook document touchstart for the very first touch on iOS.
+document.addEventListener('touchstart', function iosUnlock() {
+    const c = getCtx();
+    if (c.state !== 'running') {
+        c.resume().then(() => {
+            const buf = c.createBuffer(1, 1, c.sampleRate);
+            const src = c.createBufferSource();
+            src.buffer = buf; src.connect(c.destination); src.start(0);
+        });
+    }
+    document.removeEventListener('touchstart', iosUnlock);
+}, { passive: true });
 
 let revNode = null;
 function getRev(c) {
@@ -434,30 +485,33 @@ function getRev(c) {
     return (revNode = d);
 }
 
-// ── Piano (triangle + harmonics) ──
+// ── Piano (additive sine harmonics, NO reverb — clean standard piano tone) ──
 function pianoVoice(freq, now, c, vol, dur) {
     const amp = c.createGain();
-    [{ mult:1, type:'triangle', v:0.75 },
-     { mult:2, type:'sine',     v:0.18 },
-     { mult:3, type:'sine',     v:0.07 }]
-    .forEach(({ mult, type, v }) => {
+    [{ mult:1, v:0.62 },
+     { mult:2, v:0.22 },
+     { mult:3, v:0.10 },
+     { mult:4, v:0.04 },
+     { mult:5, v:0.02 }]
+    .forEach(({ mult, v }) => {
         const osc = c.createOscillator(), g = c.createGain();
-        osc.type = type; osc.frequency.value = freq * mult; g.gain.value = v;
+        osc.type = 'sine'; osc.frequency.value = freq * mult; g.gain.value = v;
         osc.connect(g); g.connect(amp); osc.start(now); osc.stop(now + dur + 0.15);
     });
     amp.gain.setValueAtTime(0, now);
     amp.gain.linearRampToValueAtTime(vol, now + 0.006);
-    amp.gain.exponentialRampToValueAtTime(vol * 0.38, now + 0.10);
+    amp.gain.exponentialRampToValueAtTime(vol * 0.38, now + 0.08);
     amp.gain.exponentialRampToValueAtTime(0.0001, now + dur);
     return amp;
 }
 function playPiano(step) {
-    const c = getCtx(), now = c.currentTime, rev = getRev(c);
-    const lead = pianoVoice(step.lead, now, c, 0.38, 1.0);
-    lead.connect(c.destination); lead.connect(rev);
+    const c = getCtx(), now = c.currentTime;
+    // No reverb — dry signal only
+    const lead = pianoVoice(step.lead, now, c, 0.45 * oppVol, 1.0);
+    lead.connect(c.destination);
     step.backing.forEach(f => {
-        const v = pianoVoice(f, now, c, 0.07, 1.4);
-        v.connect(c.destination); v.connect(rev);
+        const v = pianoVoice(f, now, c, 0.08 * oppVol, 1.4);
+        v.connect(c.destination);
     });
 }
 
@@ -474,8 +528,8 @@ function playGuitar(step) {
     dist.curve = curve; osc.type = 'sawtooth'; osc.frequency.value = step.lead;
     filt.type = 'bandpass'; filt.frequency.value = step.lead * 1.8; filt.Q.value = 1.4;
     amp.gain.setValueAtTime(0, now);
-    amp.gain.linearRampToValueAtTime(0.38, now + 0.008);
-    amp.gain.exponentialRampToValueAtTime(0.20, now + 0.14);
+    amp.gain.linearRampToValueAtTime(0.38 * oppVol, now + 0.008);
+    amp.gain.exponentialRampToValueAtTime(0.20 * oppVol, now + 0.14);
     amp.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
     osc.connect(dist); dist.connect(filt); filt.connect(amp);
     amp.connect(c.destination); amp.connect(rev);
@@ -483,7 +537,7 @@ function playGuitar(step) {
     step.backing.forEach(f => {
         const v = c.createOscillator(), vg = c.createGain();
         v.type = 'sawtooth'; v.frequency.value = f;
-        vg.gain.setValueAtTime(0.045, now);
+        vg.gain.setValueAtTime(0.045 * oppVol, now);
         vg.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
         v.connect(vg); vg.connect(c.destination); v.start(now); v.stop(now + 0.7);
     });
@@ -497,7 +551,7 @@ function playBells(step) {
         const osc = c.createOscillator(), g = c.createGain();
         osc.type = 'sine'; osc.frequency.value = step.lead * mult;
         g.gain.setValueAtTime(0, now);
-        g.gain.linearRampToValueAtTime(vol * 0.38, now + 0.003);
+        g.gain.linearRampToValueAtTime(vol * 0.38 * oppVol, now + 0.003);
         g.gain.exponentialRampToValueAtTime(0.0001, now + decay * 2.2);
         osc.connect(g); g.connect(c.destination); g.connect(rev);
         osc.start(now); osc.stop(now + decay * 2.3);
@@ -506,7 +560,7 @@ function playBells(step) {
         const osc = c.createOscillator(), g = c.createGain();
         osc.type = 'sine'; osc.frequency.value = f;
         g.gain.setValueAtTime(0, now);
-        g.gain.linearRampToValueAtTime(0.05, now + 0.02);
+        g.gain.linearRampToValueAtTime(0.05 * oppVol, now + 0.02);
         g.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
         osc.connect(g); g.connect(c.destination); g.connect(rev);
         osc.start(now); osc.stop(now + 1.7);
@@ -523,16 +577,15 @@ function playTechno(step) {
     filt.frequency.exponentialRampToValueAtTime(step.lead * 5, now + 0.04);
     filt.frequency.exponentialRampToValueAtTime(step.lead * 1.4, now + 0.28);
     amp.gain.setValueAtTime(0, now);
-    amp.gain.linearRampToValueAtTime(0.30, now + 0.008);
-    amp.gain.setValueAtTime(0.28, now + 0.07);
+    amp.gain.linearRampToValueAtTime(0.30 * oppVol, now + 0.008);
+    amp.gain.setValueAtTime(0.28 * oppVol, now + 0.07);
     amp.gain.exponentialRampToValueAtTime(0.0001, now + 0.46);
     osc.connect(filt); filt.connect(amp); amp.connect(c.destination); amp.connect(rev);
     osc.start(now); osc.stop(now + 0.5);
-    // Kick drum
     const kick = c.createOscillator(), kg = c.createGain();
     kick.frequency.setValueAtTime(165, now);
     kick.frequency.exponentialRampToValueAtTime(38, now + 0.12);
-    kg.gain.setValueAtTime(0.55, now);
+    kg.gain.setValueAtTime(0.55 * oppVol, now);
     kg.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
     kick.connect(kg); kg.connect(c.destination);
     kick.start(now); kick.stop(now + 0.2);
@@ -545,7 +598,7 @@ function playSynth(step) {
         const osc = c.createOscillator(), g = c.createGain();
         osc.type = 'sawtooth'; osc.detune.value = cents; osc.frequency.value = step.lead;
         g.gain.setValueAtTime(0, now);
-        g.gain.linearRampToValueAtTime(0.16, now + 0.022);
+        g.gain.linearRampToValueAtTime(0.16 * oppVol, now + 0.022);
         g.gain.exponentialRampToValueAtTime(0.0001, now + 0.88);
         osc.connect(g); g.connect(c.destination); g.connect(rev);
         osc.start(now); osc.stop(now + 0.95);
@@ -554,7 +607,7 @@ function playSynth(step) {
         const osc = c.createOscillator(), g = c.createGain();
         osc.type = 'sine'; osc.frequency.value = f;
         g.gain.setValueAtTime(0, now);
-        g.gain.linearRampToValueAtTime(0.055, now + 0.04);
+        g.gain.linearRampToValueAtTime(0.055 * oppVol, now + 0.04);
         g.gain.exponentialRampToValueAtTime(0.0001, now + 1.15);
         osc.connect(g); g.connect(c.destination); g.connect(rev);
         osc.start(now); osc.stop(now + 1.2);
@@ -670,6 +723,7 @@ function refresh() {
 }
 
 function handle(noteKey) {
+    if (oppMode) return; // opp mode takes over; pressing B4 B4 C5 stops it
     if (wordIdx >= words.length) return;
     const el = document.getElementById('key-' + noteKey);
     if (noteKey === cur().key) {
@@ -690,10 +744,16 @@ function handle(noteKey) {
     }
 }
 
-document.querySelectorAll('.wk').forEach(k =>
-    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); }));
-document.querySelectorAll('.bk.melody-key').forEach(k =>
-    k.addEventListener('click', e => { e.stopPropagation(); handle(k.dataset.note); }));
+// Register click + touchstart on every piano key
+// touchstart fires synchronously inside user gesture → critical for iOS AudioContext
+document.querySelectorAll('.wk').forEach(k => {
+    k.addEventListener('click', e => { e.stopPropagation(); noteSeqPush(k.dataset.note); handle(k.dataset.note); });
+    k.addEventListener('touchstart', e => { e.preventDefault(); noteSeqPush(k.dataset.note); handle(k.dataset.note); }, { passive: false });
+});
+document.querySelectorAll('.bk.melody-key').forEach(k => {
+    k.addEventListener('click', e => { e.stopPropagation(); noteSeqPush(k.dataset.note); handle(k.dataset.note); });
+    k.addEventListener('touchstart', e => { e.preventDefault(); noteSeqPush(k.dataset.note); handle(k.dataset.note); }, { passive: false });
+});
 
 // ─────────────────────────────────────────────────────────────
 //  SIDE MENU — sound mode buttons
@@ -723,6 +783,7 @@ function stopAuto() {
 }
 
 function startAuto() {
+    if (oppMode) stopOppenheimer();
     if (autoTimer) { stopAuto(); return; }
     spans.forEach(s => s.remove()); spans.length = 0;
     wordIdx = 0; melIdx = 0;
@@ -757,11 +818,123 @@ document.addEventListener('keydown', e => {
     secretBuf = (secretBuf + e.key.toLowerCase()).slice(-4);
     if (secretBuf === 'auto') { secretBuf = ''; startAuto(); return; }
     const n = KB[e.key];
-    if (n && !autoTimer) { e.preventDefault(); handle(n); }
+    if (n && !autoTimer) { e.preventDefault(); noteSeqPush(n); handle(n); }
 });
 
 document.getElementById('progress').textContent = `0 / ${words.length} words`;
 refresh();
+
+// ─────────────────────────────────────────────────────────────
+//  OPPENHEIMER MODE
+//  Secret: press piano keys B4 → B4 → C5 in sequence
+//  Press again to stop.
+// ─────────────────────────────────────────────────────────────
+let oppMode = false, oppInterval = null, oppBeatIdx = 0;
+let noteSeqBuf = [];
+const OPP_COLS = ['#ff4466','#ff8844','#ffdd44','#44ffaa','#44aaff','#aa44ff','#ff44cc','#ff88ff'];
+const oppBadgeEl = document.getElementById('oppBadge');
+const oppAudioEl = document.getElementById('opp-audio');
+
+// Call this on every manual key press (not from auto mode)
+function noteSeqPush(noteKey) {
+    noteSeqBuf.push(noteKey);
+    if (noteSeqBuf.length > 3) noteSeqBuf.shift();
+    if (noteSeqBuf.length === 3 &&
+        noteSeqBuf[0] === 'B4' &&
+        noteSeqBuf[1] === 'B4' &&
+        noteSeqBuf[2] === 'C5') {
+        noteSeqBuf = [];
+        oppMode ? stopOppenheimer() : startOppenheimer();
+    }
+}
+
+function startOppenheimer() {
+    if (autoTimer) stopAuto();
+    oppMode = true;
+    oppBeatIdx = 0;
+    oppVol = 0.10; // all synths at 10% — the MP3 is the star
+    document.body.classList.add('opp-mode');
+    oppBadgeEl.classList.add('on');
+
+    // Play the MP3
+    oppAudioEl.currentTime = 0;
+    oppAudioEl.volume = 0.82;
+    oppAudioEl.play().catch(() => {});
+    oppAudioEl.addEventListener('ended', stopOppenheimer, { once: true });
+
+    const allKeyEls = [
+        ...document.querySelectorAll('.wk'),
+        ...document.querySelectorAll('.bk.melody-key')
+    ];
+    const savedMode = currentMode;
+    const allModes  = ['piano', 'guitar', 'bells', 'techno', 'synth'];
+
+    oppInterval = setInterval(() => {
+        if (!oppMode) return;
+
+        const step = MELODY[oppBeatIdx % MELODY.length];
+        oppBeatIdx++;
+
+        // All 5 synth modes fire simultaneously on this melody note
+        allModes.forEach((m, i) => {
+            setTimeout(() => {
+                if (!oppMode) return;
+                currentMode = m;
+                playNote(step);
+            }, i * 10); // tiny stagger avoids phase pile-up
+        });
+        currentMode = savedMode;
+
+        // Flash the melody key with a random vivid colour
+        const el = document.getElementById('key-' + step.key);
+        const col = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
+        if (el) {
+            el.style.setProperty('--oc', col);
+            el.classList.add('opp-active');
+            spawnRipple(el);
+            spawnParticle(el);
+            spawnParticle(el);
+            setTimeout(() => {
+                el.classList.remove('opp-active');
+                el.style.removeProperty('--oc');
+            }, 220);
+        }
+
+        // 3–5 random dim key flashes (visual only, no sound)
+        const dimCount = 3 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < dimCount; i++) {
+            const rk  = allKeyEls[Math.floor(Math.random() * allKeyEls.length)];
+            const rc  = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
+            rk.style.setProperty('--oc', rc);
+            rk.classList.add('opp-dim');
+            spawnParticle(rk);
+            setTimeout(() => {
+                rk.classList.remove('opp-dim');
+                rk.style.removeProperty('--oc');
+            }, 155 + Math.random() * 80);
+        }
+
+        // 30 % chance of screen flash
+        if (Math.random() < 0.30) triggerFlash('opp');
+
+    }, 235); // ~255 BPM 16th-note feel — frenetic over the MP3
+}
+
+function stopOppenheimer() {
+    oppMode = false;
+    oppVol  = 1.0;
+    if (oppInterval) { clearInterval(oppInterval); oppInterval = null; }
+    oppAudioEl.pause();
+    oppAudioEl.currentTime = 0;
+    document.body.classList.remove('opp-mode');
+    oppBadgeEl.classList.remove('on');
+    document.querySelectorAll('.opp-active, .opp-dim').forEach(el => {
+        el.classList.remove('opp-active', 'opp-dim');
+        el.style.removeProperty('--oc');
+    });
+    // Restore active key highlight for the game
+    refresh();
+}
 </script>
 </body>
 </html>

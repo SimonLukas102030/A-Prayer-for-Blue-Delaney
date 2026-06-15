@@ -1066,3 +1066,25 @@
 - Auto mode now also triggers ripple + particle effects on each auto-played key
 - All effects (particles, ripple, screen flash) also fire during auto-play
 - Committed and pushed to GitHub Pages
+
+---
+
+### Prompt 88 — Oppenheimer mode, piano sound fix, iPad audio fix — 2026-06-15
+**Prompt:**
+> *"Hello, new session. btw, the last session ended at ish 21:00. I need you to make the piano have an option to play oppenheimer with all the different tunes. like all the different music things at ones, to make it sound awsome. For that, i put an mp3 inside assets. This is just an extra mode. not replacing the current one. it can be activated, by pressing 'B / B / C'. And btw, the 'piano' sounds not like a standert piano. got reverb an so on. that for the piano should be off. Also the sound is wird. Also, while oppenheimer is playing, make it seam, like the keyboard is playing it, and make craysy good effects. Also, make sure, sounds can play. my ipad doesnt give out a sound currently. btw, note in claude code usage"*
+> *(Clarification: "the bbc thing on piano, not keyboard" — meaning press the piano keys B4, B4, C5, not type on keyboard)*
+
+**What Claude did:**
+- **Piano sound fix:** rewrote `pianoVoice()` — replaced triangle-wave fundamental with all-sine additive synthesis (harmonics ×1–×5 at 0.62/0.22/0.10/0.04/0.02) for a cleaner, more natural piano timbre; removed all reverb routing from `playPiano()` (was connecting lead and backing through the delay feedback node)
+- **iPad audio fix:** added a `touchstart` listener on `document` (fires once, passive) that calls `getCtx().resume()` + plays a silent 1-sample buffer — the standard iOS Safari AudioContext unlock trick; added `touchstart` handlers directly on every piano key (`e.preventDefault()` to suppress click-delay and double-firing) so audio starts synchronously inside the user gesture on iOS
+- **`oppVol` multiplier:** added global `oppVol = 1.0` (set to `0.10` during Oppenheimer mode); every `playXxx` function now scales all gain values by `oppVol` so the synth overlay doesn't drown out the MP3
+- **Oppenheimer mode** (secret: press piano keys B4 → B4 → C5 in sequence; press again to stop):
+  - Plays `Assets/Can You Hear The Music.mp3` via `<audio id="opp-audio">` at 82 % volume
+  - Every 235 ms cycles through the MELODY array — fires all 5 sound modes (piano, guitar, bells, techno, synth) simultaneously on the current note, staggered 10 ms apart to avoid phase pile-up
+  - Visual effects per beat: melody key flashes with a random vivid colour (`--oc` CSS custom property → `.opp-active`), 3–5 random other keys dim-flash (`.opp-dim`), 2 particles from melody key + 1 from each dim key, 30 % chance of a pink screen flash (`screenOpp` keyframe)
+  - Background pulses dark red (`body.opp-mode`, `@keyframes oppBgPulse`), piano chassis glows red
+  - "◉ OPPENHEIMER" badge fades in top-centre, pulsing pink glow
+  - `noteSeqPush()` tracks last 3 manual piano presses (not triggered by auto mode); detecting B4-B4-C5 toggles the mode
+  - On stop: restores `oppVol`, pauses MP3, removes all CSS classes, calls `refresh()` to re-highlight the active game key
+- **Auto mode** stops Oppenheimer if it's running when AUTO is pressed
+- Committed and pushed to GitHub Pages
