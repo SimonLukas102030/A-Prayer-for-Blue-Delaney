@@ -826,15 +826,19 @@ refresh();
 // ─────────────────────────────────────────────────────────────
 //  OPPENHEIMER MODE
 //  Secret: press piano keys B4 → B4 → C5 in sequence
-//  Press again to stop.
+//  Effects are driven by real-time audio analysis of the MP3:
+//    • bass beat detected → bright key flash + ripple + particles
+//    • treble/mid energy  → continuous dim shimmer on random keys
+//    • both scale with amplitude (quiet = subtle, loud = wild)
 // ─────────────────────────────────────────────────────────────
-let oppMode = false, oppInterval = null, oppBeatIdx = 0;
+let oppMode = false, oppRafId = null;
 let noteSeqBuf = [];
-const OPP_COLS = ['#ff4466','#ff8844','#ffdd44','#44ffaa','#44aaff','#aa44ff','#ff44cc','#ff88ff'];
+let oppAnalyser = null, oppMediaSrc = null;
+let oppEnergyHist = new Array(45).fill(0), oppLastBeat = 0;
+const OPP_COLS   = ['#ff4466','#ff8844','#ffdd44','#44ffaa','#44aaff','#aa44ff','#ff44cc','#ff88ff'];
 const oppBadgeEl = document.getElementById('oppBadge');
 const oppAudioEl = document.getElementById('opp-audio');
 
-// Call this on every manual key press (not from auto mode)
 function noteSeqPush(noteKey) {
     noteSeqBuf.push(noteKey);
     if (noteSeqBuf.length > 3) noteSeqBuf.shift();
@@ -847,70 +851,43 @@ function noteSeqPush(noteKey) {
     }
 }
 
+// Connect audio element → AnalyserNode → speakers (once; reused on repeat plays)
+function connectOppAnalyser() {
+    if (oppAnalyser) return;
+    try {
+        const c     = getCtx();
+        oppMediaSrc = c.createMediaElementSource(oppAudioEl);
+        oppAnalyser = c.createAnalyser();
+        oppAnalyser.fftSize = 2048;
+        oppAnalyser.smoothingTimeConstant = 0.80;
+        oppMediaSrc.connect(oppAnalyser);
+        oppAnalyser.connect(c.destination);
+    } catch(e) {
+        oppAnalyser = null; // CORS or already-connected — fallback to timer shimmer
+    }
+}
+
 function startOppenheimer() {
     if (autoTimer) stopAuto();
     oppMode = true;
-    oppBeatIdx = 0;
-    oppVol = 0.10; // all synths at 10% — the MP3 is the star
+    oppEnergyHist.fill(0);
+    oppLastBeat = 0;
     document.body.classList.add('opp-mode');
     oppBadgeEl.classList.add('on');
 
-    // Play the MP3
+    connectOppAnalyser();
+
     oppAudioEl.currentTime = 0;
     oppAudioEl.volume = 0.82;
     oppAudioEl.play().catch(() => {});
     oppAudioEl.addEventListener('ended', stopOppenheimer, { once: true });
 
-    const allKeyEls = [
-        ...document.querySelectorAll('.wk'),
-        ...document.querySelectorAll('.bk.melody-key')
-    ];
-
-    oppInterval = setInterval(() => {
-        if (!oppMode) return;
-
-        const step = MELODY[oppBeatIdx % MELODY.length];
-        oppBeatIdx++;
-
-        // Flash the melody key with a random vivid colour
-        const el = document.getElementById('key-' + step.key);
-        const col = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
-        if (el) {
-            el.style.setProperty('--oc', col);
-            el.classList.add('opp-active');
-            spawnRipple(el);
-            spawnParticle(el);
-            spawnParticle(el);
-            setTimeout(() => {
-                el.classList.remove('opp-active');
-                el.style.removeProperty('--oc');
-            }, 220);
-        }
-
-        // 3–5 random dim key flashes (visual only, no sound)
-        const dimCount = 3 + Math.floor(Math.random() * 3);
-        for (let i = 0; i < dimCount; i++) {
-            const rk  = allKeyEls[Math.floor(Math.random() * allKeyEls.length)];
-            const rc  = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
-            rk.style.setProperty('--oc', rc);
-            rk.classList.add('opp-dim');
-            spawnParticle(rk);
-            setTimeout(() => {
-                rk.classList.remove('opp-dim');
-                rk.style.removeProperty('--oc');
-            }, 155 + Math.random() * 80);
-        }
-
-        // 30 % chance of screen flash
-        if (Math.random() < 0.30) triggerFlash('opp');
-
-    }, 235); // ~255 BPM 16th-note feel — frenetic over the MP3
+    oppRafId = requestAnimationFrame(oppLoop);
 }
 
 function stopOppenheimer() {
     oppMode = false;
-    oppVol  = 1.0;
-    if (oppInterval) { clearInterval(oppInterval); oppInterval = null; }
+    if (oppRafId) { cancelAnimationFrame(oppRafId); oppRafId = null; }
     oppAudioEl.pause();
     oppAudioEl.currentTime = 0;
     document.body.classList.remove('opp-mode');
@@ -919,8 +896,90 @@ function stopOppenheimer() {
         el.classList.remove('opp-active', 'opp-dim');
         el.style.removeProperty('--oc');
     });
-    // Restore active key highlight for the game
     refresh();
+}
+
+function oppKeys() {
+    return [...document.querySelectorAll('.wk'), ...document.querySelectorAll('.bk.melody-key')];
+}
+
+function oppLoop() {
+    if (!oppMode) return;
+    oppRafId = requestAnimationFrame(oppLoop);
+
+    const keys = oppKeys();
+
+    if (!oppAnalyser) {
+        // No analyser — subtle fallback shimmer so something still happens
+        if (Math.random() < 0.03) oppDimFlash(keys, 110);
+        return;
+    }
+
+    const freq = new Uint8Array(oppAnalyser.frequencyBinCount);
+    oppAnalyser.getByteFrequencyData(freq);
+
+    const c     = getCtx();
+    const binHz = (c.sampleRate / 2) / oppAnalyser.frequencyBinCount;
+
+    // Bass energy 40–200 Hz — drives beat detection
+    const b0 = Math.max(1, Math.floor(40  / binHz));
+    const b1 = Math.floor(200 / binHz);
+    let bass = 0;
+    for (let i = b0; i <= b1; i++) bass += freq[i];
+    bass /= (b1 - b0 + 1);
+
+    // Treble energy 1 k–8 k Hz — drives continuous shimmer
+    const t0 = Math.floor(1000 / binHz);
+    const t1 = Math.min(freq.length - 1, Math.floor(8000 / binHz));
+    let treble = 0;
+    for (let i = t0; i <= t1; i++) treble += freq[i];
+    treble /= (t1 - t0 + 1);
+
+    // Rolling bass average for relative beat threshold
+    oppEnergyHist.push(bass);
+    if (oppEnergyHist.length > 45) oppEnergyHist.shift();
+    const avgBass = oppEnergyHist.reduce((a, b) => a + b, 0) / oppEnergyHist.length;
+
+    // Beat: current bass > 130 % of rolling average, above noise floor, with cooldown
+    const now    = performance.now();
+    const isBeat = bass > avgBass * 1.30 && bass > 14 && (now - oppLastBeat) > 175;
+
+    if (isBeat) {
+        oppLastBeat = now;
+        oppBeat(keys, Math.min(1, bass / 110));
+    }
+
+    // Treble shimmer: probability and duration scale with treble level
+    const shimmer = treble / 160;
+    if (shimmer > 0.07 && Math.random() < shimmer * 0.14) {
+        oppDimFlash(keys, 80 + shimmer * 160);
+    }
+}
+
+// Bright flash on beat — count and duration scale with beat strength
+function oppBeat(keys, strength) {
+    const count = 1 + Math.round(strength * 3);
+    for (let i = 0; i < count; i++) {
+        const el  = keys[Math.floor(Math.random() * keys.length)];
+        const col = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
+        el.style.setProperty('--oc', col);
+        el.classList.add('opp-active');
+        spawnRipple(el);
+        spawnParticle(el);
+        if (strength > 0.5) spawnParticle(el);
+        setTimeout(() => { el.classList.remove('opp-active'); el.style.removeProperty('--oc'); },
+            140 + strength * 120);
+    }
+    if (strength > 0.22) triggerFlash('opp');
+}
+
+// Dim shimmer flash — subtle, driven by treble energy
+function oppDimFlash(keys, dur) {
+    const el  = keys[Math.floor(Math.random() * keys.length)];
+    const col = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
+    el.style.setProperty('--oc', col);
+    el.classList.add('opp-dim');
+    setTimeout(() => { el.classList.remove('opp-dim'); el.style.removeProperty('--oc'); }, dur);
 }
 </script>
 </body>
