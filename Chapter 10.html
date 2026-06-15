@@ -84,6 +84,12 @@
         }
         .wk:hover { background: linear-gradient(180deg, #fff, #eee); }
         .wk.active { background: linear-gradient(180deg, #ffe84a, #d4a800); box-shadow: 0 5px 22px rgba(255,200,0,0.7); }
+        body.opp-mode .wk.active { background: linear-gradient(180deg, #f8f8f4, #ddddd5); box-shadow: none; }
+        body.opp-mode .wk.active .key-lbl { color: #999; font-weight: normal; }
+        body.opp-mode .wk.active .key-arrow { display: none; }
+        body.opp-mode .bk.active { background: linear-gradient(180deg, #555, #2a2a2a); box-shadow: none; }
+        body.opp-mode .bk.active .bk-lbl { color: #555; font-weight: normal; }
+        body.opp-mode .bk.active .key-arrow { display: none; }
         .wk.pressed { transform: translateY(4px); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
         .wk.wrong-flash { background: linear-gradient(180deg, #ff5050, #bb1010) !important; }
 
@@ -300,15 +306,17 @@
         <div class="wk" id="key-D5" data-note="D5"><div class="key-arrow">&#9660;</div><div class="key-lbl">D</div></div>
         <div class="wk" id="key-E5" data-note="E5"><div class="key-arrow">&#9660;</div><div class="key-lbl">E</div></div>
         <div class="wk" id="key-F5" data-note="F5"><div class="key-arrow">&#9660;</div><div class="key-lbl">F</div></div>
+        <div class="wk" id="key-G5" data-note="G5"><div class="key-lbl">G</div></div>
 
         <!-- Black keys -->
         <div class="bk" style="left:45px;"><div class="bk-lbl">C#</div></div>
         <div class="bk" style="left:94px;"><div class="bk-lbl">D#</div></div>
-        <div class="bk" style="left:192px;"><div class="bk-lbl">F#</div></div>
+        <div class="bk" id="key-Fs4" data-note="Fs4" style="left:192px;"><div class="bk-lbl">F#</div></div>
         <div class="bk melody-key" id="key-Gs4" data-note="Gs4" style="left:241px;"><div class="key-arrow">&#9660;</div><div class="bk-lbl">G#</div></div>
         <div class="bk" style="left:290px;"><div class="bk-lbl">Bb</div></div>
         <div class="bk" style="left:388px;"><div class="bk-lbl">C#</div></div>
         <div class="bk melody-key" id="key-Ds5" data-note="Ds5" style="left:437px;"><div class="key-arrow">&#9660;</div><div class="bk-lbl">D#</div></div>
+        <div class="bk" id="key-Fs5" data-note="Fs5" style="left:535px;"><div class="bk-lbl">F#</div></div>
     </div>
 </div>
 
@@ -839,6 +847,29 @@ const OPP_COLS   = ['#ff4466','#ff8844','#ffdd44','#44ffaa','#44aaff','#aa44ff',
 const oppBadgeEl = document.getElementById('oppBadge');
 const oppAudioEl = document.getElementById('opp-audio');
 
+// ── Oppenheimer melody (hexatonic B,C,D,E,F#,G) ──────────────
+let oppMelodyTimer = null, oppMelIdx = 0;
+
+const OPP_HZ = {
+    B3:246.94, C4:261.63, D4:293.66, E4:329.63, Fs4:369.99, G4:392.00,
+    B4:493.88, C5:523.25, D5:587.33, E5:659.25, Fs5:739.99, G5:783.99,
+};
+const OPP_KEY_IDS = {
+    B3:null,       C4:'key-C4', D4:'key-D4', E4:'key-E4',
+    Fs4:'key-Fs4', G4:'key-G4', B4:'key-B4', C5:'key-C5',
+    D5:'key-D5',   E5:'key-E5', Fs5:'key-Fs5', G5:'key-G5',
+};
+// Seven ascending hexatonic groups × 6 notes — pattern: 1,2,3,skip4,5,6,return-to-4
+const OPP_SEQ = [
+    'B3', 'C4', 'D4', 'Fs4','G4', 'E4',
+    'C4', 'D4', 'E4', 'G4', 'B4', 'Fs4',
+    'D4', 'E4', 'Fs4','B4', 'C5', 'G4',
+    'E4', 'Fs4','G4', 'C5', 'D5', 'B4',
+    'Fs4','G4', 'B4', 'D5', 'E5', 'C5',
+    'G4', 'B4', 'C5', 'E5', 'Fs5','D5',
+    'B4', 'C5', 'D5', 'Fs5','G5', 'E5',
+];
+
 function noteSeqPush(noteKey) {
     noteSeqBuf.push(noteKey);
     if (noteSeqBuf.length > 3) noteSeqBuf.shift();
@@ -889,12 +920,16 @@ function startOppenheimer() {
         // file:// or CORS blocked — full timer fallback
         oppStartTimer();
     }
+
+    // Melody always runs regardless of analyser availability
+    oppStartMelody();
 }
 
 function stopOppenheimer() {
     oppMode = false;
-    if (oppRafId)   { cancelAnimationFrame(oppRafId); oppRafId = null; }
-    if (oppTimerId) { clearInterval(oppTimerId);      oppTimerId = null; }
+    if (oppRafId)      { cancelAnimationFrame(oppRafId); oppRafId = null; }
+    if (oppTimerId)    { clearInterval(oppTimerId);      oppTimerId = null; }
+    if (oppMelodyTimer){ clearInterval(oppMelodyTimer);  oppMelodyTimer = null; }
     oppAudioEl.pause();
     oppAudioEl.currentTime = 0;
     document.body.classList.remove('opp-mode');
@@ -983,6 +1018,53 @@ function oppDimFlash(keys, dur) {
     el.style.setProperty('--oc', col);
     el.classList.add('opp-dim');
     setTimeout(() => { el.classList.remove('opp-dim'); el.style.removeProperty('--oc'); }, dur);
+}
+
+// Soft choir-ish voice for the melody: two detuned sines + reverb
+function oppMelodyVoice(freq, now, c) {
+    const rev = getRev(c);
+    const amp = c.createGain();
+    [-5, 5].forEach(cents => {
+        const osc = c.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        osc.detune.value = cents;
+        osc.connect(amp);
+        osc.start(now);
+        osc.stop(now + 0.26);
+    });
+    amp.gain.setValueAtTime(0, now);
+    amp.gain.linearRampToValueAtTime(0.16, now + 0.018);
+    amp.gain.exponentialRampToValueAtTime(0.09, now + 0.09);
+    amp.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
+    amp.connect(c.destination);
+    amp.connect(rev);
+}
+
+// Plays the hexatonic melody sequence in sync with the Oppenheimer mode.
+// Runs independently of the beat-reactive RAF loop so it always plays on file:// too.
+function oppStartMelody() {
+    oppMelIdx = 0;
+    oppMelodyTimer = setInterval(() => {
+        if (!oppMode) { clearInterval(oppMelodyTimer); oppMelodyTimer = null; return; }
+        const note = OPP_SEQ[oppMelIdx % OPP_SEQ.length];
+        const keyId = OPP_KEY_IDS[note];
+        if (keyId) {
+            const el = document.getElementById(keyId);
+            if (el) {
+                const col = OPP_COLS[Math.floor(Math.random() * OPP_COLS.length)];
+                el.style.setProperty('--oc', col);
+                el.classList.add('opp-active');
+                spawnRipple(el);
+                if (Math.random() < 0.45) spawnParticle(el);
+                setTimeout(() => {
+                    el.classList.remove('opp-active');
+                    el.style.removeProperty('--oc');
+                }, 88);
+            }
+        }
+        oppMelIdx++;
+    }, 99); // 16th note at 151 BPM
 }
 
 // Timer fallback for file:// where createMediaElementSource is blocked by CORS.

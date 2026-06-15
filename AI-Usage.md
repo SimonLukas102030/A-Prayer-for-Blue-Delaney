@@ -102,7 +102,7 @@ I then had Claude Code read it and fix grammar. More detail in [Claude Code Usag
 
 ## Chapter 5
 
-<p>I desided to go with a little mor interactiv kind of task for this Chapter. I had the Idea, to make a web Page, were you can select something to read about and then look at it. And as my css skills are not jet the greatest, i had Claude Code help. I wrote the text myselve, but had help with grammar from Claude Code. I also decided, to use 2 images for the two parts. The promts are as following. I did had them be clearafied from Claude Code:
+I desided to go with a little more **interactiv** kind of task for this Chapter. <br>I had the Idea, to make a **web Page**, were you can select something to read about and then look at it. <br>And as my css skills are not jet the greatest, i had Claude Code help. I wrote the text myselve, but had help with **grammar** from Claude Code.<br> I also decided, to use **2 images** for the two parts. The promts are as following.<br> I did had them be **clearafied** from Claude Code:
 
 ### Image 1:
 > Make an Image of an dark principals Office. Its the office of the principal from the "Clontarf, Christian Brothers Orphanage". In the room, there is the principal, blacked out. So you cant see, who it is. There is also a 10 to 11 yo boy. He is sitting infront of the desk. Also blacked out. The hole scene is very dark and should be a little scarry. 
@@ -126,8 +126,8 @@ The resulting Image is: <br>
 
 ### The help from Claude for the Idea and Implementation
 
-Claude helped with the css, js and the base of the html. Also grammar was fixed by Claude. For more detail, read the [Claude Code Usage](claude-code-usage.md). <br>
-Also, the orginal html, is in [Original Chapter 5](original/Chapter%205.html)!<br>
+Claude helped with the **css, js and the base of the html**. Also **grammar** was fixed by Claude. For more detail, read the [Claude Code Usage](claude-code-usage.md). <br>
+Also, the **orginal html**, is in [Original Chapter 5](original/Chapter%205.html)!<br>
 
 ---
 **Prompts:**
@@ -135,3 +135,16 @@ Also, the orginal html, is in [Original Chapter 5](original/Chapter%205.html)!<b
 - 43
 - 45 $\rightarrow$ 49
 - 51
+
+<br><br><br>
+
+## Chapter 6
+
+For this task, i had used AI just for **grammar corrections** and help with how to **lay out** an theatre script. <br>
+For more info, and **exact prompts**, look in [Claude Code Usage](claude-code-usage.md). <br>
+Also, you can find the **orginal text**, I wrote in [Original Chapter 6](original/Chapter%206.md). <br>
+
+---
+**Prompts:**
+- 53 $\rightarrow$ 55
+- 60

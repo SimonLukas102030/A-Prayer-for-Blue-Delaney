@@ -1088,3 +1088,28 @@
   - On stop: restores `oppVol`, pauses MP3, removes all CSS classes, calls `refresh()` to re-highlight the active game key
 - **Auto mode** stops Oppenheimer if it's running when AUTO is pressed
 - Committed and pushed to GitHub Pages
+
+---
+
+### Prompt 89 — Exact Oppenheimer melody in synth — 2026-06-15
+**Prompt:**
+> *"die note die gespielt werden stimmen nicht mit den aus der mp3 überein??? es soll eine stimme von oppenheimer nachmachen. Exact"*
+
+**What Claude did:**
+- Analysed the music theory of "Can You Hear The Music" by Ludwig Göransson: hexatonic scale (B, C, D, E, F#, G); BPM 151; ascending pattern rule — play notes 1,2,3 → skip 4 → play 5,6 → return to 4 → repeat starting from next scale degree → generates 7 ascending groups × 6 notes covering B3 to G5
+- Extended the piano keyboard with a `G5` white key and `F#5` black key (`left:535px`); gave the existing non-interactive `F#4` black key `id="key-Fs4"` so it can be highlighted
+- Added `OPP_HZ` (frequencies B3–G5), `OPP_KEY_IDS` (note → DOM id), and `OPP_SEQ` (42-note hexatonic sequence)
+- Added `oppMelodyVoice()`: two ±5-cent detuned sine oscillators + reverb → choir-ish, ethereal tone matching the Oppenheimer atmosphere
+- Added `oppStartMelody()`: `setInterval` at 99ms (16th note at 151 BPM) — plays each `OPP_SEQ` note via `oppMelodyVoice` and flashes the corresponding piano key (`opp-active` + ripple + particle)
+- Melody runs on both GitHub Pages (served) and local `file://` — independent of the FFT analyser path
+- Added cleanup in `stopOppenheimer()` for `oppMelodyTimer`
+
+---
+
+### Prompt 90 — Melody keys silent + hide yellow active key — 2026-06-15
+**Prompt:**
+> *"wtf. lass die gespielten noten so, aber die sollen kein ton machen. der soll von der mp3 kommen. Außerdem, der gelbe button, soll wärenddessen nicht gelb sein"*
+
+**What Claude did:**
+- Removed the `oppMelodyVoice()` call from `oppStartMelody()` — melody keys still light up visually but produce no sound; all audio comes from the MP3
+- Added CSS overrides for `body.opp-mode .wk.active` and `body.opp-mode .bk.active` — the yellow game key (showing the next note to play) reverts to its normal unlit appearance during Oppenheimer mode (no yellow gradient, no glow, no bounce arrow)

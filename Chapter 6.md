@@ -9,7 +9,7 @@
 
 ## Task: theater script
 
-[Description of what you did for this chapter]
+For this Chapter I´ve decided to make an theater script. 
 
 ---
 
