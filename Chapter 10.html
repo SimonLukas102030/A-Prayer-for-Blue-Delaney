@@ -866,24 +866,12 @@ function startOppenheimer() {
         ...document.querySelectorAll('.wk'),
         ...document.querySelectorAll('.bk.melody-key')
     ];
-    const savedMode = currentMode;
-    const allModes  = ['piano', 'guitar', 'bells', 'techno', 'synth'];
 
     oppInterval = setInterval(() => {
         if (!oppMode) return;
 
         const step = MELODY[oppBeatIdx % MELODY.length];
         oppBeatIdx++;
-
-        // All 5 synth modes fire simultaneously on this melody note
-        allModes.forEach((m, i) => {
-            setTimeout(() => {
-                if (!oppMode) return;
-                currentMode = m;
-                playNote(step);
-            }, i * 10); // tiny stagger avoids phase pile-up
-        });
-        currentMode = savedMode;
 
         // Flash the melody key with a random vivid colour
         const el = document.getElementById('key-' + step.key);
