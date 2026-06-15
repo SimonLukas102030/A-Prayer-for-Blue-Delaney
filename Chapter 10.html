@@ -44,10 +44,9 @@
             position: relative; min-height: 110px;
             font-size: 1.04rem; color: #1a1a1e;
             line-height: 35px;
-            word-spacing: 0.15em;
             padding-top: 3px;
         }
-        .word { display: inline-block; }
+        .word { display: inline-block; margin-right: 0.42em; }
         .word.pop-in { animation: wordPopIn 0.18s ease forwards; }
         @keyframes wordPopIn {
             0%   { opacity: 0; transform: scale(1.35) translateY(-3px); }
@@ -692,7 +691,7 @@ function addWord() {
     if (wordIdx >= words.length) return;
     const s = document.createElement('span');
     s.className = 'word pop-in';
-    s.textContent = words[wordIdx] + ' ';
+    s.textContent = words[wordIdx];
     wordArea.insertBefore(s, cursor);
     spans.push(s);
     setTimeout(() => s.classList.remove('pop-in'), 220);
