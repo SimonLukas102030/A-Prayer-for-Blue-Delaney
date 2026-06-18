@@ -199,3 +199,44 @@ For more info, and **exact prompts**, look in [Claude Code Usage](claude-code-us
 - 77 $\rightarrow$ 79
 
 <br><br><br>
+
+## Chapter 9
+
+As I said for the last Chapter, i do have the template. And I used gemini again for grammar. Here is the promt and answere:
+<br>
+
+### Gemini Chat
+> can you fix grammar? Here is the text: "In the mornig, Bill wend off, and Colm thought, that Bill would send him away. It was hard for Colm to walk, but he managed it. Tough, after some steps, he fell trough the glass roof. he landet hard. Later Billy found him, and brought him back to the room. He asked what he was doing, to what Colm said he heard a woman. Billy explained, that that was a gost. Then, billy looked at his back, and was shoked, of all the wounds, Colm had on his back.  But Colm fell asleep and when he woke up, a doctor was there. The doctor later said, he has to go back to the boys home. When he was gone, Colm prayed to Billy, to not turn him in and hide him. He did, and many weeks pased, in wich colm recoverd. After a cupple of weeks, he could walk fine again, and started learning the Piano and read the news. In the news, it said, the queen of england was coming to fremantle. But Billy said, it was to dangarus."
+
+Here is the corrected text. I fixed the spelling mistakes (like "mornig", "wend", "shoked"), corrected the grammar/tenses, and cleaned up the punctuation so it flows naturally.
+
+Corrected Text
+"In the morning, Bill went off, and Colm thought that Bill would send him away. It was hard for Colm to walk, but he managed it. However, after a few steps, he fell through the glass roof and landed hard. Later, Bill found him and brought him back to the room. He asked what Colm was doing, to which Colm replied that he had heard a woman. Bill explained that it was a ghost. Then, Bill looked at his back and was shocked by all the wounds Colm had.
+
+But Colm fell asleep, and when he woke up, a doctor was there. The doctor later said that Colm had to go back to the boys' home. When the doctor was gone, Colm begged Bill not to turn him in and to hide him instead. Bill did, and many weeks passed in which Colm recovered. After a couple of weeks, he could walk fine again and started learning the piano and reading the news. In the newspaper, it said the Queen of England was coming to Fremantle. But Bill said it was too dangerous."
+
+What changed:
+Spelling: Fixed mornig -> morning, wend -> went, trough -> through, landet -> landed, gost -> ghost, shoked -> shocked, pased -> passed, wich -> which, recoverd -> recovered, cupple -> couple, england -> England, and dangarus -> dangerous.
+
+Vocabulary & Flow:
+
+Changed Tough -> However (fits much better at the start of the sentence).
+
+Changed to what Colm said -> to which Colm replied.
+
+Changed prayed to Billy -> begged Bill (prayed sounds like religious prayer; begged fits perfectly when asking for help).
+
+Standardized the name to Bill instead of jumping between Bill and Billy, matching the previous chapters.
+
+Grammar: Changed boys home to boys' home and capitalized Queen as a formal title. Removed a few unnecessary commas to make the sentences read smoother.
+
+---
+
+The used Claude template you can find at [Claude Template Chapter 10](original/Chapter%2010%20Claude%20Template.html).<br>
+For more info, and **exact prompts**, look in [Claude Code Usage](claude-code-usage.md). <br>
+
+---
+**Prompts:**
+- 77 $\rightarrow$ 90
+
+<br><br><br>
