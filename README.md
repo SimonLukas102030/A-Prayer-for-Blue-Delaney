@@ -14,6 +14,10 @@
 | Chapter 5 | Interactive HTML | [Chapter 5.html](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/Chapter%205.html) |
 | Chapter 6 | Theater script | [Chapter 6.md](Chapter%206.md) |
 | Chapter 7 | Newspaper article | [Chapter 7.html](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/Chapter%207.html) |
+| Chapter 8 | NOT DONE!!! | [Chapter 8.md]() |
+| Chapter 9 | Fisher Style Conversation | [Chapter 9.html](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/Chapter%209.html) |
+| Chapter 10 | Playable Piano | [Chapter 10.html](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/Chapter%2010.html) |
+| Story 01 | Book Review | [Story 01.md](Storry%20Task%2001.md) |
 
 ---
 
@@ -38,6 +42,8 @@
 - [Chapter 6](original/Chapter%206.md)
 - [Chapter 7](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%207%20Claude%20Template.html) - Claude Code Base
 - [Chapter 7](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%207%20Simon.html)
+- [Chapter 9](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%209%20Claude%20Template.html) - Claude Code Base
+- [Chapter 10](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/original/Chapter%2010%20Claude%20Template.html) - Claude Code Base
 
 ---
 
