@@ -148,3 +148,54 @@ Also, you can find the **orginal text**, I wrote in [Original Chapter 6](origina
 **Prompts:**
 - 53 $\rightarrow$ 55
 - 60
+
+<br><br><br>
+
+## Chapter 9
+
+I do not have acces to claude anymore. I did had the template for 9 and 10 done before I lost it dough, so I still have a "cool" html. But for grammar, I this time used gemini again. Here is the chat:
+<br>
+
+### Gemini Chat
+> do you mind correcting the grammar? const lines = [{ who: 'narrator', text: 'Colm arrived at Fremantle Docks and looked at the container ships.' },{ who: 'narrator', text: 'Colm Was very hungry and tired' },{ who: 'narrator', text: 'There was an Fisherman and his Dog. The Dog came to him an licked his feet.' },{ who: 'bill',     text: 'Is she bothering you? She usually doesn´t like strangers.' },{ who: 'bill',     text: 'You look hungry - here, have something to drink' },{ who: 'narrator', text: 'Bill hands Colm an bottle containing an orange drink.' },{ who: 'colm',     text: 'Thank you.' },{ who: 'narrator', text: 'Bill trys to leave, but his Dog stays by Colm - so he sits down next to Colm.' },{ who: 'colm',     text: 'I wand to get Home - Home to england' },{ who: 'bill',     text: 'I once tried to smuggle myselve onto a ship too. It´s not a good Idea.' },{ who: 'narrator', text: 'Bill gave him tea and biscuits. Then he asks for Colm\'s name. Colm ignores the question and keeps on petting the dog.' },{ who: 'bill',     text: 'Well, I\'m Bill Dare. You can call me Bill.' },{ who: 'bill',     text: 'You know, getting on a ship seems like a grat big adventure, but its time to get back home.' },{ who: 'colm',     text: 'I dont have a home. only the boy´s home, and im never goint back there.' },{ who: 'narrator', text: 'He starts to leave, sure Bill will drag him back. The dog started licking his feet again, and billy noticed the wounds on his feet.' },{ who: 'bill',     text: 'Im not sending you back anywere. I just wand to help. Come with me to my house. You aint going anywere on those feet.' },{ who: 'narrator', text: 'Colm agrees and follows him. Bill\'s house turns out to be an old asylum. He gives Colm food and bandages his foot.' },]; 
+
+Here is the corrected code. I fixed the typos (e.g., "wand" to "want", "grat" to "great"), corrected the articles ("an bottle" to "a bottle"), fixed punctuation/capitalization, and standardized the apostrophes to standard straight quotes (') for consistency in the strings.
+
+JavaScript
+const lines = [
+    { who: 'narrator', text: 'Colm arrived at Fremantle Docks and looked at the container ships.' },
+    { who: 'narrator', text: 'Colm was very hungry and tired.' },
+    { who: 'narrator', text: 'There was a fisherman and his dog. The dog came to him and licked his feet.' },
+    { who: 'bill',     text: 'Is she bothering you? She usually doesn\'t like strangers.' },
+    { who: 'bill',     text: 'You look hungry—here, have something to drink.' },
+    { who: 'narrator', text: 'Bill hands Colm a bottle containing an orange drink.' },
+    { who: 'colm',     text: 'Thank you.' },
+    { who: 'narrator', text: 'Bill tries to leave, but his dog stays by Colm—so he sits down next to Colm.' },
+    { who: 'colm',     text: 'I want to get home—home to England.' },
+    { who: 'bill',     text: 'I once tried to smuggle myself onto a ship too. It\'s not a good idea.' },
+    { who: 'narrator', text: 'Bill gave him tea and biscuits. Then he asks for Colm\'s name. Colm ignores the question and keeps on petting the dog.' },
+    { who: 'bill',     text: 'Well, I\'m Bill Dare. You can call me Bill.' },
+    { who: 'bill',     text: 'You know, getting on a ship seems like a great big adventure, but it\'s time to get back home.' },
+    { who: 'colm',     text: 'I don\'t have a home. Only the boys\' home, and I\'m never going back there.' },
+    { who: 'narrator', text: 'He starts to leave, sure Bill will drag him back. The dog started licking his feet again, and Bill noticed the wounds on his feet.' },
+    { who: 'bill',     text: 'I\'m not sending you back anywhere. I just want to help. Come with me to my house. You ain\'t going anywhere on those feet.' },
+    { who: 'narrator', text: 'Colm agrees and follows him. Bill\'s house turns out to be an old asylum. He gives Colm food and bandages his foot.' },
+];
+What changed:
+Typos & Spelling: Fixed Was -> was, an Fisherman -> a fisherman, an licked -> and licked, trys -> tries, wand -> want, england -> England, myselve -> myself, grat -> great, its -> it's, goint -> going, anywere -> anywhere, and capitalized billy -> Bill.
+
+Grammar & Articles: Changed an bottle to a bottle. Adjusted boy´s home to boys' home (assuming it refers to a children's home/institution). Keep in mind that Bill's dialogue uses ain't, which I left intact as it fits his character's dialect.
+
+Punctuation: Replaced the accent marks (´) with proper escaped JavaScript apostrophes (\'). Added missing periods at the ends of sentences. Used em-dashes (—) for natural-sounding pauses in the dialogue and narration.
+
+---
+
+The used Claude template you can find at [Claude Template Chapter 9](original/Chapter%209%20Claude%20Template.html).<br>
+Small note, i exedently delited the orginal, so this is a **representation**, of how it was. <br>
+For more info, and **exact prompts**, look in [Claude Code Usage](claude-code-usage.md). <br>
+
+---
+**Prompts:**
+- 77 $\rightarrow$ 79
+
+<br><br><br>
