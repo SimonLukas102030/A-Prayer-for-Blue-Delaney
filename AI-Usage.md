@@ -200,7 +200,7 @@ For more info, and **exact prompts**, look in [Claude Code Usage](claude-code-us
 
 <br><br><br>
 
-## Chapter 9
+## Chapter 10
 
 As I said for the last Chapter, i do have the template. And I used gemini again for grammar. Here is the promt and answere:
 <br>
@@ -240,3 +240,29 @@ For more info, and **exact prompts**, look in [Claude Code Usage](claude-code-us
 - 77 $\rightarrow$ 90
 
 <br><br><br>
+
+## Storry Task 01
+I desided, to write a book review and had it corrected by gemini. Here is the Conversation with Gemini:
+<br>
+
+### Gemini Chat
+> pls fix grammar: The book was fine overall. Personally, I do not read fictional storrys like this that much. I more often read books about tech and studybooks. So the books wasn´t quite my favorite. For others, however, the storry was interessting. i espectically liked the beginning. It shows, how Life was for Orphant Childs in the 50s in australia. The beatings and so on were very interessting. Also the deth of the CHaracter tommy came very unexpected. It was very truly shoking to read about. Then the Story with Billy and blue delany was also cool. the end was the complete opisit of the beginning. That also is very good character development.  If you enjoy emotional historical novels with a lot of character growth and wand to learn a bit about, how it was in austrailia in the 50s, this book will suite you quite well. Because of my prefences, the book was for me a 3 out of 5. I just dont like reading storry Books.
+
+Here is the corrected version of your text. I focused entirely on fixing the grammar, typos (like spelling "stories", "especially", and "orphaned children" correctly), and punctuation, while keeping your exact meaning, structure, and thoughts completely unchanged.
+
+The book was fine overall. Personally, I do not read fictional stories like this that much. I more often read books about tech and study books. So, the book wasn't quite my favorite.
+
+For others, however, the story was interesting. I especially liked the beginning. It shows how life was for orphaned children in the 50s in Australia. The beatings and so on were very interesting. Also, the death of the character Tommy came very unexpectedly. It was truly shocking to read about. Then the story with Billy and Blue Delaney was also cool. The end was the complete opposite of the beginning. That also is very good character development.
+
+If you enjoy emotional historical novels with a lot of character growth and want to learn a bit about how it was in Australia in the 50s, this book will suit you quite well. Because of my preferences, the book was a 3 out of 5 for me. I just don't like reading storybooks.
+
+What was fixed:
+- Spelling corrections: Changed storrys/storry to stories/story, studybooks to study books, espectically to especially, Orphant Childs to orphaned children, austrailia to Australia, deth to death, opisit to opposite, wand to want, suite to suit, and prefences to preferences.
+
+- Punctuation and Capitalization: Fixed stray apostrophes (´ to '), capitalized I and proper nouns like Australia, and removed unnecessary commas before "how" and "how it was".
+
+- Grammar adjustments: Changed books wasn't to book wasn't, came very unexpected to came very unexpectedly, and removed very from very truly shocking since "truly" already covers it.
+
+---
+
+You can find the orginal in [Orginal Storry Task 01](original/Storry%20Task%2001.md)
