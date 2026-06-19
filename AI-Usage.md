@@ -151,6 +151,69 @@ Also, you can find the **orginal text**, I wrote in [Original Chapter 6](origina
 
 <br><br><br>
 
+## Chapter 7
+
+I had the Idea to do a newspaper about tommys death from the biginning on. Here we are. <br>
+I also had the Idea, to make it written by the Brothers. So it´s not, what actually happend. <br>
+I also made up this Funeral funding thing. The Brothers are stealing for themselves. That should represent that. <br>
+Claude Code was used for the Template and help with the historic facts. (I forgot, that it was the 50s, and they didn´t have IBan...)<br>
+The Template can be found here: [Chapter 7 Claude Template](original/Chapter%207%20Claude%20Template.html)<br>
+I also saved the file, as it was before grammar Check. Its in: [Chapter 7 no Grammar](original/Chapter%207%20Simon.html)<br>
+For more exact info about the usage of Claude Code, have a look in: [Claude Code Usage](claude-code-usage.md). <br>
+
+---
+**Prompts:**
+- 64 $\rightarrow$ 68
+- 71
+
+<br><br><br>
+
+## Chapter 8
+
+I did this after 9 and 10, so I still had to use Gemini... But this is what I came up with. <br>I then had it corrected and stlyed by gemini, with the following prompts:<br>
+
+### Gemini Chat
+> please correct grammar and style a little, without changing, what and how i wrote. It´s and .md file. Here is my current text: Chapter 8 picked up on Tommys funaral. He had passed away in Chapter 7. Colm couldn´t belive it. The evining, many kids didn´t wand to eat. All of them who didn´t, were beaten. Colm didn´t. Even after a lot of beating, he just didn´t care. Later, when evryone was asleep, he fleet to tommys grave and ran away. He then laied down in the grass and slepped for a good while. He then wend on a walk, hiding from evryone and everything. After a cupple of days, he passed by a bike, and couldn´t hide. The rider, took him with him and brought him to a crossing, and told him to ask a farmer to take him to fremantle, were he wandet to go. It took him a cupple of days, untill he had the currage to ask one. They took him to fremantle and in the back, he had something to eat.<br> To be continued!
+
+Here is the corrected version of your text. I kept your exact sentence structures, the pacing, and the way you tell the story, but fixed the typos, spelling, and minor punctuation to make it flow smoothly in Markdown.MarkdownChapter 8 picked up on Tommy's funeral. He had passed away in Chapter 7. Colm couldn't believe it. In the evening, many kids didn't want to eat. All of them who didn't, were beaten. Colm didn't. Even after a lot of beating, he just didn't care. Later, when everyone was asleep, he fled to Tommy's grave and ran away. He then laid down in the grass and slept for a good while. He then went on a walk, hiding from everyone and everything. After a couple of days, he passed by a bike and couldn't hide. The rider took him with him and brought him to a crossing, and told him to ask a farmer to take him to Fremantle, where he wanted to go. It took him a couple of days until he had the courage to ask one. They took him to Fremantle and in the back, he had something to eat.<br> To be continued!
+
+Summary of adjustments made:
+- Fixed spelling mistakes (funaral $\rightarrow$ funeral, evining $\rightarrow$ evening, wand/wandet $\rightarrow$ want/wanted, evryone $\rightarrow$ everyone, cupple $\rightarrow$ couple, currage $\rightarrow$ courage).
+- Corrected irregular past tense verbs (fleet $\rightarrow$ fled, laied $\rightarrow$ laid, slepped $\rightarrow$ slept, wend $\rightarrow$ went).
+- Capitalized proper nouns (Tommy's and Fremantle).Cleaned up minor punctuation (removed unnecessary commas before "took him" and "until").
+
+> no, like use some ** and others, to make it look better. 
+Here is the text with Markdown formatting applied to make it look cleaner and more engaging, while keeping your exact words and structure.
+
+Markdown
+### Chapter 8: The Aftermath
+
+Chapter 8 picked up on **Tommy's funeral**. He had passed away in Chapter 7. 
+
+Colm couldn't believe it. In the evening, many kids didn't want to eat. All of them who didn't, were beaten. **Colm didn't.** Even after a lot of beating, he just didn't care. 
+
+Later, when everyone was asleep, he fled to Tommy's grave and **ran away**. He then laid down in the grass and slept for a good while. He then went on a walk, hiding from everyone and everything. 
+
+After a couple of days, he passed by a bike and couldn't hide. The rider took him with him and brought him to a crossing, and told him to ask a farmer to take him to **Fremantle**, where he wanted to go. It took him a couple of days until he had the courage to ask one. They took him to Fremantle and in the back, he had something to eat. 
+
+---
+*To be continued!*
+What was changed for the look:
+- Headings & Spacing: Added a small chapter heading at the top and split the wall of text into shorter paragraphs so it is much easier to read.
+
+- Bold text (): Used on key plot points (Tommy's funeral, ran away, Fremantle) and to emphasize Colm's defiance (Colm didn't.).
+
+- Horizontal Rule (---): Added a line at the bottom to separate the story from the ending note.
+
+- Italics (*): Put the "To be continued!" in italics to give it a classic cliffhanger look.
+---
+
+### What I changed
+
+Btw, I did change it a little, as I had my own hedding, and hated the "To be continued!" afterall. So i removed them.
+
+<br><br><br>
+
 ## Chapter 9
 
 I do not have acces to claude anymore. I did had the template for 9 and 10 done before I lost it dough, so I still have a "cool" html. But for grammar, I this time used gemini again. Here is the chat:
@@ -266,3 +329,39 @@ What was fixed:
 ---
 
 You can find the orginal in [Orginal Storry Task 01](original/Storry%20Task%2001.md)
+
+<br><br><br>
+
+## Storry Task 01
+I decided to do this creative writing, as i find that easy for me to do. I did however had help with grammar and stlyling tags. For more info, here the conversation with gemini: 
+<br>
+
+### Gemini Chat
+> Please, correct my grammar and make the text better with <br> and ** for the .md file its in Here is my current text. Please give me it as code. so with the ** and <br>s included: I was sentenced to washing the Cloth with Sullivan and Tommy. Tommy was badly messed up. He couldn´t even walk right. I feld so bad for him. It was hard to watch.<br>The bags were very havy, I must say and the water was very cold and felt wirdly indangaring. I don´t qite know, how to describe this right. It took us, well me and Sullivan, quite some time. Tommy didn´t do a bit. he just sat there and ditn´t move an inch. After we had washed everything, me and Sullivan packed the bags ontop of an old wheelbarrow. As we tryed to get it back up the hill, we got stuck. it was very tuff to do. Tommy said himselfe ontop of the bags and layed down. His energy level was like below sero. Very hard to whatch. Well, to get the wheelbarrow  up the hill, I wend on the back of it and Sullivan on the Front. He pulled as hard as he could, and I pushed. We managed to get it up a cupple of meters, but it was just to hard, and I felt my arms getting weaker. Then suddently, they gave up. I slipped, and the wheelbarrow  wend off. It was horrable! Me and Sullivan screemed for Tommy to jump off, but he didn´t move. I prayed as hard as I could, and pressed my hand on the Card of holy Marry. But the wheelbarrow juped off an small bump and flipped over. Over with Tommy. It hurt my heard so bad. I ran to him as fast as I could. When I saw him, my heard dropped. His hole body was bleeding and he didn´t breth. I felt so down. It was like someone was stabbing be in my heard after and after and after. I sremed so loudly, it didn´t take long, for one of the brothers to arrive. They had me go away. I tryed to stay, but they tought my by my shirt away. In the night I couldn´t sleep. it was one if not the worst day in my Life.
+
+Here is the corrected version of your text. I fixed the numerous typos (e.g., "feld", "havy", "wirdly indangaring", "heard", "tought my by my shirt away"), cleaned up the punctuation, and added the formatting to make it look great in your Markdown file.
+
+Markdown
+I was sentenced to washing the cloth with Sullivan and Tommy. **Tommy was badly messed up.** He couldn't even walk right. I felt so bad for him. It was hard to watch.<br>
+The bags were very heavy, I must say, and the water was very cold and felt weirdly endangering. I don't quite know how to describe this right. It took us—well, me and Sullivan—quite some time. Tommy didn't do a bit; he just sat there and didn't move an inch.<br>
+<br>
+After we had washed everything, me and Sullivan packed the bags on top of an old wheelbarrow. As we tried to get it back up the hill, we got stuck. **It was very tough to do.** Tommy sat himself on top of the bags and laid down. His energy level was below zero. It was very hard to watch.<br>
+<br>
+Well, to get the wheelbarrow up the hill, I went to the back of it and Sullivan went to the front. He pulled as hard as he could, and I pushed. We managed to get it up a couple of meters, but it was just too hard, and I felt my arms getting weaker. Then suddenly, they gave up. **I slipped, and the wheelbarrow went off.**<br>
+<br>
+It was horrible! Me and Sullivan screamed for Tommy to jump off, but he didn't move. I prayed as hard as I could and pressed my hand on the card of Holy Mary. But the wheelbarrow jumped off a small bump and flipped over—over with Tommy. **It broke my heart so badly.**<br>
+<br>
+I ran to him as fast as I could. When I saw him, my heart dropped. His whole body was bleeding and he didn't breathe. I felt so down. It was like someone was stabbing me in my heart again and again and again. I screamed so loudly that it didn't take long for one of the brothers to arrive. They made me go away. I tried to stay, but they grabbed me by my shirt and pulled me away.<br>
+<br>
+In the night, I couldn't sleep. **It was one of, if not the worst day of my life.**
+What I did:
+
+- Corrected Typos & Spelling: Fixed words like havy (heavy), wirdly indangaring (weirdly endangering), qite (quite), heard (heart), hole (whole), breth (breathe), and tuff (tough).
+
+- Grammar Adjustments: Rewrote "they tought my by my shirt away" to "they grabbed me by my shirt and pulled me away" so it makes sense in English. Also changed "after and after and after" to "again and again and again" for better flow.
+
+- Added Markdown Formatting: Placed <br> tags at the end of paragraphs for proper spacing in the renderer, and used  bolding to highlight the most dramatic, impactful sentences of the story.
+
+---
+
+You can find the orginal in [Orginal Storry Task 02](original/Storry%20Task%2002.md)
