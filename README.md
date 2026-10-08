@@ -19,7 +19,7 @@
 | Chapter 10 | Playable Piano | [Chapter 10.html](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/Chapter%2010.html) |
 | Story 01 | Book Review | [Story 01.md](Storry%20Task%2001.md) |
 | Story 02 | Creative Writing | [Story 02.md](Storry%20Task%2002.md) |
-
+[WOW.html](https://simonlukas102030.github.io/A-Prayer-for-Blue-Delaney/AI%207.html)
 ---
 
 ## Other files
